@@ -8,28 +8,28 @@
 
 using namespace std;
 
-// Template function which applies an uniform distribution in order to generate random elements
+
 template<typename T>
-T random(T from, T to) {
-    
+typename enable_if<is_integral<T>::value, T>::type random(T from, T to) {
     mt19937 mt(time(nullptr)); 
 
     random_device rand_dev;
     mt19937 generator(rand_dev());
-
-    cout<<is_integral<T>::value<<endl;
-
-    if(is_floating_point<T>::value){
-        uniform_real_distribution<T> distrInt(from, to);
-        return distrInt(generator);
-    }
-    else if(is_integral<T>::value){
-        uniform_int_distribution<T> distrReal(from, to); 
-        return distrReal(generator);
-    }
-    else
-        throw runtime_error("This type is not managed by the Tensor library");
+    uniform_int_distribution<T> distr(from, to);
+    return distr(generator);
 }
+
+
+template<typename T>
+typename enable_if<is_floating_point<T>::value, T>::type random(T from, T to) {
+    mt19937 mt(time(nullptr)); 
+
+    random_device rand_dev;
+    mt19937 generator(rand_dev());
+    uniform_real_distribution<T> distr(from, to);
+    return distr(generator);
+}
+
 
 
 // Tensor class definition
@@ -100,35 +100,20 @@ public:
     }
 
     void insertRandomData(T from, T to){
-        
-        // Seed value for random generator
-        // srand((unsigned) time(NULL));
+
+        if(!is_integral<T>::value && !is_floating_point<T>::value)
+            throw runtime_error("This type is not managed by the Tensor library"); 
+
         int i;
         for (i = 0; i < n_total_elements; i++){
-            T rnd = random<T>(from, to);
-            data.insert(data.begin(), rnd);
+            T rnd = random(from, to);
+            data.insert(data.begin(), rnd);   
         }
-        /*
-        // No constexpr because we are not using C++17
-        if (is_same<float, T>::value) {
-            for (i = 0; i < n_total_elements; i++){
-                float rnd = random<T>(from, to);
-                data.insert(data.begin(), rnd);
-            }
-        }
-        else if (is_same<int, T>::value) {
-            for (i = 0; i < n_total_elements; i++){
-                int rnd = random<T>(from, to);
-                data.insert(data.begin(), rnd);
-            }
-        }
-        else
-            throw runtime_error("This type is not managed by the Tensor library"); */
     }
 
     void printTensor(){
         for_each(data.begin(), data.end(), [] (const float c) {cout << c << " ";} );
-        cout<<endl;
+        cout<<endl<<endl;
     }
     
 

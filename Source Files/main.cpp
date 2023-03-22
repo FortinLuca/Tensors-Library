@@ -38,7 +38,6 @@ int main() {
     rt1.insertRandomData(0.0, 200.0);
     rt1.printTensor();
 
-
     rt2.insertRandomData(0, 200);
     rt2.printTensor();
 
