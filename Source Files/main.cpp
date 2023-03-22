@@ -13,7 +13,10 @@ int main() {
     vector<int> testvector = {1, 2, 3, 4, 5};
     
     RankedTensor<float, 5> rt1(testvector);
-    RankedTensor<float, 5> rt2(1, 2, 3, 4, 5);
+    RankedTensor<int, 5> rt2(testvector);
+
+    /*    
+    // RankedTensor<float, 5> rt2(1, 2, 3, 4, 5);
 
     int * sizeDimensions1 = rt1.getSizeDimensions();
     int * sizeDimensions2 = rt2.getSizeDimensions();
@@ -30,7 +33,16 @@ int main() {
     for(int i=0; i<5; i++){
         cout<<to_string(strides1[i]) + " "+ to_string(strides2[i])<<endl;
     }
+    */
+
+    rt1.insertRandomData(0.0, 200.0);
+    rt1.printTensor();
 
 
+    rt2.insertRandomData(0, 200);
+    rt2.printTensor();
+
+
+    
     return 0;
 }
