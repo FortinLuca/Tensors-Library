@@ -6,7 +6,6 @@
 
 #include "Utils/utils.cpp"
 
-
 // Tensor class definition
 namespace Tensor_Library{
     
@@ -94,8 +93,46 @@ namespace Tensor_Library{
 
     };
 
+    /*
+    template <typename T, int n>
+    class RankedTensor {
 
 
+    private:
+        int sizeDimensions[n];
+        int n_total_elements;
+        int strides[n];
+        vector<T> data;
+
+
+    public:
+        // Constructor
+        RankedTensor(vector<int> args);
+
+
+        // Implementation of a constructor with different input parameters by recalling the previous constructor
+        template <typename... ints>
+        RankedTensor(ints...args) : RankedTensor(vector<int>({args...})){}
+        
+
+        // Destructor from defualt
+        ~RankedTensor() = default;
+        
+
+        //---------------------------------
+        //ONLY FOR TESTING
+        RankedTensor<T, n> get();
+
+        int * getSizeDimensions();
+
+        int * getStrides();
+
+        void insertRandomData(T from, T to);
+
+        void printTensor();
+
+        };
+        */
 
 
     // --------------------------------------------------------------
