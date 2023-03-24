@@ -2,12 +2,8 @@
 #include "../tensor.h"
 
 
-class Solve {
-    public:
-        void solve() {
-            cout << "We're going to solve every tensor!" << endl;
-        }
-};
+using namespace Tensor_Library;
+
 
 int main() {
     vector<int> testvector = {1, 2, 3, 4, 5};
@@ -40,7 +36,6 @@ int main() {
 
     rt2.insertRandomData(0, 200);
     rt2.printTensor();
-
 
     
     return 0;
