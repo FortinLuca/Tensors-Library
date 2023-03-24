@@ -4,11 +4,13 @@
 #include <list>
 #include <algorithm>
 
-#include "Utils/utils.cpp"
+
+using namespace std;
+
 
 // Tensor class definition
 namespace Tensor_Library{
-    
+    /*
     template <typename T, int n>
     class RankedTensor {
 
@@ -47,14 +49,14 @@ namespace Tensor_Library{
         template <typename... ints>
         RankedTensor(ints...args) : RankedTensor(vector<int>({args...})) {}
         
-        /*
+        
         int * elem = &v[0];
 
         for(int i=0; i<5; i++){
             cout<<elem[i]<<endl; 
         }
         cout<<&v[0]<<endl;
-        */
+        
 
 
         // Destructor from defualt
@@ -92,8 +94,8 @@ namespace Tensor_Library{
         }
 
     };
-
-    /*
+    */
+    
     template <typename T, int n>
     class RankedTensor {
 
@@ -113,7 +115,16 @@ namespace Tensor_Library{
         // Implementation of a constructor with different input parameters by recalling the previous constructor
         template <typename... ints>
         RankedTensor(ints...args) : RankedTensor(vector<int>({args...})){}
-        
+
+        /*
+        int * elem = &v[0];
+
+        for(int i=0; i<5; i++){
+            cout<<elem[i]<<endl; 
+        }
+        cout<<&v[0]<<endl;
+        */
+
 
         // Destructor from defualt
         ~RankedTensor() = default;
@@ -132,7 +143,7 @@ namespace Tensor_Library{
         void printTensor();
 
         };
-        */
+        
 
 
     // --------------------------------------------------------------

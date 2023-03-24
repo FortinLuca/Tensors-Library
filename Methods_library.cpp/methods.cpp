@@ -1,10 +1,11 @@
 #include "../tensor.h"
 #include "Utils/utils.cpp"
 
-/*
+
 namespace Tensor_Library{
 
-    RankedTensor::RankedTensor(){
+    template <typename T, int n>
+    RankedTensor<T, n>::RankedTensor(std::vector<int> args){
         int i;
 
         if(n != args.size()) {
@@ -25,17 +26,20 @@ namespace Tensor_Library{
     }
 
 
-    int * RankedTensor::getSizeDimensions(){
+    template <typename T, int n>
+    int * RankedTensor<T, n>::getSizeDimensions(){
         return sizeDimensions;
     }
 
 
-    int * RankedTensor::getStrides(){
+    template <typename T, int n>
+    int * RankedTensor<T, n>::getStrides(){
         return strides;
     }
 
 
-    void * RankedTensor::insertRandomData(T from, T to){
+    template <typename T, int n>
+    void RankedTensor<T, n>::insertRandomData(T from, T to){
         int i;
 
         if(!is_integral<T>::value && !is_floating_point<T>::value)
@@ -49,12 +53,11 @@ namespace Tensor_Library{
     }
 
 
-    void RankedTensor::printTensor(){
+    template <typename T, int n>
+    void RankedTensor<T, n>::printTensor(){
         for_each(data.begin(), data.end(), [] (const float c) {cout << c << " ";} );
         cout<<endl<<endl;
     }
-
-
+    
 }
 
-*/

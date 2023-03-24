@@ -1,7 +1,6 @@
 #include <iostream>
 #include "../tensor.h"
 
-
 using namespace Tensor_Library;
 
 
