@@ -1,13 +1,16 @@
 #include <iostream>
-#include "../tensor.h"
+#include "../Libraries/tensor.h"
 
 
-class Solve {
-    public:
-        void solve() {
-            cout << "We're going to solve every tensor!" << endl;
+ /*
+ temporanea, solo per ripasso funzionamento puntatori/referenze
+        int * elem = &v[0];
+
+        for(int i=0; i<5; i++){
+            cout<<elem[i]<<endl; 
         }
-};
+        cout<<&v[0]<<endl;
+*/
 
 int main() {
     vector<int> testvector = {1, 2, 3, 4, 5};
@@ -30,7 +33,6 @@ int main() {
     for(int i=0; i<5; i++){
         cout<<to_string(strides1[i]) + " "+ to_string(strides2[i])<<endl;
     }
-
 
     return 0;
 }
