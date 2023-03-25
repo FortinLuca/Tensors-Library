@@ -63,7 +63,7 @@ namespace Tensor_Library{
 
     template <typename T, int n>
     void RankedTensor<T, n>::printTensor(){
-        for_each(data.begin(), data.end(), [] (T c) {cout << c << " ";} );
+        for_each(data.begin(), data.end(), [] (T c) {cout << +c << " ";} );
         cout<<endl<<endl;
     }
 
