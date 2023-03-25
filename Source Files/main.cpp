@@ -1,5 +1,4 @@
-#include <iostream>
-#include "../tensor.h"
+#include "../Methods_library/methods.cpp"
 
 using namespace Tensor_Library;
 
@@ -9,6 +8,8 @@ int main() {
     
     RankedTensor<float, 5> rt1(testvector);
     RankedTensor<int, 5> rt2(testvector);
+    RankedTensor<char, 5> rt3(testvector);
+    RankedTensor<double, 5> rt4(testvector);
 
     /*    
     // RankedTensor<float, 5> rt2(1, 2, 3, 4, 5);
@@ -30,11 +31,17 @@ int main() {
     }
     */
 
-    rt1.insertRandomData(0.0, 200.0);
+    rt1.insertRandomData();
     rt1.printTensor();
 
-    rt2.insertRandomData(0, 200);
+    rt2.insertRandomData();
     rt2.printTensor();
+
+    rt3.insertRandomData();
+    rt3.printTensor();
+
+    rt4.insertRandomData();
+    rt4.printTensor();
 
     
     return 0;

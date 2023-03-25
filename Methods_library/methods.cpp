@@ -1,5 +1,10 @@
+#include <cstdlib>
+#include <vector>
+#include <list>
+#include <algorithm>
+
+#include "../Utils/utils.cpp"
 #include "../tensor.h"
-#include "Utils/utils.cpp"
 
 
 namespace Tensor_Library{
@@ -39,25 +44,36 @@ namespace Tensor_Library{
 
 
     template <typename T, int n>
-    void RankedTensor<T, n>::insertRandomData(T from, T to){
+    RankedTensor<T, n> RankedTensor<T, n>::get(){}
+
+
+    template <typename T, int n>
+    void RankedTensor<T, n>::insertRandomData(){
         int i;
 
         if(!is_integral<T>::value && !is_floating_point<T>::value)
             throw runtime_error("This type is not managed by the Tensor library"); 
 
         for (i = 0; i < n_total_elements; i++){
-            T rnd = random(from, to);
+            T rnd = random();
             data.insert(data.begin(), rnd);
-
         }
     }
 
 
     template <typename T, int n>
     void RankedTensor<T, n>::printTensor(){
-        for_each(data.begin(), data.end(), [] (const float c) {cout << c << " ";} );
+        for_each(data.begin(), data.end(), [] (T c) {cout << c << " ";} );
         cout<<endl<<endl;
     }
+
+
+    template <typename T>
+    UnknownRankedTensor<T>::UnknownRankedTensor(){ }
+
+
+    template <typename T>
+    UnknownRankedTensor<T>::~UnknownRankedTensor(){ }
     
 }
 
