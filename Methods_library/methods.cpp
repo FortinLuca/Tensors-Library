@@ -9,7 +9,7 @@
 
 namespace Tensor_Library{
 
-
+    // constructor and methods implementations of the RankedTensor class
     template <typename T, int n>
     RankedTensor<T, n>::RankedTensor(std::vector<int> args){
         int i;
@@ -51,7 +51,7 @@ namespace Tensor_Library{
         for(int i=0; i<n; i++)
             index += indexes[i]*strides[i];
 
-        return index;
+        return data[index];
     }
 
 
@@ -102,6 +102,8 @@ namespace Tensor_Library{
     }
 
 
+    //---------------------------------------------------------------------------------
+    // constructor and methods implementations of the UnknownRankedTensor class
     template <typename T>
     UnknownRankedTensor<T>::UnknownRankedTensor(){ }
 
