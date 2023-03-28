@@ -22,13 +22,14 @@ namespace Tensor_Library{
 
 
     public:
-        // Constructor
-        RankedTensor(vector<int> args);
+        /** Constructor
+        * @tparam ssss */
+        RankedTensor(vector<int> sizes);
 
 
         // Implementation of a constructor with different input parameters by recalling the previous constructor
         template <typename... ints>
-        RankedTensor(ints...args) : RankedTensor(vector<int>({args...})){}
+        RankedTensor(ints...sizes) : RankedTensor(vector<int>({sizes...})){}
 
 
         // Destructor from defualt
@@ -36,8 +37,15 @@ namespace Tensor_Library{
         
 
         //---------------------------------
-        RankedTensor<T, n> get();
+        T get(vector<int> indexes);
 
+        //template <typename... ints>
+        //get(ints...indexes) : get(vector<int>({indexes...})){}
+
+
+        /** GetSizeDimensions
+        * @tparam ssss 
+        * @return aaa */
         int * getSizeDimensions();
 
         int * getStrides();

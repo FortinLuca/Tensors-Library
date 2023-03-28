@@ -45,10 +45,17 @@ namespace Tensor_Library{
 
 
     template <typename T, int n>
-    RankedTensor<T, n> RankedTensor<T, n>::get(){}
+    T RankedTensor<T, n>::get(vector<int> indexes){
+        int index = 0;
+
+        for(int i=0; i<n; i++)
+            index += indexes[i]*strides[i];
+
+        return index;
+    }
 
 
-   template<typename T, int n>
+    template<typename T, int n>
     T RankedTensor<T, n>::randomNumber() {
 
         T from = numeric_limits<T>::lowest();
@@ -71,9 +78,7 @@ namespace Tensor_Library{
             uniform_real_distribution<T> distr(from, to);
             return distr(generator);
         }
-        else
-            throw runtime_error("This type is not managed by the Tensor library");
-
+        else throw runtime_error("This type is not managed by the Tensor library");
     }
 
 
@@ -87,7 +92,6 @@ namespace Tensor_Library{
                 data.insert(data.begin(), rnd);
             }
         } else throw runtime_error("This type is not managed by the Tensor library"); 
-
     }
 
 

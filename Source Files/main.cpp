@@ -57,6 +57,9 @@ int main() {
     rt4.insertRandomData();
     rt4.printTensor();
 
+    vector<int> testvector2 = {0, 1, 1, 2, 3};
+    cout<<endl<<rt1.get(testvector2)<<endl;
+
     
     return 0;
 }
