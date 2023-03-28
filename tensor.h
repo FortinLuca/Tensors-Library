@@ -87,7 +87,7 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief insertRandomData methods: it inserts randomic values into the vector attribute of type T data with a number of element correspondent to the n_total_elements attribute.
+         * @brief insertRandomData methods: it inserts pseudo-randomic values into the vector attribute of type T data with a number of element correspondent to the n_total_elements attribute.
          * The inserting is made in base of the type T, the tensor dimensions and the uniform distribution.
          * It exploits the auxiliary, private and static function randomNumber
          * The maximum range can be from -1000 to 1000, unless the limits of the arithmetic types has smaller limits (such as char)

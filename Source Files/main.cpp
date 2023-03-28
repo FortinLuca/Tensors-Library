@@ -4,20 +4,18 @@
 using namespace Tensor_Library;
 
 
- /*
- temporanea, solo per ripasso funzionamento puntatori/referenze
-        int * elem = &v[0];
+/*
+Temporanea, solo per ripasso funzionamento puntatori/referenze
+    int * elem = &v[0];
 
-        for(int i=0; i<5; i++){
-            cout<<elem[i]<<endl; 
-        }
-        cout<<&v[0]<<endl;
+    for(int i=0; i<5; i++){
+        cout<<elem[i]<<endl; 
+    }
+    cout<<&v[0]<<endl;
 */
 
 
 int main() {
-    srand(time(NULL));
-
     // little example with four tensors with different numeric types but with the same rimensions
     vector<int> testvector = {1, 2, 3, 4, 5};
     
@@ -50,7 +48,7 @@ int main() {
     }
     */
 
-    // For each tensor, it insert randomically elements of the correspondents type and it prints the filled tensors
+    // For each tensor, it insert pseudo-randomically elements of the correspondents type and it prints the filled tensors
     rt1.insertRandomData();
     rt1.printTensor();
 
