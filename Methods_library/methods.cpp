@@ -1,13 +1,14 @@
+#include <iostream>
 #include <cstdlib>
 #include <vector>
-#include <list>
 #include <algorithm>
+#include <limits>
 
-#include "../Utils/utils.cpp"
 #include "../tensor.h"
 
 
 namespace Tensor_Library{
+
 
     template <typename T, int n>
     RankedTensor<T, n>::RankedTensor(std::vector<int> args){
@@ -47,17 +48,46 @@ namespace Tensor_Library{
     RankedTensor<T, n> RankedTensor<T, n>::get(){}
 
 
+   template<typename T, int n>
+    T RankedTensor<T, n>::randomNumber() {
+
+        T from = numeric_limits<T>::lowest();
+        T to = numeric_limits<T>::max();
+
+        if constexpr(!(is_same_v<char, T> || is_same_v<signed char, T> || is_same_v<unsigned char, T>)){
+            if(from < -1000) from = -1000;
+            if(to > 1000) to = 1000;
+        }   
+
+        mt19937 mt(time(nullptr));
+        random_device rand_dev;
+        mt19937 generator(rand_dev());
+
+        if constexpr(is_integral_v<T>){
+            uniform_int_distribution<T> distr(from, to);
+            return distr(generator);
+        }
+        else if constexpr(is_floating_point_v<T>){
+            uniform_real_distribution<T> distr(from, to);
+            return distr(generator);
+        }
+        else
+            throw runtime_error("This type is not managed by the Tensor library");
+
+    }
+
+
     template <typename T, int n>
     void RankedTensor<T, n>::insertRandomData(){
         int i;
 
-        if(!is_integral<T>::value && !is_floating_point<T>::value)
-            throw runtime_error("This type is not managed by the Tensor library"); 
+        if constexpr(is_arithmetic_v<T>){
+            for (i = 0; i < n_total_elements; i++){
+                T rnd = randomNumber();
+                data.insert(data.begin(), rnd);
+            }
+        } else throw runtime_error("This type is not managed by the Tensor library"); 
 
-        for (i = 0; i < n_total_elements; i++){
-            T rnd = random();
-            data.insert(data.begin(), rnd);
-        }
     }
 
 

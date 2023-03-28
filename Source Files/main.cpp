@@ -16,6 +16,8 @@ using namespace Tensor_Library;
 
 
 int main() {
+    srand(time(NULL));
+
     vector<int> testvector = {1, 2, 3, 4, 5};
     
     RankedTensor<float, 5> rt1(testvector);

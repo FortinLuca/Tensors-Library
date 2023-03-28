@@ -1,4 +1,6 @@
 #include <iostream>
+#include <time.h>
+#include <random>
 
 using namespace std;
 
@@ -16,6 +18,8 @@ namespace Tensor_Library{
         int strides[n];
         vector<T> data;
 
+        static T randomNumber();
+
 
     public:
         // Constructor
@@ -26,22 +30,12 @@ namespace Tensor_Library{
         template <typename... ints>
         RankedTensor(ints...args) : RankedTensor(vector<int>({args...})){}
 
-        /*
-        int * elem = &v[0];
-
-        for(int i=0; i<5; i++){
-            cout<<elem[i]<<endl; 
-        }
-        cout<<&v[0]<<endl;
-        */
-
 
         // Destructor from defualt
         ~RankedTensor() = default;
         
 
         //---------------------------------
-        //ONLY FOR TESTING
         RankedTensor<T, n> get();
 
         int * getSizeDimensions();
