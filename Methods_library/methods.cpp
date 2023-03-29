@@ -14,7 +14,7 @@ namespace Tensor_Library{
     RankedTensor<T, n>::RankedTensor(std::vector<int> args){
         int i;
 
-        // Checking that the dimensionality of the tensor corresponds to the number of dimensions' value in input
+        // Checking the dimensionality of the tensor corresponds to the number of dimensions' value in input
         if(n != args.size()) {
             throw invalid_argument("The number of space dimensions inserted are not equal to the number of rank");
         }
@@ -25,7 +25,7 @@ namespace Tensor_Library{
             if(args[i] <= 0)
                 throw invalid_argument("A dimensional space cannot be zero or less");
             else{
-                // Computation of the strides and saving the strides' results and the input dimensions' sizes
+                // Computation of the strides and the sizeDimensions
                 strides[i] = n_total_elements;
 
                 n_total_elements *= args[i];
@@ -51,7 +51,7 @@ namespace Tensor_Library{
     T RankedTensor<T, n>::get(vector<int> indexes){
         int index = 0;
 
-        // Computation of the index of the vector from which we take the value requested
+        // Computation of the index of the vector from which we take the value provided
         for(int i=0; i<n; i++)
             index += indexes[i]*strides[i];  // Expolitation of the input indexes and the strides concept
 
@@ -66,9 +66,9 @@ namespace Tensor_Library{
         T from = numeric_limits<T>::lowest();
         T to = numeric_limits<T>::max();
 
-        // Reducing the range from -1000 to 1000 only for non-char elements (because the maximum char's range is lower)
+        // Reduction of the range from -1000 to 1000 only for non-char elements (because the maximum char's range is lower)
         if constexpr(!(is_same_v<char, T> || is_same_v<signed char, T> || is_same_v<unsigned char, T>)){
-            // There exist situations in which we can't have negative elements, so we have to make a check before changing the range
+            // There exist situations in which the value is inside the range, so we have to make a check before changing the range
             if(from < -1000) from = -1000;
             if(to > 1000) to = 1000;
         }   
@@ -93,7 +93,7 @@ namespace Tensor_Library{
             uniform_real_distribution<T> distr(from, to);
             return distr(generator);
         }
-        // Otherwise we throw an exception because we don't manage that type T for this method
+        // Otherwise we throw an exception because we don't manage this new different type T for this method
         else throw runtime_error("This type is not managed by the Tensor library");
     }
 
@@ -102,7 +102,7 @@ namespace Tensor_Library{
     void RankedTensor<T, n>::insertRandomData(){
         int i;
 
-        // Inserting random elements of type T only for arithmetic types (numeric types), otherwise we throw an exception 
+        // Insertion random elements of type T only for arithmetic types (numeric types), otherwise we throw an exception 
         if constexpr(is_arithmetic_v<T>){
             // Inserting always n_total_element elements
             for (i = 0; i < n_total_elements; i++){

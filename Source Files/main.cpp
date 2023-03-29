@@ -16,7 +16,7 @@ Temporanea, solo per ripasso funzionamento puntatori/referenze
 
 
 int main() {
-    // little example with four tensors with different numeric types but with the same rimensions
+    // short example of four tensors with different types but the same dimensions
     vector<int> testvector = {1, 2, 3, 4, 5};
     
     RankedTensor<float, 5> rt1(testvector);
@@ -48,7 +48,7 @@ int main() {
     }
     */
 
-    // For each tensor, it insert pseudo-randomically elements of the correspondents type and it prints the filled tensors
+    // for each tensor, it inserts pseudo-randomic elements of the correspondent type and it prints the final (filled) tensors
     rt1.insertRandomData();
     rt1.printTensor();
 
@@ -62,9 +62,9 @@ int main() {
     rt4.printTensor();
 
 
-    // It extract a value by using the get methods from a tensor
-    vector<int> testvector2 = {0, 1, 1, 2, 3};
-    cout<<endl<<rt1.get(testvector2)<<endl;
+    // It extracts a value by using the get methods from a tensor given the vector of indexes
+    vector<int> indexesVector = {0, 1, 1, 2, 3};
+    cout<<endl<<rt1.get(indexesVector)<<endl;
 
     
     return 0;

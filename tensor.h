@@ -5,11 +5,11 @@
 using namespace std;
 
 
-// Tensor class definition
+// Tensor_Library class definition
 namespace Tensor_Library{
 
     /**
-     * @brief RankedTensor class: the tensor has rank information at compile time without having dimensional informations
+     * @brief RankedTensor class: tensor has rank information at compile time without having dimensional informations
      * 
      * @tparam T: datatype of the tensor 
      * @tparam n: rank of the tensor
@@ -20,9 +20,9 @@ namespace Tensor_Library{
 
     private:
         int sizeDimensions[n];   // int-array attribute which contains the dimensions' sizes of the tensor
-        int n_total_elements;    // int attribute which contains the value of the tensor's total elements
+        int n_total_elements;    // int attribute which contains the value of the total elements of the tensor
         int strides[n];          // int-array attribute which contains the strides of the tensor
-        vector<T> data;          // int-vector attribute which contains the tensor's data
+        vector<T> data;          // int-vector attribute which contains the data of tensor
 
         /**
          * @brief randomNumber method: static, private and auxiliary function used to generate a random T element where T must be an arithmetic type
@@ -36,16 +36,16 @@ namespace Tensor_Library{
         /**
          * @brief Constructor of the RankedTensor class: it initializes all the private attributes of the class
          * 
-         * @param sizes: integer-numbers vector of the dimensions' sizes
+         * @param sizes: int-vector of the dimensions' sizes
          */
         RankedTensor(vector<int> sizes);
 
 
         /**
          * @brief Constructor of the RankedTensor class: it initializes all the private attributes of the class. 
-         * This is the overloaded version of the previous constructor that behaves exactly in the same way
+         * This is the overload version of the previous constructor that behaves exactly in the same way but with a different parameter in input
          * 
-         * @param sizes: series of integer correspondent to the dimensions' sizes
+         * @param sizes: series of integers correspondent to the dimensions' sizes
          */
         template <typename... ints>
         RankedTensor(ints...sizes) : RankedTensor(vector<int>({sizes...})){}
@@ -59,10 +59,10 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief get method: it extracts the element correspondent to the position requested
+         * @brief get() method: it extracts the element correspondent to the position provided
          * 
          * @param indexes: vector which contains the indexes of the value to extract
-         * @return element at the correspondent entry
+         * @return element at the correspondent indexes
          */
         T get(vector<int> indexes);
 
@@ -71,7 +71,7 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief getSizeDimensions method: extract the array attribute which contains the size's dimensions
+         * @brief getSizeDimensions() method: extract the array attribute which contains the size's dimensions
          * 
          * @return int-array attribute sizeDimensions
          */
@@ -79,7 +79,7 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief getStrides method: extract the array attribute which contains the strides
+         * @brief getStrides() method: extract the array attribute which contains the strides
          * 
          * @return int-array attribute Strides
          */
@@ -87,16 +87,16 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief insertRandomData methods: it inserts pseudo-randomic values into the vector attribute of type T data with a number of element correspondent to the n_total_elements attribute.
-         * The inserting is made in base of the type T, the tensor dimensions and the uniform distribution.
-         * It exploits the auxiliary, private and static function randomNumber
-         * The maximum range can be from -1000 to 1000, unless the limits of the arithmetic types has smaller limits (such as char)
+         * @brief insertRandomData() method: it inserts pseudo-randomic values into the vector attribute of type T data with a number of element correspondent to the n_total_elements attribute.
+         * The insertion is done in order to the type T, the tensor dimensions and the uniform distribution.
+         * It exploits the auxiliary, private and static function randomNumber()
+         * The range goes from -1000 and to 1000, ***RIMUOVEREI QUESTA PARTE*** --> unless the arithmetic types limits are smaller (like char)
          */
         void insertRandomData();
 
 
         /**
-         * @brief printTensor method: it prints every element contained in the tensor (from the data attribute)
+         * @brief printTensor() method: it prints every elements contained in the tensor ("data" attribute)
          */
         void printTensor();
 
