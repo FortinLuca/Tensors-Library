@@ -17,12 +17,12 @@ Temporanea, solo per ripasso funzionamento puntatori/referenze
 
 int main() {
     // short example of four tensors with different types but the same dimensions
-    vector<int> testvector = {1, 2, 3, 4, 5};
+    vector<int> testvector = {2, 3, 4};
     
-    RankedTensor<float, 5> rt1(testvector);
-    RankedTensor<int, 5> rt2(testvector);
-    RankedTensor<char, 5> rt3(testvector);
-    RankedTensor<double, 5> rt4(testvector);
+    RankedTensor<float, 3> rt1(testvector);
+    RankedTensor<int, 3> rt2(testvector);
+    RankedTensor<char, 3> rt3(testvector);
+    RankedTensor<double, 3> rt4(testvector);
 
     /*    
     // It prints the sizeDimensions and the strides attribute of the four tensors
@@ -63,8 +63,9 @@ int main() {
 
 
     // It extracts a value by using the get methods from a tensor given the vector of indexes
-    vector<int> indexesVector = {0, 1, 1, 2, 3};
-    cout<<endl<<rt1.get(indexesVector)<<endl;
+    vector<int> indexesVector = {1, 2, 3};
+    int value = rt3.get(indexesVector);
+    cout<<endl<<"The element from the indexes {1, 2, 3} is ---> "<<value;
 
     
     return 0;

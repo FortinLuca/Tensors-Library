@@ -48,15 +48,24 @@ namespace Tensor_Library{
 
 
     template <typename T, int n>
-    T RankedTensor<T, n>::get(vector<int> indexes){
+    T RankedTensor<T, n>::get(vector<int> tensorIndexes){
         int index = 0;
-
+        int i = 0;
+        //control of association of tensor index provided and corrispective dimension vector
+        for (int tensorIndex : tensorIndexes) {
+            if (sizeDimensions[i] <= tensorIndex ) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
+            i++;
+        }
         // Computation of the index of the vector from which we take the value provided
         for(int i=0; i<n; i++)
-            index += indexes[i]*strides[i];  // Expolitation of the input indexes and the strides concept
+            index += strides[i]*tensorIndexes[i];  // Expolitation of the input tensor indexes and the strides concept
 
         return data[index];
     }
+
+    //template <typename T, int n, typename... ints>
+    //T RankedTensor<T, n>::get(ints...tensorIndexes){};
+
 
 
     template<typename T, int n>

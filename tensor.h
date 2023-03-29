@@ -66,9 +66,8 @@ namespace Tensor_Library{
          */
         T get(vector<int> indexes);
 
-        //template <typename... ints>
-        //get(ints...indexes) : get(vector<int>({indexes...})){}
-
+        // template <typename... ints>
+        // T get(ints...indexes);
 
         /**
          * @brief getSizeDimensions() method: extract the array attribute which contains the size's dimensions
