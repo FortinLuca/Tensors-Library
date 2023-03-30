@@ -52,7 +52,7 @@ namespace Tensor_Library{
         int index = 0;
         int i = 0;
 
-        if(tensorIndexes.size() != n) throw invalid_argument("The number of space dimensions inserted are not equal to the number of rank");
+        if(tensorIndexes.size() != n) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
 
         //check of the association of tensor index provided and corrispective dimension vector
         for (int tensorIndex : tensorIndexes) {
