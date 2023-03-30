@@ -74,6 +74,21 @@ namespace Tensor_Library{
     T RankedTensor<T, n>::get(ints... tensorIndexes){
         return get(vector<int>({tensorIndexes...}));
     }
+
+
+    // TODO: implement this
+    template <typename T, int n>
+    template<typename... ints>
+    RankedTensor<T, n-1> RankedTensor<T, n>::fix(const int space, ints... tensorIndexes){
+        return 0;
+    }
+
+    // TODO: implement this
+    template <typename T, int n>
+    template <typename... ints>
+    RankedTensor<T, n-1> fix_copy(const int space, ints... indexes){
+        return 0;
+    }
     
 
 

@@ -6,6 +6,7 @@ using namespace Tensor_Library;
 
 /*
 Temporanea, solo per ripasso funzionamento puntatori/referenze
+    int v[] = {1, 2, 3, 4, 5};
     int * elem = &v[0];
 
     for(int i=0; i<5; i++){
@@ -66,6 +67,7 @@ int main() {
     vector<int> indexesVector = {1, 2, 3};
     int value = rt3.get(1, 2, 3);
     cout<<endl<<"The element from the indexes {1, 2, 3} is ---> "<<value<<endl;
+
 
     
     return 0;
