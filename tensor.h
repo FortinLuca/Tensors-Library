@@ -66,8 +66,17 @@ namespace Tensor_Library{
          */
         T get(vector<int> indexes);
 
-        // template <typename... ints>
-        // T get(ints...indexes);
+
+        /**
+         * @brief get() method: it extracts the element correspondent to the position provided
+         * 
+         * @param indexes: number of int parameters correspondent to the indexes of the value to extract
+         * @return element at the correspondent indexes
+         */
+        template <typename... ints>
+        T get(ints...indexes);
+
+
 
         /**
          * @brief getSizeDimensions() method: extract the array attribute which contains the size's dimensions

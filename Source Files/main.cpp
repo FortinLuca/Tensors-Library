@@ -64,8 +64,8 @@ int main() {
 
     // It extracts a value by using the get methods from a tensor given the vector of indexes
     vector<int> indexesVector = {1, 2, 3};
-    int value = rt3.get(indexesVector);
-    cout<<endl<<"The element from the indexes {1, 2, 3} is ---> "<<value;
+    int value = rt3.get(1, 2, 3);
+    cout<<endl<<"The element from the indexes {1, 2, 3} is ---> "<<value<<endl;
 
     
     return 0;
