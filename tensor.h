@@ -77,6 +77,29 @@ namespace Tensor_Library{
         T get(ints...indexes);
 
 
+        /**
+         * @brief 
+         * 
+         * @tparam ints 
+         * @param space 
+         * @param indexes 
+         * @return RankedTensor<T, n-1> 
+         */
+        template <typename... ints>
+        RankedTensor<T, n-1> fix(const int space, ints... indexes);
+
+
+        /**
+         * @brief 
+         * 
+         * @tparam ints 
+         * @param space 
+         * @param indexes 
+         * @return RankedTensor<T, n-1> 
+         */
+        template <typename... ints>
+        RankedTensor<T, n-1> fix_copy(const int space, ints... indexes); 
+
 
         /**
          * @brief getSizeDimensions() method: extract the array attribute which contains the size's dimensions
@@ -122,6 +145,7 @@ namespace Tensor_Library{
     class UnknownRankedTensor {
 
     private:
+        const int n;
         /* data */
 
         
