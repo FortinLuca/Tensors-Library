@@ -24,6 +24,7 @@ namespace Tensor_Library{
         int n_total_elements;           // int attribute which contains the value of the total elements of the tensor
         int strides[n];                 // int-array attribute which contains the strides of the tensor
         shared_ptr<vector<T>> data;     // int-vector pointer attribute which points to the vector that contains the data of tensor
+        int init_position;
 
         /**
          * @brief randomNumber method: static, private and auxiliary function used to generate a random T element where T must be an arithmetic type
@@ -34,6 +35,7 @@ namespace Tensor_Library{
 
 
     public:
+        // Constructors
         /**
          * @brief Constructor of the RankedTensor class: it initializes all the private attributes of the class
          * 
@@ -56,40 +58,48 @@ namespace Tensor_Library{
          * @brief Destructor of the RankedTensor class: it will be mantained as default
          */
         ~RankedTensor() = default;
-        
-        //************************************************************************
-        // uso del costrutto operator definito e implementato qui per il momento
-        //RankedTensor<T, n>& operator=(const RankedTensor<T,n>& rankedTensor) = default;
 
-        T operator()(vector<int> tensorIndexes){
-            return get(tensorIndexes);
-        }
+        // ********************************************************************************************
 
+        // Operator
+        /**
+         * @brief 
+         * 
+         * @param tensorIndexes 
+         * @return T 
+         */
+        T operator()(vector<int> tensorIndexes);
+
+        /**
+         * @brief 
+         * 
+         * @tparam ints 
+         * @param tensorIndexes 
+         * @return T 
+         */
         template <typename... ints>
-        T operator()(ints... tensorIndexes){
-            vector<int> newIndexes({tensorIndexes...});
-            return get(newIndexes);
-        }
-        //************************************************************************
+        T operator()(ints... tensorIndexes);
+
+        // ***********************************************************************************************
+
+        // Methods
+        /**
+         * @brief get() method: it extracts the element correspondent to the position provided
+         * 
+         * @param tensorIndexes: vector which contains the indexes of the value to extract
+         * @return element at the correspondent indexes
+         */
+        T get(vector<int> tensorIndexes);
 
 
         /**
          * @brief get() method: it extracts the element correspondent to the position provided
          * 
-         * @param indexes: vector which contains the indexes of the value to extract
-         * @return element at the correspondent indexes
-         */
-        T get(vector<int> indexes);
-
-
-        /**
-         * @brief get() method: it extracts the element correspondent to the position provided
-         * 
-         * @param indexes: number of int parameters correspondent to the indexes of the value to extract
+         * @param tensorIndexes: number of int parameters correspondent to the indexes of the value to extract
          * @return element at the correspondent indexes
          */
         template <typename... ints>
-        T get(ints...indexes);
+        T get(ints...tensorIndexes);
 
 
         /**
@@ -97,25 +107,25 @@ namespace Tensor_Library{
          * 
          * @tparam ints 
          * @param space 
-         * @param indexes 
+         * @param tensorIndexes 
          * @return RankedTensor<T, n-1> 
          */
-        template <typename... ints>
-        RankedTensor<T, n-1> fix(const int space, ints... indexes);
+        RankedTensor<T, n-1> fix(const int space, const int tensorIndex);
 
 
         /**
          * @brief 
          * 
-         * @tparam ints 
+         * @tparam ints
          * @param space 
-         * @param indexes 
+         * @param tensorIndexes 
          * @return RankedTensor<T, n-1> 
          */
-        template <typename... ints>
-        RankedTensor<T, n-1> fix_copy(const int space, ints... indexes); 
+        RankedTensor<T, n-1> fix_copy(const int space, const int tensorIndex); 
 
+        // *******************************************************************************
 
+        // Getters and Setters
         /**
          * @brief getSizeDimensions() method: extract the array attribute which contains the size's dimensions
          * 
@@ -132,6 +142,32 @@ namespace Tensor_Library{
         int * getStrides();
 
 
+        /**
+         * @brief Get the Data object
+         * 
+         * @return shared_ptr<vector<T>> 
+         */
+        shared_ptr<vector<T>> getData();
+        
+
+        /**
+         * @brief Get the Init Position object
+         * 
+         * @return int 
+         */
+        int getInitPosition();
+
+
+        /**
+         * @brief Set the Init Position object
+         * 
+         * @param i 
+         */
+        void setInitPosition(int i);
+        
+        // ***************************************************************************+
+
+        // Methods for testing
         /**
          * @brief insertRandomData() method: it inserts pseudo-randomic values into the vector attribute of type T data with a number of element correspondent to the n_total_elements attribute.
          * The insertion is done in order to the type T, the tensor dimensions and the uniform distribution.

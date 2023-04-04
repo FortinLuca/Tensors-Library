@@ -20,6 +20,8 @@ namespace Tensor_Library{
         }
 
         n_total_elements = 1;
+        init_position = 0;
+
         for(i = n-1; i >= 0; i--){
             // The dimensions' values of the tensor must be greater than 0
             if(args[i] <= 0)
@@ -35,6 +37,23 @@ namespace Tensor_Library{
     }
 
 
+    //************************************************************************
+    //RankedTensor<T, n>& operator=(const RankedTensor<T,n>& rankedTensor) = default;
+
+    template <typename T, int n>
+    T RankedTensor<T, n>::operator()(vector<int> tensorIndexes){
+        return get(tensorIndexes);
+    }
+
+    template <typename T, int n>
+    template <typename... ints>
+    T RankedTensor<T, n>::operator()(ints... tensorIndexes){
+        vector<int> newIndexes({tensorIndexes...});
+        return get(newIndexes);
+    }
+    //************************************************************************
+
+
     template <typename T, int n>
     int * RankedTensor<T, n>::getSizeDimensions(){
         return sizeDimensions;
@@ -46,10 +65,25 @@ namespace Tensor_Library{
         return strides;
     }
 
+    template <typename T, int n>
+    shared_ptr<vector<T>> RankedTensor<T, n>::getData(){
+        return data;
+    }
+
+    template <typename T, int n>
+    int RankedTensor<T, n>::getInitPosition(){
+        return init_position;
+    }
+
+    template <typename T, int n>
+    void RankedTensor<T, n>::setInitPosition(int i){
+        init_position = i;
+    }
+
 
     template <typename T, int n>
     T RankedTensor<T, n>::get(vector<int> tensorIndexes){
-        int index = 0;
+        int index = init_position;
         int i = 0;
 
         if(tensorIndexes.size() != n) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
@@ -76,17 +110,43 @@ namespace Tensor_Library{
     }
 
 
-    // TODO: implement this
     template <typename T, int n>
-    template <typename... ints>
-    RankedTensor<T, n-1> RankedTensor<T, n>::fix(const int space, ints... tensorIndexes){
-        return 0;
+    RankedTensor<T, n-1> RankedTensor<T, n>::fix(const int space, const int tensorIndex){
+        
+        // Checking the exceptions
+        if(space < 0 || space >= n) throw invalid_argument("The dimensional space must exists");
+        if(tensorIndex < 0) throw invalid_argument("An index cannot be less than zero");
+        if(sizeDimensions[space] <= tensorIndex) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
+
+        // Creation of a new SizeDimensions
+        vector<int> newSizeDimensions;
+        newSizeDimensions.insert(newSizeDimensions.begin(), std::begin(sizeDimensions), std::end(sizeDimensions));
+        newSizeDimensions.erase(newSizeDimensions.begin() + space);
+
+        // Creation of a new tensor to return
+        RankedTensor<T, n-1> newTensor(newSizeDimensions);
+        
+        // Computation of the new tensor's slides
+        for(int i=0; i<n-1; i++){
+            if(i < space)
+                newTensor.getStrides()[i] = strides[i];
+            else if(i < space)
+                newTensor.getStrides()[i] = strides[i-1];
+        }
+
+        // Copying the new strides and the data in the new tensor
+        newTensor.getData() = data;
+
+        // Computing the new starting position, initially setted to zero
+        newTensor.setInitPosition(newTensor.getInitPosition() + space * strides[tensorIndex]); 
+
+        // It returns the new tensor
+        return newTensor;
     }
 
     // TODO: implement this
     template <typename T, int n>
-    template <typename... ints>
-    RankedTensor<T, n-1> RankedTensor<T, n>::fix_copy(const int space, ints... indexes){
+    RankedTensor<T, n-1> RankedTensor<T, n>::fix_copy(const int space, const int tensorIndex){
         return 0;
     }
     
