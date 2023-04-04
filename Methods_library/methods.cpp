@@ -70,7 +70,7 @@ namespace Tensor_Library{
 
     
     template <typename T, int n>
-    template<typename... ints>
+    template <typename... ints>
     T RankedTensor<T, n>::get(ints... tensorIndexes){
         return get(vector<int>({tensorIndexes...}));
     }
@@ -78,7 +78,7 @@ namespace Tensor_Library{
 
     // TODO: implement this
     template <typename T, int n>
-    template<typename... ints>
+    template <typename... ints>
     RankedTensor<T, n-1> RankedTensor<T, n>::fix(const int space, ints... tensorIndexes){
         return 0;
     }
@@ -86,13 +86,13 @@ namespace Tensor_Library{
     // TODO: implement this
     template <typename T, int n>
     template <typename... ints>
-    RankedTensor<T, n-1> fix_copy(const int space, ints... indexes){
+    RankedTensor<T, n-1> RankedTensor<T, n>::fix_copy(const int space, ints... indexes){
         return 0;
     }
     
 
-
-    template<typename T, int n>
+    //spostare in utils?
+    template <typename T, int n>
     T RankedTensor<T, n>::randomNumber() {
 
         // Computation of the limits of datatype T
