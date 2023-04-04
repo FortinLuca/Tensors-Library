@@ -71,6 +71,11 @@ namespace Tensor_Library{
     }
 
     template <typename T, int n>
+    void RankedTensor<T, n>::setData(shared_ptr<vector<T>> newData){
+        data = newData;
+    }
+
+    template <typename T, int n>
     int RankedTensor<T, n>::getInitPosition(){
         return init_position;
     }
@@ -135,7 +140,7 @@ namespace Tensor_Library{
         }
 
         // Copying the new strides and the data in the new tensor
-        newTensor.getData() = data;
+        newTensor.setData(data);
 
         // Computing the new starting position, initially setted to zero
         newTensor.setInitPosition(newTensor.getInitPosition() + space * strides[tensorIndex]); 

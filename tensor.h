@@ -148,6 +148,14 @@ namespace Tensor_Library{
          * @return shared_ptr<vector<T>> 
          */
         shared_ptr<vector<T>> getData();
+
+
+        /**
+         * @brief Set the Data object
+         * 
+         * @param newData 
+         */
+        void setData(shared_ptr<vector<T>> newData);
         
 
         /**
