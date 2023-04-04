@@ -70,7 +70,7 @@ int main() {
 
 
     RankedTensor<float, 2> newTensor = rt1.fix(1, 1);
-    rt1.printTensor();
+    newTensor.printTensor();
 
 
     return 0;

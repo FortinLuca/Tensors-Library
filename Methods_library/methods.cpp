@@ -83,7 +83,7 @@ namespace Tensor_Library{
 
     template <typename T, int n>
     T RankedTensor<T, n>::get(vector<int> tensorIndexes){
-        int index = init_position;
+        int index = 0;
         int i = 0;
 
         if(tensorIndexes.size() != n) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
@@ -99,7 +99,7 @@ namespace Tensor_Library{
         for(int i=0; i<n; i++)
             index += strides[i]*tensorIndexes[i];  // Expolitation of the input tensor indexes and the strides concept
 
-        return data->at(index);
+        return data->at(index + init_position);
     }
 
 
