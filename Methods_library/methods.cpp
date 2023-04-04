@@ -65,10 +65,10 @@ namespace Tensor_Library{
         for(int i=0; i<n; i++)
             index += strides[i]*tensorIndexes[i];  // Expolitation of the input tensor indexes and the strides concept
 
-        return data[index];
+        return data->at(index);
     }
 
-    
+
     template <typename T, int n>
     template <typename... ints>
     T RankedTensor<T, n>::get(ints... tensorIndexes){
@@ -134,13 +134,14 @@ namespace Tensor_Library{
     template <typename T, int n>
     void RankedTensor<T, n>::insertRandomData(){
         int i;
+        data = make_shared<vector<T>>(n_total_elements);
 
         // Insertion random elements of type T only for arithmetic types (numeric types), otherwise we throw an exception 
         if constexpr(is_arithmetic_v<T>){
             // Inserting always n_total_element elements
             for (i = 0; i < n_total_elements; i++){
                 T rnd = randomNumber();
-                data.insert(data.begin(), rnd);
+                data->at(i) = rnd;
             }
         } else throw runtime_error("This type is not managed by the Tensor library"); 
     }
@@ -149,7 +150,10 @@ namespace Tensor_Library{
     template <typename T, int n>
     void RankedTensor<T, n>::printTensor(){
         // We exploit the for_each contruct to print the element in the data vector
-        for_each(data.begin(), data.end(), [] (T c) {cout << +c << " ";} );
+        //for_each(data.begin(), data.get().end(), [] (T c) {cout << +c << " ";} );
+        for (int i = 0; i < n_total_elements; i++) {
+            cout << +data->at(i) << " ";
+        } 
         cout<<endl<<endl;
     }
 

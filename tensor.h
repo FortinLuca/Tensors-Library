@@ -1,6 +1,7 @@
 #include <iostream>
 #include <time.h>
 #include <random>
+#include <memory>
 
 using namespace std;
 
@@ -19,10 +20,10 @@ namespace Tensor_Library{
 
 
     private:
-        int sizeDimensions[n];   // int-array attribute which contains the dimensions' sizes of the tensor
-        int n_total_elements;    // int attribute which contains the value of the total elements of the tensor
-        int strides[n];          // int-array attribute which contains the strides of the tensor
-        vector<T> data;          // int-vector attribute which contains the data of tensor
+        int sizeDimensions[n];          // int-array attribute which contains the dimensions' sizes of the tensor
+        int n_total_elements;           // int attribute which contains the value of the total elements of the tensor
+        int strides[n];                 // int-array attribute which contains the strides of the tensor
+        shared_ptr<vector<T>> data;     // int-vector pointer attribute which points to the vector that contains the data of tensor
 
         /**
          * @brief randomNumber method: static, private and auxiliary function used to generate a random T element where T must be an arithmetic type
@@ -56,6 +57,20 @@ namespace Tensor_Library{
          */
         ~RankedTensor() = default;
         
+        //************************************************************************
+        // uso del costrutto operator definito e implementato qui per il momento
+        //RankedTensor<T, n>& operator=(const RankedTensor<T,n>& rankedTensor) = default;
+
+        T operator()(vector<int> tensorIndexes){
+            return get(tensorIndexes);
+        }
+
+        template <typename... ints>
+        T operator()(ints... tensorIndexes){
+            vector<int> newIndexes({tensorIndexes...});
+            return get(newIndexes);
+        }
+        //************************************************************************
 
 
         /**
