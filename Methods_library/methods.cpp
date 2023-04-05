@@ -37,7 +37,7 @@ namespace Tensor_Library{
     }
 
 
-    //************************************************************************
+    //*************************************************************************************************************************
     //RankedTensor<T, n>& operator=(const RankedTensor<T,n>& rankedTensor) = default;
 
     template <typename T, int n>
@@ -48,11 +48,11 @@ namespace Tensor_Library{
     template <typename T, int n>
     template <typename... ints>
     T RankedTensor<T, n>::operator()(ints... tensorIndexes){
-        vector<int> newIndexes({tensorIndexes...});
-        return get(newIndexes);
+        return get(vector<int> ({tensorIndexes...}));
     }
-    //************************************************************************
+    //*****************************************************************************************************************************
 
+    // Getters and setters
 
     template <typename T, int n>
     int * RankedTensor<T, n>::getSizeDimensions(){
@@ -85,6 +85,9 @@ namespace Tensor_Library{
         init_position = i;
     }
 
+    //******************************************************************************************************************************
+
+    // Methods
 
     template <typename T, int n>
     T RankedTensor<T, n>::get(vector<int> tensorIndexes){
@@ -132,18 +135,18 @@ namespace Tensor_Library{
         RankedTensor<T, n-1> newTensor(newSizeDimensions);
         
         // Computation of the new tensor's slides
-        for(int i=0; i<n-1; i++){
+        for(int i=0; i<n; i++){
             if(i < space)
                 newTensor.getStrides()[i] = strides[i];
-            else if(i < space)
-                newTensor.getStrides()[i] = strides[i-1];
+            else if(i > space)
+                newTensor.getStrides()[i-1] = strides[i];
         }
 
         // Copying the new strides and the data in the new tensor
         newTensor.setData(data);
 
         // Computing the new starting position, initially setted to zero
-        newTensor.setInitPosition(newTensor.getInitPosition() + space * strides[tensorIndex]); 
+        newTensor.setInitPosition(newTensor.getInitPosition() + tensorIndex * strides[space]); 
 
         // It returns the new tensor
         return newTensor;
@@ -154,7 +157,10 @@ namespace Tensor_Library{
     RankedTensor<T, n-1> RankedTensor<T, n>::fix_copy(const int space, const int tensorIndex){
         return 0;
     }
-    
+
+    //************************************************************************************************************************
+
+    // Methods for testing    
 
     //spostare in utils?
     template <typename T, int n>
@@ -216,14 +222,18 @@ namespace Tensor_Library{
     void RankedTensor<T, n>::printTensor(){
         // We exploit the for_each contruct to print the element in the data vector
         //for_each(data.begin(), data.get().end(), [] (T c) {cout << +c << " ";} );
-        for (int i = 0; i < n_total_elements; i++) {
+        for (int i = 0; i < init_position; i++) {
             cout << +data->at(i) << " ";
         } 
         cout<<endl<<endl;
     }
 
 
-    //---------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------------------------------------------
+    //*********************************************************************************************************************************
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
     // Constructor and methods implementations of the UnknownRankedTensor class
     template <typename T>
     UnknownRankedTensor<T>::UnknownRankedTensor(){ }
