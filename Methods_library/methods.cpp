@@ -227,7 +227,7 @@ namespace Tensor_Library{
     void RankedTensor<T, n>::printTensor(){
         // We exploit the for_each contruct to print the element in the data vector
         //for_each(data.begin(), data.get().end(), [] (T c) {cout << +c << " ";} );
-        for (int i = 0; i < init_position; i++) {
+        for (int i = 0; i < n_total_elements; i++) {
             cout << +data->at(i) << " ";
         } 
         cout<<endl<<endl;

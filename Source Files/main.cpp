@@ -72,9 +72,5 @@ int main() {
     RankedTensor<int, 2> newTensor = rt2.fix(2, 1);
     newTensor.printTensor();
 
-    vector<int> fixTestVector = {3};
-    RankedTensor<float, 2> fixTestTensor(fixTestVector);
-    cout << "number of element new tensor is "<< +fixTestTensor.get_n_total_elements();
-
     return 0;
 }
