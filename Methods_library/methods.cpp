@@ -85,6 +85,10 @@ namespace Tensor_Library{
         init_position = i;
     }
 
+    template <typename T, int n>
+    int RankedTensor<T, n>::get_n_total_elements() {
+        return n_total_elements;
+    }
 
     template <typename T, int n>
     T RankedTensor<T, n>::get(vector<int> tensorIndexes){
@@ -116,12 +120,12 @@ namespace Tensor_Library{
 
 
     template <typename T, int n>
-    RankedTensor<T, n-1> RankedTensor<T, n>::fix(const int space, const int tensorIndex){
+    RankedTensor<T, n-1> RankedTensor<T, n>::fix(const int space, const int spaceIndex){
         
         // Checking the exceptions
-        if(space < 0 || space >= n) throw invalid_argument("The dimensional space must exists");
-        if(tensorIndex < 0) throw invalid_argument("An index cannot be less than zero");
-        if(sizeDimensions[space] <= tensorIndex) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
+        if(space < 0 || space >= n) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
+        if(spaceIndex < 0) throw invalid_argument("An index cannot be less than zero");
+        if(sizeDimensions[space] <= spaceIndex) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
 
         // Creation of a new SizeDimensions
         vector<int> newSizeDimensions;
@@ -131,19 +135,19 @@ namespace Tensor_Library{
         // Creation of a new tensor to return
         RankedTensor<T, n-1> newTensor(newSizeDimensions);
         
-        // Computation of the new tensor's slides
-        for(int i=0; i<n-1; i++){
+        // Computation of the new tensor's strides
+        for(int i=0; i<n; i++){
             if(i < space)
                 newTensor.getStrides()[i] = strides[i];
-            else if(i < space)
-                newTensor.getStrides()[i] = strides[i-1];
+            else if(i > space)
+                newTensor.getStrides()[i-1] = strides[i];
         }
 
-        // Copying the new strides and the data in the new tensor
+        // Copy of the new strides and the original data in the new tensor
         newTensor.setData(data);
 
-        // Computing the new starting position, initially setted to zero
-        newTensor.setInitPosition(newTensor.getInitPosition() + space * strides[tensorIndex]); 
+        // Computation of the new starting position, initially setted to zero
+        newTensor.setInitPosition(newTensor.getInitPosition() + spaceIndex * strides[space]); 
 
         // It returns the new tensor
         return newTensor;
@@ -217,7 +221,7 @@ namespace Tensor_Library{
         // We exploit the for_each contruct to print the element in the data vector
         //for_each(data.begin(), data.get().end(), [] (T c) {cout << +c << " ";} );
         for (int i = 0; i < n_total_elements; i++) {
-            cout << +data->at(i) << " ";
+            cout << +data->at(i) << " ";        
         } 
         cout<<endl<<endl;
     }

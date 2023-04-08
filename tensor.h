@@ -172,6 +172,14 @@ namespace Tensor_Library{
          * @param i 
          */
         void setInitPosition(int i);
+
+        
+        /**
+         * @brief Get the n_total_elements
+         * 
+         * @return int 
+         */
+        int get_n_total_elements();
         
         // ***************************************************************************+
 
