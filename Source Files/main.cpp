@@ -51,25 +51,25 @@ int main() {
 
     // for each tensor, it inserts pseudo-randomic elements of the correspondent type and it prints the final (filled) tensors
     rt1.insertRandomData();
-    rt1.printTensor();
+    //rt1.printTensor();
 
     rt2.insertRandomData();
     rt2.printTensor();
 
     rt3.insertRandomData();
-    rt3.printTensor();
+    //rt3.printTensor();
 
     rt4.insertRandomData();
-    rt4.printTensor();
+    //rt4.printTensor();
 
 
     // It extracts a value by using the get methods from a tensor given the vector of indexes
     vector<int> indexesVector = {1, 2, 3};
-    char value = rt3(1, 2, 3);
-    cout<<endl<<"The element from the indexes {1, 2, 3} is ---> "<<+value<<endl<<endl;
+    //char value = rt3(1, 2, 3);
+    //cout<<endl<<"The element from the indexes {1, 2, 3} is ---> "<<+value<<endl<<endl;
 
-
-    RankedTensor<float, 2> newTensor = rt1.fix(1, 1);
+    // It tries to use the fix method
+    RankedTensor<int, 2> newTensor = rt2.fix(2, 1);
     newTensor.printTensor();
 
     vector<int> fixTestVector = {3};

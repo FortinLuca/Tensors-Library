@@ -80,49 +80,7 @@ namespace Tensor_Library{
         template <typename... ints>
         T operator()(ints... tensorIndexes);
 
-        // ***********************************************************************************************
-
-        // Methods
-        /**
-         * @brief get() method: it extracts the element correspondent to the position provided
-         * 
-         * @param tensorIndexes: vector which contains the indexes of the value to extract
-         * @return element at the correspondent indexes
-         */
-        T get(vector<int> tensorIndexes);
-
-
-        /**
-         * @brief get() method: it extracts the element correspondent to the position provided
-         * 
-         * @param tensorIndexes: number of int parameters correspondent to the indexes of the value to extract
-         * @return element at the correspondent indexes
-         */
-        template <typename... ints>
-        T get(ints...tensorIndexes);
-
-
-        /**
-         * @brief 
-         * 
-         * @tparam ints 
-         * @param space 
-         * @param tensorIndexes 
-         * @return RankedTensor<T, n-1> 
-         */
-        RankedTensor<T, n-1> fix(const int space, const int tensorIndex);
-
-
-        /**
-         * @brief 
-         * 
-         * @tparam ints
-         * @param space 
-         * @param tensorIndexes 
-         * @return RankedTensor<T, n-1> 
-         */
-        RankedTensor<T, n-1> fix_copy(const int space, const int tensorIndex); 
-
+        
         // *******************************************************************************
 
         // Getters and Setters
@@ -180,8 +138,52 @@ namespace Tensor_Library{
          * @return int 
          */
         int get_n_total_elements();
-        
-        // ***************************************************************************+
+
+
+        // ***********************************************************************************************
+
+        // Methods
+        /**
+         * @brief get() method: it extracts the element correspondent to the position provided
+         * 
+         * @param tensorIndexes: vector which contains the indexes of the value to extract
+         * @return element at the correspondent indexes
+         */
+        T get(vector<int> tensorIndexes);
+
+
+        /**
+         * @brief get() method: it extracts the element correspondent to the position provided
+         * 
+         * @param tensorIndexes: number of int parameters correspondent to the indexes of the value to extract
+         * @return element at the correspondent indexes
+         */
+        template <typename... ints>
+        T get(ints...tensorIndexes);
+
+
+        /**
+         * @brief 
+         * 
+         * @tparam ints 
+         * @param space 
+         * @param tensorIndexes 
+         * @return RankedTensor<T, n-1> 
+         */
+        RankedTensor<T, n-1> fix(const int space, const int tensorIndex);
+
+
+        /**
+         * @brief 
+         * 
+         * @tparam ints
+         * @param space 
+         * @param tensorIndexes 
+         * @return RankedTensor<T, n-1> 
+         */
+        RankedTensor<T, n-1> fix_copy(const int space, const int tensorIndex);         
+
+        // *************************************************************************************************
 
         // Methods for testing
         /**
