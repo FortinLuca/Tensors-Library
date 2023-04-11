@@ -1,15 +1,10 @@
 #include "Iterators/iterators.cpp"
 
-#include <iostream>
-#include <time.h>
-#include <random>
-#include <memory>
-
 using namespace std;
 using namespace Iterators;
 
 
-// Tensor_Library class definition
+// Tensor_Library definition
 namespace Tensor_Library{
 
     /**
@@ -93,8 +88,9 @@ namespace Tensor_Library{
         // *******************************************************************************
 
         // Getters and Setters
+        
         /**
-         * @brief getSizeDimensions() method: extract the array attribute which contains the size's dimensions
+         * @brief getSizeDimensions() method: it extracts the array attribute which contains the size's dimensions
          * 
          * @return int-array attribute sizeDimensions
          */
@@ -102,7 +98,7 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief getStrides() method: extract the array attribute which contains the strides
+         * @brief getStrides() method: it extracts the array attribute which contains the strides
          * 
          * @return int-array attribute Strides
          */
@@ -110,7 +106,7 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief Get the Data object
+         * @brief getData() method: it extracts the Data object
          * 
          * @return shared_ptr<vector<T>> 
          */
@@ -118,33 +114,33 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief Set the Data object
+         * @brief setData() method: it sets the Data object
          * 
-         * @param newData 
+         * @param newData: it will be the new Data of the tensor
          */
         void setData(shared_ptr<vector<T>> newData);
         
 
         /**
-         * @brief Get the Init Position object
+         * @brief getInitPosition(): it gets the InitPosition object
          * 
-         * @return int 
+         * @return  
          */
         int getInitPosition();
 
 
         /**
-         * @brief Set the Init Position object
+         * @brief setInitPosition(): it set the InitPosition object
          * 
-         * @param i 
+         * @param i: it will be the new value of the attribute InitPosition
          */
         void setInitPosition(int i);
 
         
         /**
-         * @brief Get the n_total_elements
+         * @brief get_n_total_elements() methods: Get the n_total_elements
          * 
-         * @return int 
+         * @return the value of the attribute n_total_elements
          */
         int get_n_total_elements();
 

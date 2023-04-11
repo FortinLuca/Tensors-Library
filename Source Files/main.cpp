@@ -69,7 +69,7 @@ int main() {
     //cout<<endl<<"The element from the indexes {1, 2, 3} is ---> "<<+value<<endl<<endl;
 
     // It tries to use the fix method
-    RankedTensor<int, 2> newTensor = rt2.fix(2, 1);
+    //RankedTensor<int, 2> newTensor = rt2.fix(2, 1);
     //newTensor.printTensor();
 
     auto it = rt2.getIterator();

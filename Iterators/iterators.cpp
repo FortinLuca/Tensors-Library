@@ -2,7 +2,10 @@
 
 using namespace std;
 
+
 namespace Iterators{
+
+    // Constructor implementation
     template <typename T, int n>
     RankedTensorIterator<T, n>::RankedTensorIterator(RankedTensor<T, n> &tensorInput) : tensor(&tensorInput){
         for (int i = 0; i < n; i++) {
@@ -12,10 +15,12 @@ namespace Iterators{
         
     }
 
+    // Implementation of the hasNext method
     template <typename T, int n>
     bool RankedTensorIterator<T, n>::hasNext(){
 
         for(int i = 0; i < n; i++){
+            // Checking if we have a successive element
             if(indexes[i] < endIndexes[i]){
                 return true;
             }
@@ -32,15 +37,18 @@ namespace Iterators{
     }
 
 
+    // Implementation of the next method
     template <typename T, int n>
     T RankedTensorIterator<T, n>::next(){
         int idx = n-1;
         bool check = false;
-        T checkLast = indexes[0];
+        int checkLast = indexes[0];
 
+        // Saving the element of the current position into the elem variable by using the get method
         vector<int> vectIndexes(begin(indexes), end(indexes));
         T elem = tensor->get(vectIndexes);
 
+        // Ordered sliding of the tensor elements
         while(!check && idx >= 0){
             if(indexes[idx] == endIndexes[idx]){
                 indexes[idx] = 0;
@@ -52,9 +60,11 @@ namespace Iterators{
             }
         }
 
+        // Handling the case where you are in the last element
         if(!check)
             indexes[0] = checkLast + 1;
 
+        // Returning the element saved before
         return elem;
     }
 
