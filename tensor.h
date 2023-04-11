@@ -1,12 +1,10 @@
-#include <iostream>
-#include <time.h>
-#include <random>
-#include <memory>
+#include "Iterators/iterators.cpp"
 
 using namespace std;
+using namespace Iterators;
 
 
-// Tensor_Library class definition
+// Tensor_Library definition
 namespace Tensor_Library{
 
     /**
@@ -25,6 +23,7 @@ namespace Tensor_Library{
         int strides[n];                 // int-array attribute which contains the strides of the tensor
         shared_ptr<vector<T>> data;     // int-vector pointer attribute which points to the vector that contains the data of tensor
         int init_position;
+        friend class RankedTensorIterator<T, n>;
 
         /**
          * @brief randomNumber method: static, private and auxiliary function used to generate a random T element where T must be an arithmetic type
@@ -52,6 +51,11 @@ namespace Tensor_Library{
          */
         template <typename... ints>
         RankedTensor(ints...sizes) : RankedTensor(vector<int>({sizes...})){}
+
+
+        RankedTensor(RankedTensor<T, n> &tensor) = default;
+
+        RankedTensor(RankedTensor<T, n> &&tensor) = default;
 
 
         /**
@@ -84,8 +88,9 @@ namespace Tensor_Library{
         // *******************************************************************************
 
         // Getters and Setters
+        
         /**
-         * @brief getSizeDimensions() method: extract the array attribute which contains the size's dimensions
+         * @brief getSizeDimensions() method: it extracts the array attribute which contains the size's dimensions
          * 
          * @return int-array attribute sizeDimensions
          */
@@ -93,7 +98,7 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief getStrides() method: extract the array attribute which contains the strides
+         * @brief getStrides() method: it extracts the array attribute which contains the strides
          * 
          * @return int-array attribute Strides
          */
@@ -101,7 +106,7 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief Get the Data object
+         * @brief getData() method: it extracts the Data object
          * 
          * @return shared_ptr<vector<T>> 
          */
@@ -109,33 +114,33 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief Set the Data object
+         * @brief setData() method: it sets the Data object
          * 
-         * @param newData 
+         * @param newData: it will be the new Data of the tensor
          */
         void setData(shared_ptr<vector<T>> newData);
         
 
         /**
-         * @brief Get the Init Position object
+         * @brief getInitPosition(): it gets the InitPosition object
          * 
-         * @return int 
+         * @return  
          */
         int getInitPosition();
 
 
         /**
-         * @brief Set the Init Position object
+         * @brief setInitPosition(): it set the InitPosition object
          * 
-         * @param i 
+         * @param i: it will be the new value of the attribute InitPosition
          */
         void setInitPosition(int i);
 
         
         /**
-         * @brief Get the n_total_elements
+         * @brief get_n_total_elements() methods: Get the n_total_elements
          * 
-         * @return int 
+         * @return the value of the attribute n_total_elements
          */
         int get_n_total_elements();
 
@@ -181,7 +186,12 @@ namespace Tensor_Library{
          * @param tensorIndexes 
          * @return RankedTensor<T, n-1> 
          */
-        RankedTensor<T, n-1> fix_copy(const int space, const int tensorIndex);         
+        RankedTensor<T, n-1> fix_copy(const int space, const int tensorIndex);
+
+        // *************************************************************************************************
+        // Methods for iterator
+        RankedTensorIterator<T, n> getIterator();
+
 
         // *************************************************************************************************
 
