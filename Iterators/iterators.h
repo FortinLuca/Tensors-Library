@@ -18,7 +18,7 @@ namespace Iterators{
 
         private:
             friend class RankedTensor<T, n>;
-            const RankedTensor<T, n> *tensor;
+            RankedTensor<T, n> *tensor;
             int indexes[n];
             int startIndexes[n];
             int endIndexes[n];
@@ -30,8 +30,8 @@ namespace Iterators{
             ~RankedTensorIterator() = default;
 
             bool hasNext();
-            
-            RankedTensorIterator<T, n>& next();
+
+            T next();
 
     };
     

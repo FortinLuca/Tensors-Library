@@ -70,13 +70,11 @@ int main() {
 
     // It tries to use the fix method
     RankedTensor<int, 2> newTensor = rt2.fix(2, 1);
-    newTensor.printTensor();
-
+    //newTensor.printTensor();
 
     auto it = rt2.getIterator();
-    while(it.hasNext()){
-        cout<< "hello" << endl;
-    }
+    while(it.hasNext())
+        cout<< it.next() << endl;
 
     return 0;
 }
