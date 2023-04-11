@@ -1,4 +1,4 @@
-#include "Iterators/iterators.h"
+#include "Iterators/iterators.cpp"
 
 #include <iostream>
 #include <time.h>
@@ -28,6 +28,7 @@ namespace Tensor_Library{
         int strides[n];                 // int-array attribute which contains the strides of the tensor
         shared_ptr<vector<T>> data;     // int-vector pointer attribute which points to the vector that contains the data of tensor
         int init_position;
+        friend class RankedTensorIterator<T, n>;
 
         /**
          * @brief randomNumber method: static, private and auxiliary function used to generate a random T element where T must be an arithmetic type

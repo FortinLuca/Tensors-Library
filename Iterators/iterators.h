@@ -30,6 +30,7 @@ namespace Iterators{
             ~RankedTensorIterator() = default;
 
             bool hasNext();
+            
             RankedTensorIterator<T, n>& next();
 
     };

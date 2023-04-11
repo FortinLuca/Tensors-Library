@@ -165,9 +165,11 @@ namespace Tensor_Library{
 
     //***************************************************************************************************************
     // Methods for the iterator
+    
     template <typename T, int n>
     RankedTensorIterator<T, n> RankedTensor<T, n>::getIterator(){
-        return RankedTensorIterator<T, n>(*this);
+        RankedTensorIterator<T, n> iterator(*this);
+        return iterator;
     }
 
     //************************************************************************************************************************
