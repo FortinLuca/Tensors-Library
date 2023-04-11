@@ -1,9 +1,12 @@
+#include "Iterators/iterators.h"
+
 #include <iostream>
 #include <time.h>
 #include <random>
 #include <memory>
 
 using namespace std;
+using namespace Iterators;
 
 
 // Tensor_Library class definition
@@ -52,6 +55,11 @@ namespace Tensor_Library{
          */
         template <typename... ints>
         RankedTensor(ints...sizes) : RankedTensor(vector<int>({sizes...})){}
+
+
+        RankedTensor(RankedTensor<T, n> &tensor) = default;
+
+        RankedTensor(RankedTensor<T, n> &&tensor) = default;
 
 
         /**
@@ -181,7 +189,12 @@ namespace Tensor_Library{
          * @param tensorIndexes 
          * @return RankedTensor<T, n-1> 
          */
-        RankedTensor<T, n-1> fix_copy(const int space, const int tensorIndex);         
+        RankedTensor<T, n-1> fix_copy(const int space, const int tensorIndex);
+
+        // *************************************************************************************************
+        // Methods for iterator
+        RankedTensorIterator<T, n> getIterator();
+
 
         // *************************************************************************************************
 

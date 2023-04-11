@@ -72,5 +72,11 @@ int main() {
     RankedTensor<int, 2> newTensor = rt2.fix(2, 1);
     newTensor.printTensor();
 
+
+    RankedTensorIterator<int, 3> it = rt2.getIterator();
+    while(!it.hasNext()){
+        cout<< "hello" << endl;
+    }
+
     return 0;
 }
