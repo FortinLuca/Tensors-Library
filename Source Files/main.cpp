@@ -17,7 +17,7 @@ Temporanea, solo per ripasso funzionamento puntatori/referenze
 
 
 int main() {
-    // short example of four tensors with different types but the same dimensions
+    // Short example of four tensors with different types but the same dimensions
     vector<int> testvector = {2, 3, 4};
     
     RankedTensor<float, 3> rt1(testvector);
@@ -26,7 +26,7 @@ int main() {
     RankedTensor<double, 3> rt4(testvector);
 
     /*    
-    // It prints the sizeDimensions and the strides attribute of the four tensors
+    // Printing the sizeDimensions and the strides attribute of the four tensors
 
     int * sizeDimensions1 = rt1.getSizeDimensions();
     int * sizeDimensions2 = rt2.getSizeDimensions();
@@ -51,30 +51,34 @@ int main() {
 
     // for each tensor, it inserts pseudo-randomic elements of the correspondent type and it prints the final (filled) tensors
     rt1.insertRandomData();
-    //rt1.printTensor();
+    //rt1.printData();
 
     rt2.insertRandomData();
-    rt2.printTensor();
+    rt2.printData();
 
     rt3.insertRandomData();
-    //rt3.printTensor();
+    //rt3.printData();
 
     rt4.insertRandomData();
-    //rt4.printTensor();
+    //rt4.printData();
 
 
-    // It extracts a value by using the get methods from a tensor given the vector of indexes
+    // Extracting a value by using the get methods from a tensor given the vector of indexes
     vector<int> indexesVector = {1, 2, 3};
     //char value = rt3(1, 2, 3);
     //cout<<endl<<"The element from the indexes {1, 2, 3} is ---> "<<+value<<endl<<endl;
 
-    // It tries to use the fix method
-    //RankedTensor<int, 2> newTensor = rt2.fix(2, 1);
-    //newTensor.printTensor();
+    // Trying to use the fix method
+    RankedTensor<int, 2> newTensor1 = rt2.fix(2, 1);
+    newTensor1.printData();
 
-    auto it = rt2.getIterator();
-    while(it.hasNext())
-        cout<< it.next() << endl;
+
+    // Testing the flattening methods
+    RankedTensor<int, 1> newTensor2 = rt2.flattening();
+    //cout << newTensor2.getSizeDimensions()[0] << endl << endl;
+
+    rt2.printTensor();
+
 
     return 0;
 }

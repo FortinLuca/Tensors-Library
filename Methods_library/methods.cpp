@@ -15,9 +15,12 @@ namespace Tensor_Library{
         int i;
 
         // Checking the dimensionality of the tensor corresponds to the number of dimensions' value in input
-        if(n != args.size()) {
+        if(n != args.size()) 
             throw invalid_argument("The number of space dimensions inserted are not equal to the number of rank");
-        }
+
+        // Checking that the rank is greater than zero
+        if(n <= 0)
+            throw invalid_argument("The rank must be greater than zero");
 
         n_total_elements = 1;
         init_position = 0;
@@ -96,7 +99,7 @@ namespace Tensor_Library{
 
     template <typename T, int n>
     T RankedTensor<T, n>::get(vector<int> tensorIndexes){
-        int index = 0;
+        int index = init_position;
         int i = 0;
 
         if(tensorIndexes.size() != n) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
@@ -110,9 +113,9 @@ namespace Tensor_Library{
 
         // Computation of the index of the vector from which we take the value provided
         for(int i=0; i<n; i++)
-            index += strides[i]*tensorIndexes[i];  // Expolitation of the input tensor indexes and the strides concept
+            index += strides[i] * tensorIndexes[i];  // Expolitation of the input tensor indexes and the strides concept
 
-        return data->at(index + init_position);
+        return data->at(index);
     }
 
 
@@ -157,11 +160,23 @@ namespace Tensor_Library{
         return newTensor;
     }
 
+
     // TODO: implement this
     template <typename T, int n>
     RankedTensor<T, n-1> RankedTensor<T, n>::fix_copy(const int space, const int tensorIndex){
         return 0;
     }
+
+
+
+    template <typename T, int n>
+    RankedTensor<T, 1> RankedTensor<T, n>::flattening(){
+        // It doesn't matter if the rank of the original tensor is 1 because in that case it produces the same tensor with the same instructions
+        RankedTensor<T, 1> newTensor(n_total_elements);
+        newTensor.setData(data);
+        return newTensor;
+    }
+
 
     //***************************************************************************************************************
     // Methods for the iterator
@@ -231,9 +246,9 @@ namespace Tensor_Library{
         } else throw runtime_error("This type is not managed by the Tensor library"); 
     }
 
-
+    /*
     template <typename T, int n>
-    void RankedTensor<T, n>::printTensor(){
+    void RankedTensor<T, n>::printData(){
         // We exploit the for_each contruct to print the element in the data vector
         //for_each(data.begin(), data.get().end(), [] (T c) {cout << +c << " ";} );
         for (int i = 0; i < n_total_elements; i++) {
@@ -241,6 +256,53 @@ namespace Tensor_Library{
         } 
         cout<<endl<<endl;
     }
+    */
+
+
+    template <typename T, int n>
+    void RankedTensor<T, n>::printData(){
+        auto it = getIterator();
+        while(it.hasNext())
+            cout<< it.next() << " ";
+            
+        cout<<endl<<endl;
+    }
+
+
+
+    template <typename T, int n>
+    void RankedTensor<T, n>::printTensor(){
+        
+        // Printing the dimensions of the tensor
+        cout << "Tensor's dimensions: ";
+        for(int i = 0; i < n; i++){
+            cout << sizeDimensions[i];
+            if(i < n-1)
+                cout << " x ";
+            else 
+                cout << endl;
+        }
+        
+        
+        // Printing the strides
+        cout << "Tensor's strides: ";
+        for(int i = 0; i < n; i++){
+            cout << strides[i];
+            if(i < n-1)
+                cout << " x ";
+            else 
+                cout << endl;
+        }
+
+        // Printing the total number of element of the tensor
+        cout << "Total number of element of the tensor: " << n_total_elements << endl;
+
+        // Printing the tensor's data
+        cout << "Tensor's data: ";
+        printData();
+        cout << endl;
+    }
+
 
 
     //---------------------------------------------------------------------------------------------------------------------------------
