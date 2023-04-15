@@ -12,8 +12,8 @@ namespace Iterators{
             indexes[i] = 0;
             endIndexes[i] = tensor->sizeDimensions[i] - 1;
         }
-        
     }
+
 
     // Implementation of the hasNext method
     template <typename T, int n>
@@ -21,9 +21,9 @@ namespace Iterators{
 
         for(int i = 0; i < n; i++){
             // Checking if we have a successive element
-            if(indexes[i] < endIndexes[i]){
+            if(indexes[i] < endIndexes[i])
                 return true;
-            }
+    
             // Checking if we are above the last element
             else if(indexes[i] > endIndexes[i])
                 return false;

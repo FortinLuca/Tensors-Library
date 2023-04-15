@@ -188,6 +188,18 @@ namespace Tensor_Library{
          */
         RankedTensor<T, n-1> fix_copy(const int space, const int tensorIndex);
 
+
+        /**
+         * @brief flattening() method: it applies the flattening to a tensor
+         * 
+         * @return tensor with the same type T and with rank 1. This tensor will share the data with the tensor from which we call this method 
+         */
+        RankedTensor<T, 1> flattening();
+
+
+        //TODO: flattening_with_copy();
+
+
         // *************************************************************************************************
         // Methods for iterator
         RankedTensorIterator<T, n> getIterator();
@@ -206,7 +218,14 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief printTensor() method: it prints every elements contained in the tensor ("data" attribute)
+         * @brief printData() method: it prints every elements contained in the tensor ("data" attribute)
+         */
+        void printData();
+
+
+        /**
+         * @brief printTensor() method: it prints the most important fields (sizeDimensions, strides and n_total_elements) and the data of the correspondent tensor
+         * 
          */
         void printTensor();
 
