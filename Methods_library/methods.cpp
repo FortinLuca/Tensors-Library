@@ -215,13 +215,13 @@ namespace Tensor_Library{
 
     template <typename T, int n>
     RankedTensor<T, n> RankedTensor<T, n>::window(const vector<int> min, const vector<int> max) {
-        if (min.size() != n) throw invalid_argument("The number of min's indexes inserted are not equal to the number of rank");
-        if (max.size() != n) throw invalid_argument("The number of max's indexes inserted are not equal to the number of rank");
+        if (min.size() != n) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
+        if (max.size() != n) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
         
         for (int i=0; i<n; i++) {
-            if (min[i] > sizeDimensions[i]-1 || max[i]>sizeDimensions[i]-1) throw invalid_argument("One of the min or max's indexes is greater than the relative size dimension");
-            if (min[i] < 0 || max[i] < 0) throw invalid_argument("One of the min's or max indexes is smaller than zero");
-            if (min[i] > max[i]) throw invalid_argument("One of the min's indexes can't be greater than the relative max's index");
+            if (min[i] > sizeDimensions[i]-1 || max[i]>sizeDimensions[i]-1) throw invalid_argument("One of the min or max indexes is greater than the relative size dimension");
+            if (min[i] < 0 || max[i] < 0) throw invalid_argument("One of the min or max indexes is smaller than zero");
+            if (min[i] > max[i]) throw invalid_argument("One of the min indexes can't be greater than the relative max index");
         }
 
         // a new tensor with a pointer to the original tensor. It enables to copy the constructor for creating a new tensor equal to the one passed to the constructor

@@ -196,8 +196,16 @@ namespace Tensor_Library{
          */
         RankedTensor<T, 1> flattening_copy();
 
+        /** @brief window() method: it creates a new tensor of rank = n (original rank) generating a sub-window of given tensor changing the starting-point and end-point of each index
+         * 
+         * @param min[]: vector of all starting (min) indexes 
+         * @param max[]: vector of all ending (max) indexes
+         * 
+         * @return new tensor with the same type T and rank n but with low (or equal) total number of elements included in data 
+         */
         RankedTensor<T, n> window(vector<int> min, vector<int> max);
 
+        // TODO:
         RankedTensor<T, n> window_copy(vector<int> min, vector<int> max);
 
 
