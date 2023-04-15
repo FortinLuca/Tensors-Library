@@ -49,9 +49,8 @@ namespace Tensor_Library{
          * 
          * @param sizes: series of integers correspondent to the dimensions' sizes
          */
-        template <typename... ints>
-        RankedTensor(ints...sizes) : RankedTensor(vector<int>({sizes...})){}
-
+        // template <typename... ints>
+        // RankedTensor(ints...sizes) : RankedTensor(vector<int>({sizes...})){}
 
         RankedTensor(RankedTensor<T, n> &tensor) = default;
 
@@ -96,14 +95,12 @@ namespace Tensor_Library{
          */
         int * getSizeDimensions();
 
-
         /**
          * @brief getStrides() method: it extracts the array attribute which contains the strides
          * 
          * @return int-array attribute Strides
          */
         int * getStrides();
-
 
         /**
          * @brief getData() method: it extracts the Data object
@@ -112,14 +109,12 @@ namespace Tensor_Library{
          */
         shared_ptr<vector<T>> getData();
 
-
         /**
          * @brief setData() method: it sets the Data object
          * 
          * @param newData: it will be the new Data of the tensor
          */
         void setData(shared_ptr<vector<T>> newData);
-        
 
         /**
          * @brief getInitPosition(): it gets the InitPosition object
@@ -128,7 +123,6 @@ namespace Tensor_Library{
          */
         int getInitPosition();
 
-
         /**
          * @brief setInitPosition(): it set the InitPosition object
          * 
@@ -136,7 +130,6 @@ namespace Tensor_Library{
          */
         void setInitPosition(int i);
 
-        
         /**
          * @brief get_n_total_elements() methods: Get the n_total_elements
          * 
@@ -196,8 +189,16 @@ namespace Tensor_Library{
          */
         RankedTensor<T, 1> flattening();
 
+        /**
+         * @brief flattening_copy() method: it creates new tensor of rank = 1 applying the flattening to a tensor
+         * 
+         * @return new tensor with the same type T and with rank 1
+         */
+        RankedTensor<T, 1> flattening_copy();
 
-        //TODO: flattening_with_copy();
+        RankedTensor<T, n> window(vector<int> min, vector<int> max);
+
+        RankedTensor<T, n> window_copy(vector<int> min, vector<int> max);
 
 
         // *************************************************************************************************

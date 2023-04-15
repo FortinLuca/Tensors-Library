@@ -69,15 +69,22 @@ int main() {
     //cout<<endl<<"The element from the indexes {1, 2, 3} is ---> "<<+value<<endl<<endl;
 
     // Trying to use the fix method
-    RankedTensor<int, 2> newTensor1 = rt2.fix(2, 1);
-    newTensor1.printData();
+    // RankedTensor<int, 2> newTensor1 = rt2.fix(2, 1);
+    // newTensor1.printData();
+    // newTensor1.printTensor();
+
+    vector<int> minIndexesVector = {0, 1, 0};
+    vector<int> maxIndexesVector = {1, 1, 2};
+    RankedTensor<int, 3> newTensor2 = rt2.window(minIndexesVector, maxIndexesVector);
+
+    newTensor2.printData();
 
 
     // Testing the flattening methods
-    RankedTensor<int, 1> newTensor2 = rt2.flattening();
+    //RankedTensor<int, 1> newTensor2 = rt2.flattening_copy();
     //cout << newTensor2.getSizeDimensions()[0] << endl << endl;
 
-    rt2.printTensor();
+    //newTensor2.printTensor();
 
 
     return 0;
