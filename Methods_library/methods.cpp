@@ -159,8 +159,36 @@ namespace Tensor_Library{
 
     // TODO: implement this
     template <typename T, int n>
-    RankedTensor<T, n-1> RankedTensor<T, n>::fix_copy(const int space, const int tensorIndex){
-        return 0;
+    RankedTensor<T, n-1> RankedTensor<T, n>::fix_copy(const int space, const int spaceIndex){
+        // Checking the exceptions
+        if(space < 0 || space >= n) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
+        if(spaceIndex < 0) throw invalid_argument("An index cannot be less than zero");
+        if(sizeDimensions[space] <= spaceIndex) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
+
+        // Creation of a new SizeDimensions
+        vector<int> newSizeDimensions;
+        newSizeDimensions.insert(newSizeDimensions.begin(), std::begin(sizeDimensions), std::end(sizeDimensions));
+        newSizeDimensions.erase(newSizeDimensions.begin() + space);
+
+        // Creation of a new tensor to return
+        RankedTensor<T, n-1> newTensor(newSizeDimensions);
+
+        // iterating all and only taking the values according to the fixed index
+        int i = 0;
+        shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
+        auto it = getIterator();
+        while( it.hasNext() ) {
+            T elem = it.next();
+            if(it.indexes[space] == spaceIndex) {
+                newData->at(i) = elem;
+                i++;
+            }
+        }
+
+        newTensor.setData(newData);
+
+        return newTensor;
+
     }
 
     //***************************************************************************************************************

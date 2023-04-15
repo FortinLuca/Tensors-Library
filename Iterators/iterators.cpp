@@ -28,6 +28,7 @@ namespace Iterators{
             else if(indexes[i] > endIndexes[i])
                 return false;
         }
+        //if we are here then we are in te last vector space "i"
 
         // Checking if we are at the last element
         if(indexes[0] == endIndexes[0])

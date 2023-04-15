@@ -64,17 +64,21 @@ int main() {
 
 
     // It extracts a value by using the get methods from a tensor given the vector of indexes
-    vector<int> indexesVector = {1, 2, 3};
+    //vector<int> indexesVector = {1, 2, 3};
     //char value = rt3(1, 2, 3);
     //cout<<endl<<"The element from the indexes {1, 2, 3} is ---> "<<+value<<endl<<endl;
 
-    // It tries to use the fix method
-    //RankedTensor<int, 2> newTensor = rt2.fix(2, 1);
-    //newTensor.printTensor();
+    // RankedTensor<int, 2> newTensor1 = rt2.fix_copy(2, 1);
+    // newTensor1.printTensor();
 
-    auto it = rt2.getIterator();
-    while(it.hasNext())
-        cout<< it.next() << endl;
+    // cout<< "------------------------------" << endl;
+    // It tries to use the fix method
+    // RankedTensor<int, 2> newTensor = rt2.fix_copy(2, 1);
+    // newTensor.printTensor();
+
+    // auto it = rt2.getIterator();
+    // while(it.hasNext())
+    //     cout<< it.next() << endl;
 
     return 0;
 }
