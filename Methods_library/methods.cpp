@@ -48,11 +48,11 @@ namespace Tensor_Library{
         return get(tensorIndexes);
     }
 
-    // template <typename T, int n>
-    // template <typename... ints>
-    // T RankedTensor<T, n>::operator()(ints... tensorIndexes){
-    //     return get(vector<int> ({tensorIndexes...}));
-    // }
+    template <typename T, int n>
+    template <typename... ints>
+    T RankedTensor<T, n>::operator()(ints... tensorIndexes){
+         return get(vector<int> ({tensorIndexes...}));
+    }
     //*****************************************************************************************************************************
 
     // Getters and setters
@@ -124,6 +124,7 @@ namespace Tensor_Library{
     T RankedTensor<T, n>::get(ints... tensorIndexes){
         return get(vector<int>({tensorIndexes...}));
     }
+
 
 
     template <typename T, int n>
@@ -208,10 +209,23 @@ namespace Tensor_Library{
     template <typename T, int n>
     RankedTensor<T, 1> RankedTensor<T, n>::flattening_copy(){
         RankedTensor<T, 1> newTensor(n_total_elements);
-        shared_ptr<vector<T>> newData = data;
+
+        // Creating a new vector with the same elements of the original tensor
+        shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
+        RankedTensorIterator<T, n> it = getIterator();
+
+        int index = 0;
+        while(it.hasNext()) {
+            newData->at(index) = it.next();
+            index++;
+        }
+
+        // Setting into a new tensor the new vector containing data
         newTensor.setData(newData);
         return newTensor;
     }
+
+
 
     template <typename T, int n>
     RankedTensor<T, n> RankedTensor<T, n>::window(const vector<int> min, const vector<int> max) {
@@ -224,17 +238,20 @@ namespace Tensor_Library{
             if (min[i] > max[i]) throw invalid_argument("One of the min indexes can't be greater than the relative max index");
         }
 
-        // a new tensor with a pointer to the original tensor. It enables to copy the constructor for creating a new tensor equal to the one passed to the constructor
+        // New tensor with a pointer to the original tensor. It enables to copy the constructor for creating a new tensor equal to the one passed to the constructor
         RankedTensor<T,n> newTensor(*this);
-        // start to compute attributes of the new tensor
+
+        // Start to compute attributes of the new tensor
         newTensor.n_total_elements = 1;
         newTensor.init_position = 0;
-        int j = n-1; //index for strides that start to the last element
 
-        // from 0 to n-1, exactly like "j" that goes to other way from n-1 to 0
-        for (int i = 0; i<n; i++) {
-            newTensor.strides[j]=newTensor.n_total_elements;
-            newTensor.sizeDimensions[i]=max[i] - min[i] + 1;
+        // Index for strides that start to the last element
+        int j = n-1;
+
+        // From 0 to n-1, exactly like "j" that goes to other way from n-1 to 0
+        for (int i = 0; i < n; i++) {
+            newTensor.strides[j] = newTensor.n_total_elements;
+            newTensor.sizeDimensions[i] = max[i] - min[i] + 1;
             newTensor.n_total_elements *= newTensor.sizeDimensions[j];
             newTensor.init_position += strides[j] * min[i];
             j--;
@@ -246,9 +263,50 @@ namespace Tensor_Library{
         return newTensor;
     }
 
+
     template <typename T, int n>
     RankedTensor<T, n> RankedTensor<T, n>::window_copy(const vector<int> min, const vector<int> max) {
-        return NULL;
+        if (min.size() != n) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
+        if (max.size() != n) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
+        
+        for (int i=0; i<n; i++) {
+            if (min[i] > sizeDimensions[i]-1 || max[i]>sizeDimensions[i]-1) throw invalid_argument("One of the min or max indexes is greater than the relative size dimension");
+            if (min[i] < 0 || max[i] < 0) throw invalid_argument("One of the min or max indexes is smaller than zero");
+            if (min[i] > max[i]) throw invalid_argument("One of the min indexes can't be greater than the relative max index");
+        }
+
+        // Creating a new tensor with the new dimensions
+        vector<int> newSizeDimensions(n);
+        for(int i = 0; i < n; i++)
+            newSizeDimensions[i] = max[i] - min[i] + 1;
+            
+        RankedTensor<T, n> newTensor(newSizeDimensions);
+
+        // Filling the new tensor with a totally new vector with the same data on the correct window of the original tensor
+        RankedTensorIterator<T, n> it = getIterator();
+        bool check_inside_window;
+        int index = 0;
+
+        shared_ptr<vector<T>> newData = make_shared<vector<T>>(newTensor.get_n_total_elements());
+
+        while(it.hasNext()){
+            check_inside_window = true;
+
+            for(int i = 0; i < n; i++) {
+                if(it.indexes[i] < min[i] || it.indexes[i] > max[i])
+                    check_inside_window = false;
+            }
+
+            T elem = it.next();
+            if(check_inside_window){
+                newData->at(index) = elem;
+                index++;
+            }
+        }
+
+        newTensor.setData(newData);
+
+        return newTensor;
     }
 
 
@@ -319,18 +377,6 @@ namespace Tensor_Library{
             }
         } else throw runtime_error("This type is not managed by the Tensor library"); 
     }
-
-    /*
-    template <typename T, int n>
-    void RankedTensor<T, n>::printData(){
-        // We exploit the for_each contruct to print the element in the data vector
-        //for_each(data.begin(), data.get().end(), [] (T c) {cout << +c << " ";} );
-        for (int i = 0; i < n_total_elements; i++) {
-            cout << +data->at(i) << " ";
-        } 
-        cout<<endl<<endl;
-    }
-    */
 
 
     template <typename T, int n>

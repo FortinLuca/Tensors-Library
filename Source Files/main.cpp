@@ -75,14 +75,16 @@ int main() {
 
     vector<int> minIndexesVector = {0, 1, 0};
     vector<int> maxIndexesVector = {1, 1, 2};
-    RankedTensor<int, 3> newTensor2 = rt2.window(minIndexesVector, maxIndexesVector);
 
+    RankedTensor<int, 3> newTensor2 = rt2.window(minIndexesVector, maxIndexesVector);
     newTensor2.printData();
 
+    RankedTensor<int, 3> newTensor3 = rt2.window_copy(minIndexesVector, maxIndexesVector);
+    newTensor3.printData();
 
     // Testing the flattening methods
-    //RankedTensor<int, 1> newTensor2 = rt2.flattening_copy();
-    //cout << newTensor2.getSizeDimensions()[0] << endl << endl;
+    //RankedTensor<int, 1> newTensor4 = rt2.flattening_copy();
+    //cout << newTensor4.getSizeDimensions()[0] << endl << endl;
 
     //newTensor2.printTensor();
 
