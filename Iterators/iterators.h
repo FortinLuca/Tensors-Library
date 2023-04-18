@@ -28,14 +28,14 @@ namespace Iterators{
      */
     template <typename T, int n>
     class RankedTensorIterator {
-
         private:
-            friend class RankedTensor<T, n>;   // it can access private and protected members of the RankedTensor class
-            RankedTensor<T, n> *tensor;        // tensor which compose the iterator object
-            int indexes[n];                    // indexes which indicates the current position          
-            int endIndexes[n];                 // indexes of the tensor's last element
-
-
+            friend class RankedTensor<T, n>;        // it can access private and protected members of the RankedTensor class
+            RankedTensor<T, n> *tensor;             // tensor which compose the iterator object
+            int indexes[n];                         // indexes which indicates the current position          
+            int endIndexes[n];                      // indexes of the tensor's last element
+            int space;
+            int index;
+            
         public:
             /**
              * @brief Constructor of the RankedTensorIterator object: it initializes all the private attributes of the class
@@ -43,6 +43,9 @@ namespace Iterators{
              * @param tensorInput: tensor which gives a shape to the iterator
              */
             RankedTensorIterator(RankedTensor<T, n> &tensorInput);
+
+
+            RankedTensorIterator(RankedTensor<T, n> &tensorInput, int space, int index);
 
             /**
              * @brief Destructor of the RankedTensorIterator object

@@ -318,6 +318,13 @@ namespace Tensor_Library{
         return iterator;
     }
 
+
+    template <typename T, int n>
+    RankedTensorIterator<T, n> RankedTensor<T, n>::getIterator(int space, int index){
+        RankedTensorIterator<T, n> iterator(*this, space, index);
+        return iterator;
+    }
+
     //************************************************************************************************************************
 
     // Methods for testing    
@@ -380,7 +387,7 @@ namespace Tensor_Library{
 
     template <typename T, int n>
     void RankedTensor<T, n>::printData(){
-        auto it = getIterator();
+        RankedTensorIterator<T, n> it = getIterator();
         while(it.hasNext())
             cout<< it.next() << " ";
             

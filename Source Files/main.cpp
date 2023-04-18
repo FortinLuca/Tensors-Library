@@ -99,11 +99,17 @@ int main() {
     prova1.printData();
     prova2.printData();
 
-    RankedTensor<int, 3> aaa = prova1 + prova2;
-    aaa.printData();
 
-    RankedTensor<int, 3> bbbb = prova1 + 2;
-    bbbb.printData();
+    RankedTensorIterator<int, 3> it = prova2.getIterator(1, 2);
+    while(it.hasNext()){
+       cout << it.next() << " ";
+    }
+    cout << endl;
+
+    RankedTensor<int, 2> aa = prova2.fix(1, 2);
+    aa.printData();
+
+
 
 
     return 0;

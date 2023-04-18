@@ -231,6 +231,8 @@ namespace Tensor_Library{
          */
         RankedTensorIterator<T, n> getIterator();
 
+        RankedTensorIterator<T, n> getIterator(int space, int index);
+
 
         // *************************************************************************************************
 
