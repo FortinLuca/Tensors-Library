@@ -88,6 +88,22 @@ int main() {
 
     //newTensor2.printTensor();
 
+    UnknownRankedTensor<int> newTensorA(2, 3, 4);
+
+
+    RankedTensor<int, 3> prova1(2, 3, 4);
+    RankedTensor<int, 3> prova2(2, 3, 4);
+    prova1.insertRandomData();
+    prova2.insertRandomData();
+
+    prova1.printData();
+    prova2.printData();
+
+    RankedTensor<int, 3> aaa = prova1 + prova2;
+    aaa.printData();
+
+ 
+
 
     return 0;
 }

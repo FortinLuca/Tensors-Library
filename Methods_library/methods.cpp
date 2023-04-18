@@ -423,6 +423,52 @@ namespace Tensor_Library{
     }
 
 
+    //************************************************************************************************************************
+
+    // Methods for operations between tensors
+    template <typename T, int n>
+    RankedTensor<T, n> RankedTensor<T, n>::algebraicSum(RankedTensor<T, n> tensor){
+        for (int i = 0; i < n; i++){
+            if(sizeDimensions[i] != tensor.sizeDimensions[i])
+                throw invalid_argument("In order to apply the algebraic sum, the dimensions of the two tensors must to be equal");
+        }
+
+        shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
+
+        RankedTensorIterator<T, n> it1 = getIterator();
+        RankedTensorIterator<T, n> it2 = tensor.getIterator();
+        int index = 0;
+
+        while(it1.hasNext() && it2.hasNext()){
+            T elem1 = it1.next();
+            T elem2 = it2.next();
+            newData->at(index) = elem1 + elem2;
+            index++;
+        }
+
+        this->setData(newData);
+        return *this;
+    }
+
+
+    template <typename T, int n>
+    RankedTensor<T, n> RankedTensor<T, n>::operator+(RankedTensor<T, n> tensor){
+        return algebraicSum(tensor);
+    }
+
+
+    template <typename T, int n>
+    RankedTensor<T, n> RankedTensor<T, n>::multiply(RankedTensor<T, n> tensor){
+        return NULL;
+    }
+
+    template <typename T, int n>
+    RankedTensor<T, n> RankedTensor<T, n>::operator+(RankedTensor<T, n> tensor){
+        return NULL;
+    }
+
+
+
 
     //---------------------------------------------------------------------------------------------------------------------------------
     //*********************************************************************************************************************************
@@ -431,7 +477,10 @@ namespace Tensor_Library{
 
     // Constructor and methods implementations of the UnknownRankedTensor class
     template <typename T>
-    UnknownRankedTensor<T>::UnknownRankedTensor(){ }
+    UnknownRankedTensor<T>::UnknownRankedTensor(vector<int> args){
+        n = args.size();
+        
+    }
 
 
     template <typename T>

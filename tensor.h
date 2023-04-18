@@ -256,6 +256,24 @@ namespace Tensor_Library{
          */
         void printTensor();
 
+        // *****************************************************************************************
+
+        // Methods for the operations between tensors
+
+        RankedTensor<T, n> algebraicSum(RankedTensor<T, n> tensor);
+
+        RankedTensor<T, n> operator+(RankedTensor<T, n> tensor);
+
+
+
+        RankedTensor<T, n> multiply(RankedTensor<T, n> tensor);
+        RankedTensor<T, n> operator*(RankedTensor<T, n> tensor);
+
+        
+
+
+
+
     };
         
 
@@ -270,8 +288,12 @@ namespace Tensor_Library{
     class UnknownRankedTensor {
 
     private:
-        const int n;
-        /* data */
+        int n;
+        vector<int> sizeDimensions;     // int-array attribute which contains the dimensions' sizes of the tensor
+        int n_total_elements;           // int attribute which contains the value of the total elements of the tensor
+        vector<int> strides;            // int-array attribute which contains the strides of the tensor
+        shared_ptr<vector<T>> data;     // int-vector pointer attribute which points to the vector that contains the data of tensor
+        int init_position;
 
         
     public:
@@ -279,7 +301,11 @@ namespace Tensor_Library{
         /**
          * @brief Constructor of the UnknownRankedTensor class: it initializes all the private attributes of the class
          */
-        UnknownRankedTensor();
+        UnknownRankedTensor(vector<int> sizes);
+
+
+        template <typename... ints>
+        UnknownRankedTensor(ints...sizes) : UnknownRankedTensor(vector<int>({sizes...})){}
 
         /**
          * @brief Destructor of the UnknownRankedTensor class: it will be mantained as default
