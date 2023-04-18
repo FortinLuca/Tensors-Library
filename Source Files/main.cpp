@@ -1,4 +1,4 @@
-#include "../Methods_library/methods.cpp"
+#include "../tensors.cpp"
 
 
 using namespace Tensor_Library;

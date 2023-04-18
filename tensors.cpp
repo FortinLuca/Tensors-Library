@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <limits>
 
-#include "../tensor.h"
+#include "tensors.h"
 
 
 namespace Tensor_Library{
