@@ -109,8 +109,9 @@ int main() {
     RankedTensor<int, 2> aa = prova2.fix(1, 2);
     aa.printData();
 
-
-
+    prova1.printData();
+    prova1.set(1, 0, 0, 1);
+    prova1.printData();
 
     return 0;
 }

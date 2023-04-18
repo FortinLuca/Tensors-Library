@@ -41,8 +41,6 @@ namespace Tensor_Library{
 
 
     //*************************************************************************************************************************
-    //RankedTensor<T, n>& operator=(const RankedTensor<T,n>& rankedTensor) = default;
-
     template <typename T, int n>
     T RankedTensor<T, n>::operator()(vector<int> tensorIndexes){
         return get(tensorIndexes);
@@ -128,6 +126,37 @@ namespace Tensor_Library{
 
 
     template <typename T, int n>
+    void RankedTensor<T, n>::set(T elem, vector<int> tensorIndexes){
+        int index = init_position;
+        int i = 0;
+
+        if(tensorIndexes.size() != n) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
+
+        //check of the association of tensor index provided and corrispective dimension vector
+        for (int tensorIndex : tensorIndexes) {
+            if (sizeDimensions[i] <= tensorIndex ) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
+            if (tensorIndex < 0) throw invalid_argument("An index cannot be less than zero");
+            i++;
+        }
+
+        // Computation of the index of the vector from which we take the value provided
+        for(int i=0; i<n; i++)
+            index += strides[i] * tensorIndexes[i];  // Expolitation of the input tensor indexes and the strides concept
+
+        // Setting the element into the correct position
+        data->at(index) = elem;
+    }
+
+
+    template <typename T, int n>
+    template <typename... ints>
+    void RankedTensor<T, n>::set(T elem, ints... tensorIndexes){
+        set(elem, vector<int>({tensorIndexes...}));
+    }
+
+
+
+    template <typename T, int n>
     RankedTensor<T, n-1> RankedTensor<T, n>::fix(const int space, const int spaceIndex){
         
         // Checking the exceptions
@@ -193,7 +222,6 @@ namespace Tensor_Library{
         newTensor.setData(newData);
 
         return newTensor;
-
     }
 
 
@@ -205,6 +233,7 @@ namespace Tensor_Library{
         newTensor.setData(data);
         return newTensor;
     }
+
 
     template <typename T, int n>
     RankedTensor<T, 1> RankedTensor<T, n>::flattening_copy(){
@@ -288,6 +317,7 @@ namespace Tensor_Library{
 
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(newTensor.get_n_total_elements());
 
+        // Checking and saving all the elements that are into the given windows by comparing the current indexes with the input limit indexes
         while(it.hasNext()){
             check_inside_window = true;
 
@@ -309,6 +339,7 @@ namespace Tensor_Library{
     }
 
 
+
     //***************************************************************************************************************
     // Methods for the iterator
     
@@ -324,6 +355,8 @@ namespace Tensor_Library{
         RankedTensorIterator<T, n> iterator(*this, space, index);
         return iterator;
     }
+
+
 
     //************************************************************************************************************************
 
@@ -385,6 +418,7 @@ namespace Tensor_Library{
     }
 
 
+
     template <typename T, int n>
     void RankedTensor<T, n>::printData(){
         RankedTensorIterator<T, n> it = getIterator();
@@ -393,7 +427,6 @@ namespace Tensor_Library{
             
         cout<<endl<<endl;
     }
-
 
 
     template <typename T, int n>
@@ -430,22 +463,27 @@ namespace Tensor_Library{
     }
 
 
+
     //************************************************************************************************************************
 
     // Methods for operations between tensors
     template <typename T, int n>
     RankedTensor<T, n> RankedTensor<T, n>::algebraicSum(RankedTensor<T, n> tensor){
+        // The dimensions of the tensors must be equal
         for (int i = 0; i < n; i++){
             if(sizeDimensions[i] != tensor.sizeDimensions[i])
                 throw invalid_argument("In order to apply the algebraic sum, the dimensions of the two tensors must to be equal");
         }
 
+        // Creating a new data vector pointer
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
 
+        // Creating the two iterators
         RankedTensorIterator<T, n> it1 = getIterator();
         RankedTensorIterator<T, n> it2 = tensor.getIterator();
         int index = 0;
 
+        // Since there are the same dimensions, the iterators iterates in the same number of steps
         while(it1.hasNext() && it2.hasNext()){
             T elem1 = it1.next();
             T elem2 = it2.next();
@@ -453,6 +491,7 @@ namespace Tensor_Library{
             index++;
         }
 
+        // Inserting the new pointer of data and returning the current tensor
         this->setData(newData);
         return *this;
     }
@@ -464,11 +503,13 @@ namespace Tensor_Library{
         int index = 0; 
         RankedTensorIterator<T, n> it = getIterator();
 
+        // Adding the element to every element of the tensor
         while(it.hasNext()){
             newData->at(index) = elem + it.next();
             index++;
         }
 
+        // Inserting the new pointer of data and returning the current tensor
         this->setData(newData);
         return *this;
     }
@@ -479,20 +520,23 @@ namespace Tensor_Library{
         return algebraicSum(tensor);
     }
 
+
     template <typename T, int n>
     RankedTensor<T, n> RankedTensor<T, n>::operator+(T elem){
         return algebraicSum(elem);
     }
 
+
     
     template <typename T, int n>
-    RankedTensor<T, n> RankedTensor<T, n>::multiply(RankedTensor<T, n> tensor){
+    RankedTensor<T, n> RankedTensor<T, n>::product(RankedTensor<T, n> tensor){
         return NULL;
     }
 
+
     template <typename T, int n>
     RankedTensor<T, n> RankedTensor<T, n>::operator*(RankedTensor<T, n> tensor){
-        return multiply(tensor);
+        return product(tensor);
     }
 
 
@@ -507,7 +551,6 @@ namespace Tensor_Library{
     template <typename T>
     UnknownRankedTensor<T>::UnknownRankedTensor(vector<int> args){
         n = args.size();
-        
     }
     
 }

@@ -52,6 +52,7 @@ namespace Tensor_Library{
         template <typename... ints>
         RankedTensor(ints...sizes) : RankedTensor(vector<int>({sizes...})){}
 
+
         /**
          * @brief Constructor of the RankedTensor class: it produces a tensor which is the copy of the input one
          * 
@@ -59,7 +60,13 @@ namespace Tensor_Library{
          */
         RankedTensor(RankedTensor<T, n> &tensor) = default;
 
-        //RankedTensor(RankedTensor<T, n> &&tensor) = default;
+
+        /**
+         * @brief Constructor of the RankedTensor class: it produces a completely new tensor in which the parameter of the tensor's input will be moved
+         * 
+         * @param tensor: tensor in which will be copied in the constructed one
+         */
+        RankedTensor(RankedTensor<T, n> &&tensor) = default;
 
 
         /**
@@ -67,9 +74,12 @@ namespace Tensor_Library{
          */
         ~RankedTensor() = default;
 
+
+
         // ********************************************************************************************
 
         // Operator
+
         /**
          * @brief Direct access operator in which automatically will be applied the get method by only using the round brackets without specifying get
          * 
@@ -77,6 +87,7 @@ namespace Tensor_Library{
          * @return tensor's element of type T which corresponds to the indexes given in input
          */
         T operator()(vector<int> tensorIndexes);
+
 
         /**
          * @brief Direct access operator similar to the previous one, but with the difference that the input will be a series of integer corresponding to the positional indexes
@@ -99,12 +110,14 @@ namespace Tensor_Library{
          */
         int * getSizeDimensions();
 
+
         /**
          * @brief getStrides() method: it extracts the array attribute which contains the strides
          * 
          * @return int-array attribute Strides
          */
         int * getStrides();
+
 
         /**
          * @brief getData() method: it extracts the Data object
@@ -113,6 +126,7 @@ namespace Tensor_Library{
          */
         shared_ptr<vector<T>> getData();
 
+
         /**
          * @brief setData() method: it sets the Data object
          * 
@@ -120,12 +134,14 @@ namespace Tensor_Library{
          */
         void setData(shared_ptr<vector<T>> newData);
 
+
         /**
          * @brief getInitPosition(): it gets the InitPosition object
          * 
-         * @return  
+         * @return the correspondent integer number of the initial position
          */
         int getInitPosition();
+
 
         /**
          * @brief setInitPosition(): it set the InitPosition object
@@ -134,12 +150,14 @@ namespace Tensor_Library{
          */
         void setInitPosition(int i);
 
+
         /**
          * @brief get_n_total_elements() methods: Get the n_total_elements
          * 
          * @return the value of the attribute n_total_elements
          */
         int get_n_total_elements();
+
 
 
         // ***********************************************************************************************
@@ -164,6 +182,27 @@ namespace Tensor_Library{
         T get(ints...tensorIndexes);
 
 
+
+        /**
+         * @brief set() method: it sets an element into the tensor given the input indexes
+         * 
+         * @param elem: element of type T to be inserted into the tensor 
+         * @param tensorIndexes: vector of indexes that specifies the position in which insert the element
+         */
+        void set(T elem, vector<int> tensorIndexes);
+
+
+        /**
+         * @brief set() method: it sets an element into the tensor given the input indexes
+         * 
+         * @param elem: element of type T to be inserted into the tensor 
+         * @param tensorIndexes: a number of int parameters that specifies the position in which insert the element
+         */
+        template <typename... ints>
+        void set(T elem, ints... tensorIndexes);
+
+
+
         /**
          * @brief fix() method: it slices the tensor by fixing a specifing space
          *  
@@ -173,15 +212,17 @@ namespace Tensor_Library{
          */
         RankedTensor<T, n-1> fix(const int space, const int tensorIndex);
 
+
         /**
          * @brief fix_copy() method: it slices the tensor by fixing a specifing space.
          * The new tensor returned has the data which doesn't point to the original tensor, but it will be copied into another new data structure
          * 
          * @param space: integer that goes from 0 to n-1. It specifies the space which will be fixed
-         * @param tensorIndexes: integer that specify the index of the space which will be fices  
+         * @param tensorIndexes: integer that specify the index of the space which will be fixed  
          * @return new tensor of type RankedTensor<T, n-1>, the rank will be reduced by one and the data doesn't point to the original tensor
          */
         RankedTensor<T, n-1> fix_copy(const int space, const int tensorIndex);
+
 
 
         /**
@@ -191,6 +232,7 @@ namespace Tensor_Library{
          */
         RankedTensor<T, 1> flattening();
 
+
         /**
          * @brief flattening_copy() method: it creates new tensor of rank = 1 applying the flattening to a tensor. 
          * It will be created a completely new tensor in which the data doesn't point to the original one
@@ -198,6 +240,7 @@ namespace Tensor_Library{
          * @return new tensor with the same type T and with rank 1
          */
         RankedTensor<T, 1> flattening_copy();
+
 
 
         /** 
@@ -210,6 +253,7 @@ namespace Tensor_Library{
          */
         RankedTensor<T, n> window(vector<int> min, vector<int> max);
 
+
         /**
          * @brief  window_copy() method: it creates a new tensor of rank = n (original rank) generating a sub-window of a given tensor
          * It will be created a completely new tensor in which the data doesn't point to the original one  
@@ -219,6 +263,7 @@ namespace Tensor_Library{
          * @return new tensor with the same type T and rank n but with low (or equal) total number of elements included in data.
          */
         RankedTensor<T, n> window_copy(vector<int> min, vector<int> max);
+
 
 
         // *************************************************************************************************
@@ -231,7 +276,16 @@ namespace Tensor_Library{
          */
         RankedTensorIterator<T, n> getIterator();
 
+
+        /**
+         * @brief getIterator() method: it produces an iterator which will iterate only on the element with the fixed index on the given space
+         * 
+         * @param space: integer that goes from 0 to n-1. It specifies the space which will be fixed
+         * @param index: integer that specify the index of the space which will be fixed 
+         * @return new iterator that iterates only on the elements correspondent to the correspondent fixed index on the given space  
+         */
         RankedTensorIterator<T, n> getIterator(int space, int index);
+
 
 
         // *************************************************************************************************
@@ -246,6 +300,7 @@ namespace Tensor_Library{
         void insertRandomData();
 
 
+
         /**
          * @brief printData() method: it prints every elements contained in the tensor ("data" attribute)
          */
@@ -258,31 +313,75 @@ namespace Tensor_Library{
          */
         void printTensor();
 
+
         // *****************************************************************************************
 
         // Methods for the operations between tensors
-
+        /**
+         * @brief algebraicSum() method: it modifies all the elements of the tensor by summing each of its element with the element of the input's tensor 
+         * 
+         * @param tensor: tensor with the same rank and type of the current one. The two tensors must have the same dimensions
+         * @return the current tensor with all elements modified by the algebraic sum of the elements
+         */
         RankedTensor<T, n> algebraicSum(RankedTensor<T, n> tensor);
+
+
+        /**
+         * @brief algebraicSum() method: it modifies all the elements of the tensor by summing each of its element with the input element of type T
+         * 
+         * @param elem: element of type T which will be summed to each element of the tensor
+         * @return the current tensor with all elements modified by the algebraic sum of the elements with the input one
+         */
         RankedTensor<T, n> algebraicSum(T elem);
 
+
+
+        /**
+         * @brief Operator which lets the application of the algebraic sum between two tensors with the + operator. 
+         * It applies the algebraicSum() method between the current tensor and the input one
+         * 
+         * @param tensor: tensor with the same rank and type of the current one. The two tensors must have the same dimensions
+         * @return the current tensor with all elements modified by the algebraic sum of the elements
+         */
         RankedTensor<T, n> operator+(RankedTensor<T, n> tensor);
+
+
+        /**
+         * @brief Operator which lets the application of the algebraic sum between two tensors with the + operator.
+         * It applies the algebraicSum() method between the current tensor and the input element of type T
+         * 
+         * @param elem: element of type T which will be summed to each element of the tensor
+         * @return the current tensor with all elements modified by the algebraic sum of the elements with the input one
+         */
         RankedTensor<T, n> operator+(T elem);
 
 
 
-        RankedTensor<T, n> multiply(RankedTensor<T, n> tensor);
+        /**
+         * @brief product() method: it applies the product of the two tensors by exploiting the Einstein Formalism.
+         * The elements of the current tensor will be modified by the product with the input tensor
+         * 
+         * @param tensor: 
+         * @return RankedTensor<T, n> 
+         */
+        RankedTensor<T, n> product(RankedTensor<T, n> tensor);
+
+
+        /**
+         * @brief Operator which lets the application of the product between two tensors with the * operator.
+         * It applies the product() method between the current tensor and the input one
+         * 
+         * @param tensor: tensor with the same rank and type of the current one 
+         * @return the current tensor with all elements modified by the product of the tensors' elements
+         */
         RankedTensor<T, n> operator*(RankedTensor<T, n> tensor);
-
-        
-
-
-
 
     };
         
 
 
-    // --------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------
     /**
      * @brief UnknownRankedTensor class: the tensor hasn't the rank information at the compile time
      * 
@@ -292,10 +391,12 @@ namespace Tensor_Library{
     class UnknownRankedTensor {
 
     private:
+        //rank value of the tensor. We don't know at compiler time this value, so the sizeDimensions and strides fields will be vector initialized in the constructor
         int n;
-        vector<int> sizeDimensions;     // int-array attribute which contains the dimensions' sizes of the tensor
+        
+        vector<int> sizeDimensions;     // int-vector attribute which contains the dimensions' sizes of the tensor
         int n_total_elements;           // int attribute which contains the value of the total elements of the tensor
-        vector<int> strides;            // int-array attribute which contains the strides of the tensor
+        vector<int> strides;            // int-vector attribute which contains the strides of the tensor
         shared_ptr<vector<T>> data;     // int-vector pointer attribute which points to the vector that contains the data of tensor
         int init_position;
 

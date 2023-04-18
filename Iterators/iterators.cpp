@@ -71,8 +71,9 @@ namespace Iterators{
         T elem = tensor->get(vectIndexes);
 
         // Ordered sliding of the tensor elements
-        while(!check && idx >= 0){          
+        while(!check && idx >= 0){ 
             if(indexes[idx] == endIndexes[idx]){
+                // Checking the fixed index of the given space
                 if(space < 0 || idx != space)
                     indexes[idx] = 0;
                 else
