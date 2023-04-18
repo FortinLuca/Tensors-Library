@@ -261,8 +261,10 @@ namespace Tensor_Library{
         // Methods for the operations between tensors
 
         RankedTensor<T, n> algebraicSum(RankedTensor<T, n> tensor);
+        RankedTensor<T, n> algebraicSum(T elem);
 
         RankedTensor<T, n> operator+(RankedTensor<T, n> tensor);
+        RankedTensor<T, n> operator+(T elem);
 
 
 
@@ -310,7 +312,7 @@ namespace Tensor_Library{
         /**
          * @brief Destructor of the UnknownRankedTensor class: it will be mantained as default
          */
-        ~UnknownRankedTensor();
+        ~UnknownRankedTensor() = default;
 
     };
 

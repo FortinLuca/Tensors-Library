@@ -102,7 +102,8 @@ int main() {
     RankedTensor<int, 3> aaa = prova1 + prova2;
     aaa.printData();
 
- 
+    RankedTensor<int, 3> bbbb = prova1 + 2;
+    bbbb.printData();
 
 
     return 0;

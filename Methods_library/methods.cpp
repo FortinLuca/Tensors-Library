@@ -450,21 +450,42 @@ namespace Tensor_Library{
         return *this;
     }
 
+    
+    template <typename T, int n>
+    RankedTensor<T, n> RankedTensor<T, n>::algebraicSum(T elem){
+        shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
+        int index = 0; 
+        RankedTensorIterator<T, n> it = getIterator();
+
+        while(it.hasNext()){
+            newData->at(index) = elem + it.next();
+            index++;
+        }
+
+        this->setData(newData);
+        return *this;
+    }
+
 
     template <typename T, int n>
     RankedTensor<T, n> RankedTensor<T, n>::operator+(RankedTensor<T, n> tensor){
         return algebraicSum(tensor);
     }
 
+    template <typename T, int n>
+    RankedTensor<T, n> RankedTensor<T, n>::operator+(T elem){
+        return algebraicSum(elem);
+    }
 
+    
     template <typename T, int n>
     RankedTensor<T, n> RankedTensor<T, n>::multiply(RankedTensor<T, n> tensor){
         return NULL;
     }
 
     template <typename T, int n>
-    RankedTensor<T, n> RankedTensor<T, n>::operator+(RankedTensor<T, n> tensor){
-        return NULL;
+    RankedTensor<T, n> RankedTensor<T, n>::operator*(RankedTensor<T, n> tensor){
+        return multiply(tensor);
     }
 
 
@@ -481,10 +502,6 @@ namespace Tensor_Library{
         n = args.size();
         
     }
-
-
-    template <typename T>
-    UnknownRankedTensor<T>::~UnknownRankedTensor(){ }
     
 }
 
