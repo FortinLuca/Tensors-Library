@@ -250,7 +250,6 @@ namespace Tensor_Library{
 
         // From 0 to n-1, exactly like "j" that goes to other way from n-1 to 0
         for (int i = 0; i < n; i++) {
-            newTensor.strides[j] = newTensor.n_total_elements;
             newTensor.sizeDimensions[i] = max[i] - min[i] + 1;
             newTensor.n_total_elements *= newTensor.sizeDimensions[j];
             newTensor.init_position += strides[j] * min[i];
