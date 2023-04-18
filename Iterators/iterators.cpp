@@ -17,13 +17,15 @@ namespace Iterators{
     
     template <typename T, int n>
     RankedTensorIterator<T, n>::RankedTensorIterator(RankedTensor<T, n> &tensorInput, int space, int index) : tensor(&tensorInput){
-
+        // Checking the validity of the two parameters
         if(space < 0 || index < 0)
             throw invalid_argument("The space and the index in which iterate must be greater than zero");
 
+        // Initializing the space and index fields
         this->space = space;
         this->index = index;
 
+        // Initializing the indexes and endIndexes fields by using space and index values
         for (int i = 0; i < n; i++) {
             if(i != space){
                 indexes[i] = 0;

@@ -361,8 +361,8 @@ namespace Tensor_Library{
          * @brief product() method: it applies the product of the two tensors by exploiting the Einstein Formalism.
          * The elements of the current tensor will be modified by the product with the input tensor
          * 
-         * @param tensor: 
-         * @return RankedTensor<T, n> 
+         * @param tensor: tensor with the same rank and type of the current one 
+         * @return the current tensor with all elements modified by the product of the tensors' elements 
          */
         RankedTensor<T, n> product(RankedTensor<T, n> tensor);
 
