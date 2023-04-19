@@ -20,10 +20,10 @@ int main() {
     // Short example of four tensors with different types but the same dimensions
     vector<int> testvector = {2, 3, 4};
 
-    RankedTensor<float, 3> rt1(testvector);
-    RankedTensor<int, 3> rt2(testvector);
-    RankedTensor<char, 3> rt3(testvector);
-    RankedTensor<double, 3> rt4(testvector);
+    UnknownRankedTensor<float> rt1(testvector);
+    UnknownRankedTensor<int> rt2(testvector);
+    UnknownRankedTensor<char> rt3(testvector);
+    UnknownRankedTensor<double> rt4(testvector);
 
     /*
     // Printing the sizeDimensions and the strides attribute of the four tensors
@@ -76,10 +76,10 @@ int main() {
     vector<int> minIndexesVector = {0, 1, 0};
     vector<int> maxIndexesVector = {1, 1, 2};
 
-    RankedTensor<int, 3> newTensor2 = rt2.window(minIndexesVector, maxIndexesVector);
+    UnknownRankedTensor<int> newTensor2 = rt2.window(minIndexesVector, maxIndexesVector);
     newTensor2.printData();
 
-    RankedTensor<int, 3> newTensor3 = rt2.window_copy(minIndexesVector, maxIndexesVector);
+    UnknownRankedTensor<int> newTensor3 = rt2.window_copy(minIndexesVector, maxIndexesVector);
     newTensor3.printData();
 
     // Testing the flattening methods
@@ -91,8 +91,8 @@ int main() {
     UnknownRankedTensor<int> newTensorA(2, 3, 4);
 
 
-    RankedTensor<int, 3> prova1(2, 3, 4);
-    RankedTensor<int, 3> prova2(2, 3, 4);
+    UnknownRankedTensor<int> prova1(2, 3, 4);
+    UnknownRankedTensor<int> prova2(2, 3, 4);
     prova1.insertRandomData();
     prova2.insertRandomData();
 
@@ -100,13 +100,13 @@ int main() {
     prova2.printData();
 
 
-    RankedTensorIterator<int, 3> it = prova2.getIterator(1, 2);
+    TensorIterator<int> it = prova2.getIterator(1, 2);
     while(it.hasNext()){
        cout << it.next() << " ";
     }
     cout << endl;
 
-    RankedTensor<int, 2> aa = prova2.fix(1, 2);
+    UnknownRankedTensor<int> aa = prova2.fix(1, 2);
     aa.printData();
 
     prova1.printData();

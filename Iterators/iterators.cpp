@@ -6,8 +6,12 @@ using namespace std;
 namespace Iterators{
 
     // Constructor implementation
-    template <typename T, int n>
-    RankedTensorIterator<T, n>::RankedTensorIterator(RankedTensor<T, n> &tensorInput) : tensor(&tensorInput){
+    template <typename T>
+    TensorIterator<T>::TensorIterator(UnknownRankedTensor<T> &tensorInput) : tensor(&tensorInput){
+        n = tensor->getRank();
+        indexes = vector<int>(n);
+        endIndexes = vector<int>(n);
+
         for (int i = 0; i < n; i++) {
             indexes[i] = 0;
             endIndexes[i] = tensor->sizeDimensions[i] - 1;
@@ -15,8 +19,12 @@ namespace Iterators{
     }
 
     
-    template <typename T, int n>
-    RankedTensorIterator<T, n>::RankedTensorIterator(RankedTensor<T, n> &tensorInput, int space, int index) : tensor(&tensorInput){
+    template <typename T>
+    TensorIterator<T>::TensorIterator(UnknownRankedTensor<T> &tensorInput, int space, int index) : tensor(&tensorInput){
+        n = tensor->getRank();
+        indexes = vector<int>(n);
+        endIndexes = vector<int>(n);
+
         // Checking the validity of the two parameters
         if(space < 0 || index < 0)
             throw invalid_argument("The space and the index in which iterate must be greater than zero");
@@ -40,8 +48,8 @@ namespace Iterators{
     
 
     // Implementation of the hasNext method
-    template <typename T, int n>
-    bool RankedTensorIterator<T, n>::hasNext(){
+    template <typename T>
+    bool TensorIterator<T>::hasNext(){
         for(int i = 0; i < n; i++){
             // Checking if we have a successive element
             if(indexes[i] < endIndexes[i])
@@ -62,8 +70,8 @@ namespace Iterators{
 
 
     // Implementation of the next method
-    template <typename T, int n>
-    T RankedTensorIterator<T, n>::next(){
+    template <typename T>
+    T TensorIterator<T>::next(){
         int idx = n-1;
         bool check = false;
         int checkLast = indexes[0];
@@ -87,8 +95,6 @@ namespace Iterators{
                 indexes[idx]++;
                 check = true;
             }
-
-            
         }
 
         // Handling the case where you are in the last element

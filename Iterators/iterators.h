@@ -1,6 +1,7 @@
 #include <iostream>
 #include <time.h>
 #include <random>
+#include <vector>
 #include <memory>
 
 // Declaration of the classes on the namespace Tensor_Library because for the iteration's classes we need to use the Tensor Library
@@ -14,6 +15,7 @@ namespace Tensor_Library{
 
 
 using namespace Tensor_Library;
+using namespace std;
 
 
 // Iterators definition
@@ -26,17 +28,21 @@ namespace Iterators{
      * @tparam T: datatype of the correspondent tensor 
      * @tparam n: rank of the correspondent tensor
      */
-    template <typename T, int n>
-    class RankedTensorIterator {
+    template <typename T>
+    class TensorIterator {
+
         private:
-            friend class RankedTensor<T, n>;        // it can access private and protected members of the RankedTensor class
-            RankedTensor<T, n> *tensor;             // tensor which compose the iterator object
-            int indexes[n];                         // indexes which indicates the current position          
-            int endIndexes[n];                      // indexes of the tensor's last element
+
+            int n;
+            friend class UnknownRankedTensor<T>;             // it can access private and protected members of the RankedTensor class
+            UnknownRankedTensor<T> *tensor;                  // tensor which compose the iterator object
+            vector<int> indexes;                             // indexes which indicates the current position          
+            vector<int> endIndexes;                          // indexes of the tensor's last element
             
             // Space and index parameter used for the iterators 
             int space = -1; 
             int index = -1;
+            
             
         public:
             /**
@@ -44,7 +50,7 @@ namespace Iterators{
              * 
              * @param tensorInput: tensor which gives a shape to the iterator
              */
-            RankedTensorIterator(RankedTensor<T, n> &tensorInput);
+            TensorIterator(UnknownRankedTensor<T> &tensorInput);
 
 
             /**
@@ -55,13 +61,13 @@ namespace Iterators{
              * @param space: integer that goes from 0 to n-1. It specifies the space which will be fixed
              * @param index: integer that specify the index of the space which will be fixed
              */
-            RankedTensorIterator(RankedTensor<T, n> &tensorInput, int space, int index);
+            TensorIterator(UnknownRankedTensor<T> &tensorInput, int space, int index);
 
             /**
              * @brief Destructor of the RankedTensorIterator object
              * 
              */
-            ~RankedTensorIterator() = default;
+            ~TensorIterator() = default;
 
             /**
              * @brief hasNext() method: it check the presence of a new element after the current one

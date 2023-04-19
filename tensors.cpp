@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cstdlib>
-#include <vector>
 #include <algorithm>
 #include <limits>
 
@@ -8,6 +7,44 @@
 
 
 namespace Tensor_Library{
+
+    // Constructor and methods implementations of the UnknownRankedTensor class
+    template <typename T>
+    UnknownRankedTensor<T>::UnknownRankedTensor(vector<int> args){
+        n = args.size();
+        sizeDimensions = vector<int>(n);
+        strides = vector<int>(n);
+        int size = args.size();
+
+        // Checking the dimensionality of the tensor corresponds to the number of dimensions' value in input
+        if(n != size) 
+            throw invalid_argument("The number of space dimensions inserted are not equal to the number of rank");
+
+        // Checking that the rank is greater than zero
+        if(n <= 0)
+            throw invalid_argument("The rank must be greater than zero");
+
+        n_total_elements = 1;
+        init_position = 0;
+
+        for(int i = n-1; i >= 0; i--){
+            // The dimensions' values of the tensor must be greater than 0
+            if(args[i] <= 0)
+                throw invalid_argument("A dimensional space cannot be zero or less");
+            else{
+                // Computation of the strides and the sizeDimensions
+                strides[i] = n_total_elements;
+
+                n_total_elements *= args[i];
+                sizeDimensions[i] = args[i];
+            }
+        }
+    }
+
+
+
+    /*
+    // ------------------------------------------------------------------
 
     // Constructor and methods implementations of the RankedTensor class
     template <typename T, int n>
@@ -38,56 +75,62 @@ namespace Tensor_Library{
             }
         }
     }
-
+    */
 
     //*************************************************************************************************************************
-    template <typename T, int n>
-    T RankedTensor<T, n>::operator()(vector<int> tensorIndexes){
+    template <typename T>
+    T UnknownRankedTensor<T>::operator()(vector<int> tensorIndexes){
         return get(tensorIndexes);
     }
 
-    template <typename T, int n>
+    template <typename T>
     template <typename... ints>
-    T RankedTensor<T, n>::operator()(ints... tensorIndexes){
+    T UnknownRankedTensor<T>::operator()(ints... tensorIndexes){
          return get(vector<int> ({tensorIndexes...}));
     }
+
     //*****************************************************************************************************************************
 
     // Getters and setters
 
-    template <typename T, int n>
-    int * RankedTensor<T, n>::getSizeDimensions(){
+    template <typename T>
+    int UnknownRankedTensor<T>::getRank(){
+        return n;
+    }
+
+    template <typename T>
+    vector<int> UnknownRankedTensor<T>::getSizeDimensions(){
         return sizeDimensions;
     }
 
 
-    template <typename T, int n>
-    int * RankedTensor<T, n>::getStrides(){
+    template <typename T>
+    vector<int> UnknownRankedTensor<T>::getStrides(){
         return strides;
     }
 
-    template <typename T, int n>
-    shared_ptr<vector<T>> RankedTensor<T, n>::getData(){
+    template <typename T>
+    shared_ptr<vector<T>> UnknownRankedTensor<T>::getData(){
         return data;
     }
 
-    template <typename T, int n>
-    void RankedTensor<T, n>::setData(shared_ptr<vector<T>> newData){
+    template <typename T>
+    void UnknownRankedTensor<T>::setData(shared_ptr<vector<T>> newData){
         data = newData;
     }
 
-    template <typename T, int n>
-    int RankedTensor<T, n>::getInitPosition(){
+    template <typename T>
+    int UnknownRankedTensor<T>::getInitPosition(){
         return init_position;
     }
 
-    template <typename T, int n>
-    void RankedTensor<T, n>::setInitPosition(int i){
+    template <typename T>
+    void UnknownRankedTensor<T>::setInitPosition(int i){
         init_position = i;
     }
 
-    template <typename T, int n>
-    int RankedTensor<T, n>::get_n_total_elements() {
+    template <typename T>
+    int UnknownRankedTensor<T>::get_n_total_elements() {
         return n_total_elements;
     }
 
@@ -95,12 +138,13 @@ namespace Tensor_Library{
 
     // Methods
 
-    template <typename T, int n>
-    T RankedTensor<T, n>::get(vector<int> tensorIndexes){
+    template <typename T>
+    T UnknownRankedTensor<T>::get(vector<int> tensorIndexes){
         int index = init_position;
         int i = 0;
+        int size_index = tensorIndexes.size();
 
-        if(tensorIndexes.size() != n) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
+        if(size_index != n) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
 
         //check of the association of tensor index provided and corrispective dimension vector
         for (int tensorIndex : tensorIndexes) {
@@ -117,20 +161,21 @@ namespace Tensor_Library{
     }
 
 
-    template <typename T, int n>
+    template <typename T>
     template <typename... ints>
-    T RankedTensor<T, n>::get(ints... tensorIndexes){
+    T UnknownRankedTensor<T>::get(ints... tensorIndexes){
         return get(vector<int>({tensorIndexes...}));
     }
 
 
 
-    template <typename T, int n>
-    void RankedTensor<T, n>::set(T elem, vector<int> tensorIndexes){
+    template <typename T>
+    void UnknownRankedTensor<T>::set(T elem, vector<int> tensorIndexes){
         int index = init_position;
         int i = 0;
+        int size_indexes = tensorIndexes.size();
 
-        if(tensorIndexes.size() != n) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
+        if(size_indexes != n) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
 
         //check of the association of tensor index provided and corrispective dimension vector
         for (int tensorIndex : tensorIndexes) {
@@ -148,16 +193,16 @@ namespace Tensor_Library{
     }
 
 
-    template <typename T, int n>
+    template <typename T>
     template <typename... ints>
-    void RankedTensor<T, n>::set(T elem, ints... tensorIndexes){
+    void UnknownRankedTensor<T>::set(T elem, ints... tensorIndexes){
         set(elem, vector<int>({tensorIndexes...}));
     }
 
 
 
-    template <typename T, int n>
-    RankedTensor<T, n-1> RankedTensor<T, n>::fix(const int space, const int spaceIndex){
+    template <typename T>
+    UnknownRankedTensor<T> UnknownRankedTensor<T>::fix(const int space, const int spaceIndex){
         
         // Checking the exceptions
         if(space < 0 || space >= n) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
@@ -170,7 +215,7 @@ namespace Tensor_Library{
         newSizeDimensions.erase(newSizeDimensions.begin() + space);
 
         // Creation of a new tensor to return
-        RankedTensor<T, n-1> newTensor(newSizeDimensions);
+        UnknownRankedTensor<T> newTensor(newSizeDimensions);
         
         // Computation of the new tensor's strides
         for(int i=0; i<n; i++){
@@ -192,8 +237,8 @@ namespace Tensor_Library{
 
 
     // TODO: implement this
-    template <typename T, int n>
-    RankedTensor<T, n-1> RankedTensor<T, n>::fix_copy(const int space, const int spaceIndex){
+    template <typename T>
+    UnknownRankedTensor<T> UnknownRankedTensor<T>::fix_copy(const int space, const int spaceIndex){
         // Checking the exceptions
         if(space < 0 || space >= n) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
         if(spaceIndex < 0) throw invalid_argument("An index cannot be less than zero");
@@ -205,7 +250,7 @@ namespace Tensor_Library{
         newSizeDimensions.erase(newSizeDimensions.begin() + space);
 
         // Creation of a new tensor to return
-        RankedTensor<T, n-1> newTensor(newSizeDimensions);
+        UnknownRankedTensor<T> newTensor(newSizeDimensions);
 
         // iterating all and only taking the values according to the fixed index
         int i = 0;
@@ -226,22 +271,22 @@ namespace Tensor_Library{
 
 
 
-    template <typename T, int n>
-    RankedTensor<T, 1> RankedTensor<T, n>::flattening(){
+    template <typename T>
+    UnknownRankedTensor<T> UnknownRankedTensor<T>::flattening(){
         // It doesn't matter if the rank of the original tensor is 1 because in that case it produces the same tensor with the same instructions
-        RankedTensor<T, 1> newTensor(n_total_elements);
+        UnknownRankedTensor<T> newTensor(n_total_elements);
         newTensor.setData(data);
         return newTensor;
     }
 
 
-    template <typename T, int n>
-    RankedTensor<T, 1> RankedTensor<T, n>::flattening_copy(){
-        RankedTensor<T, 1> newTensor(n_total_elements);
+    template <typename T>
+    UnknownRankedTensor<T> UnknownRankedTensor<T>::flattening_copy(){
+        UnknownRankedTensor<T> newTensor(n_total_elements);
 
         // Creating a new vector with the same elements of the original tensor
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
-        RankedTensorIterator<T, n> it = getIterator();
+        TensorIterator<T> it = getIterator();
 
         int index = 0;
         while(it.hasNext()) {
@@ -256,10 +301,13 @@ namespace Tensor_Library{
 
 
 
-    template <typename T, int n>
-    RankedTensor<T, n> RankedTensor<T, n>::window(const vector<int> min, const vector<int> max) {
-        if (min.size() != n) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
-        if (max.size() != n) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
+    template <typename T>
+    UnknownRankedTensor<T> UnknownRankedTensor<T>::window(const vector<int> min, const vector<int> max) {
+        int min_size = min.size();
+        int max_size = max.size();
+
+        if (min_size != n) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
+        if (max_size != n) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
         
         for (int i=0; i<n; i++) {
             if (min[i] > sizeDimensions[i]-1 || max[i]>sizeDimensions[i]-1) throw invalid_argument("One of the min or max indexes is greater than the relative size dimension");
@@ -268,7 +316,7 @@ namespace Tensor_Library{
         }
 
         // New tensor with a pointer to the original tensor. It enables to copy the constructor for creating a new tensor equal to the one passed to the constructor
-        RankedTensor<T,n> newTensor(*this);
+        UnknownRankedTensor<T> newTensor(*this);
 
         // Start to compute attributes of the new tensor
         newTensor.n_total_elements = 1;
@@ -292,10 +340,13 @@ namespace Tensor_Library{
     }
 
 
-    template <typename T, int n>
-    RankedTensor<T, n> RankedTensor<T, n>::window_copy(const vector<int> min, const vector<int> max) {
-        if (min.size() != n) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
-        if (max.size() != n) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
+    template <typename T>
+    UnknownRankedTensor<T> UnknownRankedTensor<T>::window_copy(const vector<int> min, const vector<int> max) {
+        int min_size = min.size();
+        int max_size = max.size();
+
+        if (min_size != n) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
+        if (max_size != n) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
         
         for (int i=0; i<n; i++) {
             if (min[i] > sizeDimensions[i]-1 || max[i]>sizeDimensions[i]-1) throw invalid_argument("One of the min or max indexes is greater than the relative size dimension");
@@ -308,10 +359,10 @@ namespace Tensor_Library{
         for(int i = 0; i < n; i++)
             newSizeDimensions[i] = max[i] - min[i] + 1;
             
-        RankedTensor<T, n> newTensor(newSizeDimensions);
+        UnknownRankedTensor<T> newTensor(newSizeDimensions);
 
         // Filling the new tensor with a totally new vector with the same data on the correct window of the original tensor
-        RankedTensorIterator<T, n> it = getIterator();
+        TensorIterator<T> it = getIterator();
         bool check_inside_window;
         int index = 0;
 
@@ -343,16 +394,16 @@ namespace Tensor_Library{
     //***************************************************************************************************************
     // Methods for the iterator
     
-    template <typename T, int n>
-    RankedTensorIterator<T, n> RankedTensor<T, n>::getIterator(){
-        RankedTensorIterator<T, n> iterator(*this);
+    template <typename T>
+    TensorIterator<T> UnknownRankedTensor<T>::getIterator(){
+        TensorIterator<T> iterator(*this);
         return iterator;
     }
 
 
-    template <typename T, int n>
-    RankedTensorIterator<T, n> RankedTensor<T, n>::getIterator(int space, int index){
-        RankedTensorIterator<T, n> iterator(*this, space, index);
+    template <typename T>
+    TensorIterator<T> UnknownRankedTensor<T>::getIterator(int space, int index){
+        TensorIterator<T> iterator(*this, space, index);
         return iterator;
     }
 
@@ -363,8 +414,8 @@ namespace Tensor_Library{
     // Methods for testing    
 
     //spostare in utils?
-    template <typename T, int n>
-    T RankedTensor<T, n>::randomNumber() {
+    template <typename T>
+    T UnknownRankedTensor<T>::randomNumber() {
 
         // Computation of the limits of datatype T
         T from = numeric_limits<T>::lowest();
@@ -402,8 +453,8 @@ namespace Tensor_Library{
     }
 
 
-    template <typename T, int n>
-    void RankedTensor<T, n>::insertRandomData(){
+    template <typename T>
+    void UnknownRankedTensor<T>::insertRandomData(){
         int i;
         data = make_shared<vector<T>>(n_total_elements);
 
@@ -419,9 +470,9 @@ namespace Tensor_Library{
 
 
 
-    template <typename T, int n>
-    void RankedTensor<T, n>::printData(){
-        RankedTensorIterator<T, n> it = getIterator();
+    template <typename T>
+    void UnknownRankedTensor<T>::printData(){
+        TensorIterator<T> it = getIterator();
         while(it.hasNext())
             cout<< it.next() << " ";
             
@@ -429,8 +480,8 @@ namespace Tensor_Library{
     }
 
 
-    template <typename T, int n>
-    void RankedTensor<T, n>::printTensor(){
+    template <typename T>
+    void UnknownRankedTensor<T> ::printTensor(){
         
         // Printing the dimensions of the tensor
         cout << "Tensor's dimensions: ";
@@ -467,8 +518,8 @@ namespace Tensor_Library{
     //************************************************************************************************************************
 
     // Methods for operations between tensors
-    template <typename T, int n>
-    RankedTensor<T, n> RankedTensor<T, n>::algebraicSum(RankedTensor<T, n> tensor){
+    template <typename T>
+    UnknownRankedTensor<T> UnknownRankedTensor<T>::algebraicSum(UnknownRankedTensor<T> tensor){
         // The dimensions of the tensors must be equal
         for (int i = 0; i < n; i++){
             if(sizeDimensions[i] != tensor.sizeDimensions[i])
@@ -479,8 +530,8 @@ namespace Tensor_Library{
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
 
         // Creating the two iterators
-        RankedTensorIterator<T, n> it1 = getIterator();
-        RankedTensorIterator<T, n> it2 = tensor.getIterator();
+        TensorIterator<T> it1 = getIterator();
+        TensorIterator<T> it2 = tensor.getIterator();
         int index = 0;
 
         // Since there are the same dimensions, the iterators iterates in the same number of steps
@@ -497,11 +548,11 @@ namespace Tensor_Library{
     }
 
     
-    template <typename T, int n>
-    RankedTensor<T, n> RankedTensor<T, n>::algebraicSum(T elem){
+    template <typename T>
+    UnknownRankedTensor<T> UnknownRankedTensor<T>::algebraicSum(T elem){
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
         int index = 0; 
-        RankedTensorIterator<T, n> it = getIterator();
+        TensorIterator<T> it = getIterator();
 
         // Adding the element to every element of the tensor
         while(it.hasNext()){
@@ -515,19 +566,19 @@ namespace Tensor_Library{
     }
 
 
-    template <typename T, int n>
-    RankedTensor<T, n> RankedTensor<T, n>::operator+(RankedTensor<T, n> tensor){
+    template <typename T>
+    UnknownRankedTensor<T> UnknownRankedTensor<T>::operator+(UnknownRankedTensor<T> tensor){
         return algebraicSum(tensor);
     }
 
 
-    template <typename T, int n>
-    RankedTensor<T, n> RankedTensor<T, n>::operator+(T elem){
+    template <typename T>
+    UnknownRankedTensor<T> UnknownRankedTensor<T>::operator+(T elem){
         return algebraicSum(elem);
     }
 
 
-    
+    /*
     template <typename T, int n>
     RankedTensor<T, n> RankedTensor<T, n>::product(RankedTensor<T, n> tensor){
         return NULL;
@@ -538,6 +589,7 @@ namespace Tensor_Library{
     RankedTensor<T, n> RankedTensor<T, n>::operator*(RankedTensor<T, n> tensor){
         return product(tensor);
     }
+    */
 
 
 
@@ -547,11 +599,7 @@ namespace Tensor_Library{
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-    // Constructor and methods implementations of the UnknownRankedTensor class
-    template <typename T>
-    UnknownRankedTensor<T>::UnknownRankedTensor(vector<int> args){
-        n = args.size();
-    }
+    
     
 }
 
