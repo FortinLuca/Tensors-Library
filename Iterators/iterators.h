@@ -34,7 +34,7 @@ namespace Iterators{
         private:
 
             int n;
-            friend class UnknownRankedTensor<T>;             // it can access private and protected members of the RankedTensor class
+            friend class UnknownRankedTensor<T>;             // it can access private and protected members of the UnknownRankedTensor class
             UnknownRankedTensor<T> *tensor;                  // tensor which compose the iterator object
             vector<int> indexes;                             // indexes which indicates the current position          
             vector<int> endIndexes;                          // indexes of the tensor's last element
@@ -46,7 +46,7 @@ namespace Iterators{
             
         public:
             /**
-             * @brief Constructor of the RankedTensorIterator object: it initializes the private attributes of the class (excepts for space and index)
+             * @brief Constructor of the TensorIterator object: it initializes the private attributes of the class (excepts for space and index)
              * 
              * @param tensorInput: tensor which gives a shape to the iterator
              */
@@ -54,7 +54,7 @@ namespace Iterators{
 
 
             /**
-             * @brief Constructor of the RankedTensorIterator object: it initializes the private attributes of the class (including space and index fields)
+             * @brief Constructor of the TensorIterator object: it initializes the private attributes of the class (including space and index fields)
              * It constructs an iterator that iterators in a forward way along the content of the index field on the space field
              * 
              * @param tensorInput: tensor which gives a shape to the iterator
@@ -64,7 +64,7 @@ namespace Iterators{
             TensorIterator(UnknownRankedTensor<T> &tensorInput, int space, int index);
 
             /**
-             * @brief Destructor of the RankedTensorIterator object
+             * @brief Destructor of the TensorIterator object
              * 
              */
             ~TensorIterator() = default;
