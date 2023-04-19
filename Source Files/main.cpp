@@ -113,5 +113,9 @@ int main() {
     prova1.set(1, 0, 0, 1);
     prova1.printData();
 
+    RankedTensor<int, 3> rt(2, 3, 4);
+    rt.insertRandomData();
+    rt.printData();
+
     return 0;
 }

@@ -27,6 +27,7 @@ namespace Tensor_Library{
         int init_position;
         friend class TensorIterator<T>;
 
+
         static T randomNumber();
 
         
@@ -66,6 +67,7 @@ namespace Tensor_Library{
          * @param tensor: tensor in which will be copied in the constructed one
          */
         UnknownRankedTensor(UnknownRankedTensor<T> &&tensor) = default;
+
 
 
         /**
@@ -377,13 +379,13 @@ namespace Tensor_Library{
      * @tparam n: rank of the tensor
      */
     template <typename T, int n>
-    class RankedTensor {
+    class RankedTensor : public UnknownRankedTensor<T>{
 
 
     private:
-        int sizeDimensions[n];          // int-array attribute which contains the dimensions' sizes of the tensor
+        vector<int> sizeDimensions;          // int-array attribute which contains the dimensions' sizes of the tensor
         int n_total_elements;           // int attribute which contains the value of the total elements of the tensor
-        int strides[n];                 // int-array attribute which contains the strides of the tensor
+        vector<int> strides;                 // int-array attribute which contains the strides of the tensor
         shared_ptr<vector<T>> data;     // int-vector pointer attribute which points to the vector that contains the data of tensor
         int init_position;
         friend class TensorIterator<T>;
@@ -397,6 +399,7 @@ namespace Tensor_Library{
 
 
     public:
+
         // Constructors
         /**
          * @brief Constructor of the RankedTensor class: it initializes all the private attributes of the class
@@ -465,13 +468,15 @@ namespace Tensor_Library{
         // *******************************************************************************
 
         // Getters and Setters
+
+        int getRank();
         
         /**
          * @brief getSizeDimensions() method: it extracts the array attribute which contains the size's dimensions
          * 
          * @return int-array attribute sizeDimensions
          */
-        int * getSizeDimensions();
+        vector<int> getSizeDimensions();
 
 
         /**
@@ -479,7 +484,7 @@ namespace Tensor_Library{
          * 
          * @return int-array attribute Strides
          */
-        int * getStrides();
+        vector<int> getStrides();
 
 
         /**
