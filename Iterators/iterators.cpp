@@ -1,7 +1,5 @@
 #include "iterators.h"
 
-using namespace std;
-
 
 namespace Iterators{
 

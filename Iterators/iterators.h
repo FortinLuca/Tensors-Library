@@ -1,8 +1,8 @@
 #include <iostream>
-#include <time.h>
-#include <random>
+#include <cstdlib>
 #include <vector>
 #include <memory>
+
 
 // Declaration of the classes on the namespace Tensor_Library because for the iteration's classes we need to use the Tensor Library
 namespace Tensor_Library{
