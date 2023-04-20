@@ -107,31 +107,6 @@ namespace Tensor_Library{
 
 
     // ***************************************************************************
-    // RankedTensor methods used for testing
-
-    template <typename T, int n>
-    T RankedTensor<T, n>::randomNumber() {
-        return UnknownRankedTensor<T>::randomNumber();
-    }
-
-
-    template <typename T, int n>
-    void RankedTensor<T, n>::insertRandomData(){
-        UnknownRankedTensor<T>::insertRandomData(); 
-    }
-
-
-
-    template <typename T, int n>
-    void RankedTensor<T, n>::printData(){
-        UnknownRankedTensor<T>::printData();
-    }
-
-
-    template <typename T, int n>
-    void RankedTensor<T, n> ::printTensor(){
-        UnknownRankedTensor<T> ::printTensor();  
-    }
-
+    // RankedTensor methods used for testing are inherited from UnknownRankedTensor
 
 }

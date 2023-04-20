@@ -416,7 +416,8 @@ namespace Tensor_Library{
          * 
          * @return T number generated randomically by the uniform distribution
          */
-        static T randomNumber();
+
+        using UnknownRankedTensor<T>::randomNumber;
 
 
     public:
@@ -489,7 +490,8 @@ namespace Tensor_Library{
          * @param tensorIndexes: vector of integers that contains the indexes of the element which will be returned
          * @return tensor's element of type T which corresponds to the indexes given in input
          */
-        T operator()(vector<int> tensorIndexes);
+        //T operator()(vector<int> tensorIndexes);
+        //using UnknownRankedTensor<T>::operator();
 
 
         /**
@@ -498,114 +500,58 @@ namespace Tensor_Library{
          * @param tensorIndexes: series of integers which composes the indexes of the element to return
          * @return tensor's element of type T which corresponds to the indexes given in input
          */
-        template <typename... ints>
-        T operator()(ints... tensorIndexes);
+
 
         
         // *******************************************************************************
 
         // Getters and Setters
 
-        int getRank();
+
+        // getRank() methods: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::getRank;
         
-        /**
-         * @brief getSizeDimensions() method: it extracts the array attribute which contains the size's dimensions
-         * 
-         * @return int-array attribute sizeDimensions
-         */
-        vector<int> getSizeDimensions();
+
+        // getSizeDimensions() methods: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::getSizeDimensions;
 
 
-        /**
-         * @brief getStrides() method: it extracts the array attribute which contains the strides
-         * 
-         * @return int-array attribute Strides
-         */
-        vector<int> getStrides();
+        // getStrides() methods: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::getStrides;
 
 
-        /**
-         * @brief getData() method: it extracts the Data object
-         * 
-         * @return shared_ptr<vector<T>> 
-         */
-        shared_ptr<vector<T>> getData();
+        // getData() methods: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::getData;
 
 
-        /**
-         * @brief setData() method: it sets the Data object
-         * 
-         * @param newData: it will be the new Data of the tensor
-         */
-        void setData(shared_ptr<vector<T>> newData);
+        // setData() methods: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::setData;
 
 
-        /**
-         * @brief getInitPosition(): it gets the InitPosition object
-         * 
-         * @return the correspondent integer number of the initial position
-         */
-        int getInitPosition();
+        // getInitPosition() methods: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::getInitPosition;
 
 
-        /**
-         * @brief setInitPosition(): it set the InitPosition object
-         * 
-         * @param i: it will be the new value of the attribute InitPosition
-         */
-        void setInitPosition(int i);
+        // setInitPosition() methods: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::setInitPosition;
 
 
-        /**
-         * @brief get_n_total_elements() methods: Get the n_total_elements
-         * 
-         * @return the value of the attribute n_total_elements
-         */
-        int get_n_total_elements();
+        // get_n_total_elements() methods: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::get_n_total_elements;
 
 
 
         // ***********************************************************************************************
 
         // Methods
-        /**
-         * @brief get() method: it extracts the element correspondent to the position provided
-         * 
-         * @param tensorIndexes: vector which contains the indexes of the value to extract
-         * @return element at the correspondent indexes
-         */
-        T get(vector<int> tensorIndexes);
 
-
-        /**
-         * @brief get() method: it extracts the element correspondent to the position provided
-         * 
-         * @param tensorIndexes: number of int parameters correspondent to the indexes of the value to extract
-         * @return element at the correspondent indexes
-         */
-        template <typename... ints>
-        T get(ints...tensorIndexes);
+        // get() method: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::get;
 
 
 
-        /**
-         * @brief set() method: it sets an element into the tensor given the input indexes
-         * 
-         * @param elem: element of type T to be inserted into the tensor 
-         * @param tensorIndexes: vector of indexes that specifies the position in which insert the element
-         */
-        void set(T elem, vector<int> tensorIndexes);
-
-
-        /**
-         * @brief set() method: it sets an element into the tensor given the input indexes
-         * 
-         * @param elem: element of type T to be inserted into the tensor 
-         * @param tensorIndexes: a number of int parameters that specifies the position in which insert the element
-         */
-        template <typename... ints>
-        void set(T elem, ints... tensorIndexes);
-
+        // set() method: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::set;
 
 
         /**
@@ -672,51 +618,30 @@ namespace Tensor_Library{
 
 
         // *************************************************************************************************
+
         // Methods for iterator
 
-        /**
-         * @brief getIterator() method: it produces an iterator of a corresponding tensor
-         * 
-         * @return iterator of type TensorIterator<T>, with T corresponding to the type of the given tensor and n to the rank
-         */
-        TensorIterator<T> getIterator();
-
-
-        /**
-         * @brief getIterator() method: it produces an iterator which will iterate only on the element with the fixed index on the given space
-         * 
-         * @param space: integer that goes from 0 to n-1. It specifies the space which will be fixed
-         * @param index: integer that specify the index of the space which will be fixed 
-         * @return new iterator that iterates only on the elements correspondent to the correspondent fixed index on the given space  
-         */
-        TensorIterator<T> getIterator(int space, int index);
+        // getIterator() method: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::getIterator;
 
 
 
         // *************************************************************************************************
 
         // Methods for testing
-        /**
-         * @brief insertRandomData() method: it inserts pseudo-randomic values into the vector attribute of type T data with a number of element correspondent to the n_total_elements attribute.
-         * The insertion is done in order to the type T, the tensor dimensions and the uniform distribution.
-         * It exploits the auxiliary, private and static function randomNumber()
-         * The range goes from -1000 and to 1000, ***RIMUOVEREI QUESTA PARTE*** --> unless the arithmetic types limits are smaller (like char)
-         */
-        void insertRandomData();
+  
+
+        // insertRandomData() method: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::insertRandomData;
 
 
-
-        /**
-         * @brief printData() method: it prints every elements contained in the tensor ("data" attribute)
-         */
-        void printData();
+        // printData() method: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::printData;
 
 
-        /**
-         * @brief printTensor() method: it prints the most important fields (sizeDimensions, strides and n_total_elements) and the data of the correspondent tensor
-         * 
-         */
-        void printTensor();
+        // printTensor() method: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::printTensor;
+
 
 
         // *****************************************************************************************

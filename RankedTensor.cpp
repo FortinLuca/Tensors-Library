@@ -17,17 +17,7 @@ namespace Tensor_Library {
 
 
     //*************************************************************************************************************************
-    template <typename T, int n>
-    T RankedTensor<T, n>::operator()(vector<int> tensorIndexes){
-        return get(tensorIndexes);
-    }
 
-
-    template <typename T, int n>
-    template <typename... ints>
-    T RankedTensor<T, n>::operator()(ints... tensorIndexes){
-        return get(vector<int> ({tensorIndexes...}));
-    }
 
 
 
@@ -35,78 +25,10 @@ namespace Tensor_Library {
 
     // Getters and setters
 
-    template <typename T, int n>
-    int RankedTensor<T, n>::getRank(){
-        return UnknownRankedTensor<T>::getRank();
-    }
-
-    template <typename T, int n>
-    vector<int> RankedTensor<T, n>::getSizeDimensions(){
-        return UnknownRankedTensor<T>::getSizeDimensions();
-    }
-
-
-    template <typename T, int n>
-    vector<int> RankedTensor<T, n>::getStrides(){
-        return UnknownRankedTensor<T>::getStrides();
-    }
-
-    template <typename T, int n>
-    shared_ptr<vector<T>> RankedTensor<T, n>::getData(){
-        return UnknownRankedTensor<T>::getData();
-    }
-
-    template <typename T, int n>
-    void RankedTensor<T, n>::setData(shared_ptr<vector<T>> newData){
-        UnknownRankedTensor<T>::setData(newData);
-    }
-
-    template <typename T, int n>
-    int RankedTensor<T, n>::getInitPosition(){
-        return UnknownRankedTensor<T>::getInitPosition();
-    }
-
-    template <typename T, int n>
-    void RankedTensor<T, n>::setInitPosition(int i){
-        UnknownRankedTensor<T>::setInitPosition(i);
-    }
-
-    template <typename T, int n>
-    int RankedTensor<T, n>::get_n_total_elements() {
-        return UnknownRankedTensor<T>::get_n_total_elements();
-    }
     
 
     // -----------------------------------------------------
     // Methods 
-
-    template <typename T, int n>
-    T RankedTensor<T, n>::get(vector<int> tensorIndexes){
-        return UnknownRankedTensor<T>::get(tensorIndexes);
-    }
-
-
-    template <typename T, int n>
-    template <typename... ints>
-    T RankedTensor<T, n>::get(ints... tensorIndexes){
-        return get(vector<int>({tensorIndexes...}));
-    }
-
-
-
-    template <typename T, int n>
-    void RankedTensor<T, n>::set(T elem, vector<int> tensorIndexes){
-        UnknownRankedTensor<T>::set(elem, tensorIndexes);
-    }
-
-
-    template <typename T, int n>
-    template <typename... ints>
-    void RankedTensor<T, n>::set(T elem, ints... tensorIndexes){
-        set(elem, vector<int>({tensorIndexes...}));
-    }
-
-
 
     template <typename T, int n>
     RankedTensor<T, n-1> RankedTensor<T, n>::fix(const int space, const int spaceIndex){
@@ -302,17 +224,6 @@ namespace Tensor_Library {
     //***************************************************************************************************************
     // Methods for the iterator
     
-    template <typename T, int n>
-    TensorIterator<T> RankedTensor<T, n>::getIterator(){
-        return UnknownRankedTensor<T>::getIterator();
-    }
-
-
-    template <typename T, int n>
-    TensorIterator<T> RankedTensor<T, n>::getIterator(int space, int index){
-        return UnknownRankedTensor<T>::getIterator(space, index);
-    }
-
 
 
     //************************************************************************************************************************
