@@ -84,6 +84,16 @@ namespace Iterators{
              */
             T next();
 
+
+            /**
+             * @brief getIndexes() method: it asks for the indexes of the iterator that gives the current position during the iteration
+             * This method was added because the class RankedTensor can't acceeds the private fields of this class (UnknownRankedTensor can access them because they are friend classes)
+             * 
+             * @return vector of integer of the indixes
+             */
+            vector<int> getIndexes();
+            
+
     };
     
 

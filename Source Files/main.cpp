@@ -147,14 +147,33 @@ int main() {
     // Flattening methods
     RankedTensor<int, 1> nrt4 = nrt1.flattening();
     nrt4.printTensor();
+    nrt4 = nrt1.flattening_copy();
+    nrt4.printTensor();
 
 
-    // Fix methods
-    //RankedTensor<int, 2> nrt3 = nrt1.fix(1, 1);
-    //nrt3.printData();
+    //Fix methods
+    RankedTensor<int, 2> nrt3 = nrt1.fix(1, 1);
+    nrt1.printData();
+    nrt3.printData();
+    nrt3 = nrt1.fix_copy(1, 1);
+    nrt3.printData();
 
 
     // Windows methods
+    RankedTensor<int, 3> nrt5 = nrt1.window({0, 1, 0}, {1, 1, 2});
+    nrt1.printData();
+    nrt5.printData();
+
+    nrt5 = nrt1.window_copy({0, 1, 0}, {1, 1, 2});
+    nrt1.printData();
+    nrt5.printData();
+
+
+    // Adding operation
+    //nrt1.printData();
+    //nrt2.printData();
+    //nrt1 = nrt1 + nrt2;
+    //nrt1.printData();
     
 
     return 0;

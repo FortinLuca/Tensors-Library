@@ -16,7 +16,7 @@ namespace Tensor_Library{
     template <typename T>
     class UnknownRankedTensor {
 
-    private:
+    protected:
         // Rank value of the tensor. We don't know at compiler time this value, so the sizeDimensions and strides fields will be vector initialized in the constructor
         int rank;
 
@@ -405,15 +405,7 @@ namespace Tensor_Library{
     class RankedTensor : public UnknownRankedTensor<T>{
 
 
-    private:
-        int rank;
-        vector<int> sizeDimensions;          // int-array attribute which contains the dimensions' sizes of the tensor
-        int n_total_elements;                // int attribute which contains the value of the total elements of the tensor
-        vector<int> strides;                 // int-array attribute which contains the strides of the tensor
-        shared_ptr<vector<T>> data;          // int-vector pointer attribute which points to the vector that contains the data of tensor
-        int init_position;                   // value used for computing the positions after fixing operations with the modification of the tensor
-        friend class TensorIterator<T>;      // the TensorIterator class can acceeds the private fields from 
-        
+    private:        
 
         /**
          * @brief randomNumber method: static, private and auxiliary function used to generate a random T element where T must be an arithmetic type

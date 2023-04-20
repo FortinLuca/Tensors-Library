@@ -106,4 +106,10 @@ namespace Iterators{
     }
 
 
+    template <typename T>
+    vector<int> TensorIterator<T>::getIndexes(){
+        return indexes;
+    }
+
+
 }
