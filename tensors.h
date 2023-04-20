@@ -17,23 +17,23 @@ namespace Tensor_Library{
     class UnknownRankedTensor {
 
     private:
-        //rank value of the tensor. We don't know at compiler time this value, so the sizeDimensions and strides fields will be vector initialized in the constructor
-        int n;
-        
+        // Rank value of the tensor. We don't know at compiler time this value, so the sizeDimensions and strides fields will be vector initialized in the constructor
+        int rank;
+
         vector<int> sizeDimensions;         // int-array attribute which contains the dimensions' sizes of the tensor
         vector<int> strides;                // int-array attribute which contains the strides of the tensor
         int n_total_elements;               // int attribute which contains the value of the total elements of the tensor
         shared_ptr<vector<T>> data;         // int-vector pointer attribute which points to the vector that contains the data of tensor
         int init_position;
+
         friend class TensorIterator<T>;
 
 
         static T randomNumber();
-
+    
         
     public:
 
-        
         // Constructors
         /**
          * @brief Constructor of the UnknownRankedTensor class: it initializes all the private attributes of the class
@@ -52,18 +52,20 @@ namespace Tensor_Library{
         template <typename... ints>
         UnknownRankedTensor(ints...sizes) : UnknownRankedTensor(vector<int>({sizes...})){}
 
-
+        // Rule of five
         /**
-         * @brief Constructor of the UnknownRankedTensor class: it produces a tensor which is the copy of the input one
+         * @brief Copy-constructor of the UnknownRankedTensor class: it produces a tensor which is the copy of the input one
+         * It forces the compiler to produce automatically the copy-constructor 
          * 
          * @param tensor: tensor which will be copied
          */
-        UnknownRankedTensor(UnknownRankedTensor<T> &tensor) = default;
+        UnknownRankedTensor(const UnknownRankedTensor<T> &tensor) = default;
 
 
         /**
-         * @brief Constructor of the UnknownRankedTensor class: it produces a completely new tensor in which the parameter of the tensor's input will be moved
-         * 
+         * @brief Move-constructor of the UnknownRankedTensor class: it produces a completely new tensor in which the parameter of the tensor's input will be moved
+         * It forces the compiler to produce automatically the move-constructor 
+         *
          * @param tensor: tensor in which will be copied in the constructed one
          */
         UnknownRankedTensor(UnknownRankedTensor<T> &&tensor) = default;
@@ -71,9 +73,25 @@ namespace Tensor_Library{
 
 
         /**
-         * @brief Destructor of the UnknownRankedTensor class: it will be mantained as default
+         * @brief Destructor of the UnknownRankedTensor class: it forces the compiler to produce automatically the destructor
          */
         ~UnknownRankedTensor() = default;
+
+
+        /**
+         * @brief Copy assignment operator: 
+         * It forces the compiler to generates the assignment operator that assign a copy of the UnknownRankedTensor object reference
+         * 
+         */
+        UnknownRankedTensor& operator=(const UnknownRankedTensor& tensor) = default;
+
+        
+        /**
+         * @brief Move assignment operator: 
+         * It forces the compiler to generates the assignment operator that assign a reference of an UnknownRankedTensor object which has the same parameters of the input one
+         * 
+         */
+        UnknownRankedTensor& operator=(UnknownRankedTensor&& tensor) = default;
 
 
 
@@ -212,7 +230,7 @@ namespace Tensor_Library{
          *  
          * @param space: integer that goes from 0 to n-1. It specifies the space which will be fixed
          * @param tensorIndexes: integer that specify the index of the space which will be fices 
-         * @return new tensor of type RankedTensor<T, n-1>, the rank will be reduced by one and the data points to the original tensor
+         * @return new tensor of type UnknownRankedTensor<T> with that rank will be reduced by one and the data points to the original tensor
          */
         UnknownRankedTensor<T> fix(const int space, const int tensorIndex);
 
@@ -223,7 +241,7 @@ namespace Tensor_Library{
          * 
          * @param space: integer that goes from 0 to n-1. It specifies the space which will be fixed
          * @param tensorIndexes: integer that specify the index of the space which will be fixed  
-         * @return new tensor of type RankedTensor<T, n-1>, the rank will be reduced by one and the data doesn't point to the original tensor
+         * @return new tensor of type UnknownRankedTensor<T> with the rank that will be reduced by one and the data doesn't point to the original tensor
          */
         UnknownRankedTensor<T> fix_copy(const int space, const int tensorIndex);
 
@@ -250,6 +268,7 @@ namespace Tensor_Library{
         /** 
          * @brief window() method: it creates a new tensor of rank = n (original rank) generating a sub-window of given tensor changing the starting-point and end-point of each index
          * The data will point to the original tensor
+         *
          * @param min: vector of all starting (min) indexes 
          * @param max: vector of all ending (max) indexes
          * 
@@ -276,7 +295,7 @@ namespace Tensor_Library{
         /**
          * @brief getIterator() method: it produces an iterator of a corresponding tensor
          * 
-         * @return iterator of type RankedTensorIterator<T, n>, with T corresponding to the type of the given tensor and n to the rank
+         * @return iterator of type TensorIterator<T>, with T corresponding to the type
          */
         TensorIterator<T> getIterator();
 
@@ -359,6 +378,10 @@ namespace Tensor_Library{
          */
         UnknownRankedTensor<T> operator+(T elem);
 
+
+        // TODO: Product between tensors with Einstein's formalism
+
+
     };
 
 
@@ -383,12 +406,14 @@ namespace Tensor_Library{
 
 
     private:
+        int rank;
         vector<int> sizeDimensions;          // int-array attribute which contains the dimensions' sizes of the tensor
-        int n_total_elements;           // int attribute which contains the value of the total elements of the tensor
+        int n_total_elements;                // int attribute which contains the value of the total elements of the tensor
         vector<int> strides;                 // int-array attribute which contains the strides of the tensor
-        shared_ptr<vector<T>> data;     // int-vector pointer attribute which points to the vector that contains the data of tensor
-        int init_position;
-        friend class TensorIterator<T>;
+        shared_ptr<vector<T>> data;          // int-vector pointer attribute which points to the vector that contains the data of tensor
+        int init_position;                   // value used for computing the positions after fixing operations with the modification of the tensor
+        friend class TensorIterator<T>;      // the TensorIterator class can acceeds the private fields from 
+        
 
         /**
          * @brief randomNumber method: static, private and auxiliary function used to generate a random T element where T must be an arithmetic type
@@ -439,6 +464,22 @@ namespace Tensor_Library{
          * @brief Destructor of the RankedTensor class: it will be mantained as default
          */
         ~RankedTensor() = default;
+
+
+        /**
+         * @brief Copy assignment operator: 
+         * It forces the compiler to generates the assignment operator that assign a copy of the RankedTensor object reference
+         * 
+         */
+        RankedTensor& operator=(const RankedTensor& tensor) = default;
+
+        
+        /**
+         * @brief Move assignment operator: 
+         * It forces the compiler to generates the assignment operator that assign a reference of a RankedTensor object which has the same parameters of the input one
+         * 
+         */
+        RankedTensor& operator=(RankedTensor&& tensor) = default;
 
 
 
@@ -640,7 +681,7 @@ namespace Tensor_Library{
         /**
          * @brief getIterator() method: it produces an iterator of a corresponding tensor
          * 
-         * @return iterator of type RankedTensorIterator<T, n>, with T corresponding to the type of the given tensor and n to the rank
+         * @return iterator of type TensorIterator<T>, with T corresponding to the type of the given tensor and n to the rank
          */
         TensorIterator<T> getIterator();
 
@@ -725,24 +766,7 @@ namespace Tensor_Library{
 
 
 
-        /**
-         * @brief product() method: it applies the product of the two tensors by exploiting the Einstein Formalism.
-         * The elements of the current tensor will be modified by the product with the input tensor
-         * 
-         * @param tensor: tensor with the same rank and type of the current one 
-         * @return the current tensor with all elements modified by the product of the tensors' elements 
-         */
-        //RankedTensor<T, n> product(RankedTensor<T, n> tensor);
-
-
-        /**
-         * @brief Operator which lets the application of the product between two tensors with the * operator.
-         * It applies the product() method between the current tensor and the input one
-         * 
-         * @param tensor: tensor with the same rank and type of the current one 
-         * @return the current tensor with all elements modified by the product of the tensors' elements
-         */
-        //RankedTensor<T, n> operator*(RankedTensor<T, n> tensor);
+        // TODO: Product between tensors with Einstein's formalism 
 
     };
 

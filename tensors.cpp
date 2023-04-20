@@ -11,23 +11,18 @@ namespace Tensor_Library{
     // Constructor and methods implementations of the UnknownRankedTensor class
     template <typename T>
     UnknownRankedTensor<T>::UnknownRankedTensor(vector<int> args){
-        n = args.size();
-        sizeDimensions = vector<int>(n);
-        strides = vector<int>(n);
-        int size = args.size();
-
-        // Checking the dimensionality of the tensor corresponds to the number of dimensions' value in input
-        if(n != size) 
-            throw invalid_argument("The number of space dimensions inserted are not equal to the number of rank");
-
+        this->rank = args.size();
+        sizeDimensions = vector<int>(rank);
+        strides = vector<int>(rank);
+        
         // Checking that the rank is greater than zero
-        if(n <= 0)
+        if(rank <= 0)
             throw invalid_argument("The rank must be greater than zero");
 
         n_total_elements = 1;
         init_position = 0;
 
-        for(int i = n-1; i >= 0; i--){
+        for(int i = rank-1; i >= 0; i--){
             // The dimensions' values of the tensor must be greater than 0
             if(args[i] <= 0)
                 throw invalid_argument("A dimensional space cannot be zero or less");
@@ -49,6 +44,7 @@ namespace Tensor_Library{
         return get(tensorIndexes);
     }
 
+
     template <typename T>
     template <typename... ints>
     T UnknownRankedTensor<T>::operator()(ints... tensorIndexes){
@@ -61,7 +57,7 @@ namespace Tensor_Library{
 
     template <typename T>
     int UnknownRankedTensor<T>::getRank(){
-        return n;
+        return rank;
     }
 
     template <typename T>
@@ -110,7 +106,7 @@ namespace Tensor_Library{
         int i = 0;
         int size_index = tensorIndexes.size();
 
-        if(size_index != n) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
+        if(size_index != rank) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
 
         //check of the association of tensor index provided and corrispective dimension vector
         for (int tensorIndex : tensorIndexes) {
@@ -120,7 +116,7 @@ namespace Tensor_Library{
         }
 
         // Computation of the index of the vector from which we take the value provided
-        for(int i=0; i<n; i++)
+        for(int i=0; i<rank; i++)
             index += strides[i] * tensorIndexes[i];  // Expolitation of the input tensor indexes and the strides concept
 
         return data->at(index);
@@ -141,7 +137,7 @@ namespace Tensor_Library{
         int i = 0;
         int size_indexes = tensorIndexes.size();
 
-        if(size_indexes != n) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
+        if(size_indexes != rank) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
 
         //check of the association of tensor index provided and corrispective dimension vector
         for (int tensorIndex : tensorIndexes) {
@@ -151,7 +147,7 @@ namespace Tensor_Library{
         }
 
         // Computation of the index of the vector from which we take the value provided
-        for(int i=0; i<n; i++)
+        for(int i=0; i<rank; i++)
             index += strides[i] * tensorIndexes[i];  // Expolitation of the input tensor indexes and the strides concept
 
         // Setting the element into the correct position
@@ -171,7 +167,7 @@ namespace Tensor_Library{
     UnknownRankedTensor<T> UnknownRankedTensor<T>::fix(const int space, const int spaceIndex){
         
         // Checking the exceptions
-        if(space < 0 || space >= n) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
+        if(space < 0 || space >= rank) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
         if(spaceIndex < 0) throw invalid_argument("An index cannot be less than zero");
         if(sizeDimensions[space] <= spaceIndex) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
 
@@ -184,7 +180,7 @@ namespace Tensor_Library{
         UnknownRankedTensor<T> newTensor(newSizeDimensions);
         
         // Computation of the new tensor's strides
-        for(int i=0; i<n; i++){
+        for(int i=0; i<rank; i++){
             if(i < space)
                 newTensor.getStrides()[i] = strides[i];
             else if(i > space)
@@ -202,11 +198,11 @@ namespace Tensor_Library{
     }
 
 
-    // TODO: implement this
+    
     template <typename T>
     UnknownRankedTensor<T> UnknownRankedTensor<T>::fix_copy(const int space, const int spaceIndex){
         // Checking the exceptions
-        if(space < 0 || space >= n) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
+        if(space < 0 || space >= rank) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
         if(spaceIndex < 0) throw invalid_argument("An index cannot be less than zero");
         if(sizeDimensions[space] <= spaceIndex) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
 
@@ -272,10 +268,10 @@ namespace Tensor_Library{
         int min_size = min.size();
         int max_size = max.size();
 
-        if (min_size != n) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
-        if (max_size != n) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
+        if (min_size != rank) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
+        if (max_size != rank) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
         
-        for (int i=0; i<n; i++) {
+        for (int i=0; i<rank; i++) {
             if (min[i] > sizeDimensions[i]-1 || max[i]>sizeDimensions[i]-1) throw invalid_argument("One of the min or max indexes is greater than the relative size dimension");
             if (min[i] < 0 || max[i] < 0) throw invalid_argument("One of the min or max indexes is smaller than zero");
             if (min[i] > max[i]) throw invalid_argument("One of the min indexes can't be greater than the relative max index");
@@ -289,10 +285,10 @@ namespace Tensor_Library{
         newTensor.init_position = 0;
 
         // Index for strides that start to the last element
-        int j = n-1;
+        int j = rank-1;
 
-        // From 0 to n-1, exactly like "j" that goes to other way from n-1 to 0
-        for (int i = 0; i < n; i++) {
+        // From 0 to rank-1, exactly like "j" that goes to other way from rank-1 to 0
+        for (int i = 0; i < rank; i++) {
             newTensor.sizeDimensions[i] = max[i] - min[i] + 1;
             newTensor.n_total_elements *= newTensor.sizeDimensions[j];
             newTensor.init_position += strides[j] * min[i];
@@ -311,18 +307,18 @@ namespace Tensor_Library{
         int min_size = min.size();
         int max_size = max.size();
 
-        if (min_size != n) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
-        if (max_size != n) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
+        if (min_size != rank) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
+        if (max_size != rank) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
         
-        for (int i=0; i<n; i++) {
+        for (int i=0; i<rank; i++) {
             if (min[i] > sizeDimensions[i]-1 || max[i]>sizeDimensions[i]-1) throw invalid_argument("One of the min or max indexes is greater than the relative size dimension");
             if (min[i] < 0 || max[i] < 0) throw invalid_argument("One of the min or max indexes is smaller than zero");
             if (min[i] > max[i]) throw invalid_argument("One of the min indexes can't be greater than the relative max index");
         }
 
         // Creating a new tensor with the new dimensions
-        vector<int> newSizeDimensions(n);
-        for(int i = 0; i < n; i++)
+        vector<int> newSizeDimensions(rank);
+        for(int i = 0; i < rank; i++)
             newSizeDimensions[i] = max[i] - min[i] + 1;
             
         UnknownRankedTensor<T> newTensor(newSizeDimensions);
@@ -338,7 +334,7 @@ namespace Tensor_Library{
         while(it.hasNext()){
             check_inside_window = true;
 
-            for(int i = 0; i < n; i++) {
+            for(int i = 0; i < rank; i++) {
                 if(it.indexes[i] < min[i] || it.indexes[i] > max[i])
                     check_inside_window = false;
             }
@@ -451,9 +447,9 @@ namespace Tensor_Library{
         
         // Printing the dimensions of the tensor
         cout << "Tensor's dimensions: ";
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < rank; i++){
             cout << sizeDimensions[i];
-            if(i < n-1)
+            if(i < rank-1)
                 cout << " x ";
             else 
                 cout << endl;
@@ -462,9 +458,9 @@ namespace Tensor_Library{
         
         // Printing the strides
         cout << "Tensor's strides: ";
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < rank; i++){
             cout << strides[i];
-            if(i < n-1)
+            if(i < rank-1)
                 cout << " x ";
             else 
                 cout << endl;
@@ -484,10 +480,12 @@ namespace Tensor_Library{
     //************************************************************************************************************************
 
     // Methods for operations between tensors
+
+    // Algebraic Sum between tensors
     template <typename T>
     UnknownRankedTensor<T> UnknownRankedTensor<T>::algebraicSum(UnknownRankedTensor<T> tensor){
         // The dimensions of the tensors must be equal
-        for (int i = 0; i < n; i++){
+        for (int i = 0; i < rank; i++){
             if(sizeDimensions[i] != tensor.sizeDimensions[i])
                 throw invalid_argument("In order to apply the algebraic sum, the dimensions of the two tensors must to be equal");
         }
@@ -513,7 +511,15 @@ namespace Tensor_Library{
         return *this;
     }
 
+
+    template <typename T>
+    UnknownRankedTensor<T> UnknownRankedTensor<T>::operator+(UnknownRankedTensor<T> tensor){
+        return algebraicSum(tensor);
+    }
+
+
     
+    // Algebraic Sum between a tensor and an element
     template <typename T>
     UnknownRankedTensor<T> UnknownRankedTensor<T>::algebraicSum(T elem){
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
@@ -533,30 +539,13 @@ namespace Tensor_Library{
 
 
     template <typename T>
-    UnknownRankedTensor<T> UnknownRankedTensor<T>::operator+(UnknownRankedTensor<T> tensor){
-        return algebraicSum(tensor);
-    }
-
-
-    template <typename T>
     UnknownRankedTensor<T> UnknownRankedTensor<T>::operator+(T elem){
         return algebraicSum(elem);
     }
 
 
-    /*
-    template <typename T, int n>
-    RankedTensor<T, n> RankedTensor<T, n>::product(RankedTensor<T, n> tensor){
-        return NULL;
-    }
 
-
-    template <typename T, int n>
-    RankedTensor<T, n> RankedTensor<T, n>::operator*(RankedTensor<T, n> tensor){
-        return product(tensor);
-    }
-    */
-
+    // TODO: Product with Einstein Formalism
 
 
 
@@ -565,13 +554,34 @@ namespace Tensor_Library{
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-
     
     // Constructor and methods implementations of the RankedTensor class
     template <typename T, int n>
     RankedTensor<T, n>::RankedTensor(std::vector<int> args) : UnknownRankedTensor<T>::UnknownRankedTensor(args){
+        
+        int size = args.size(); 
 
+        // Checking the dimensionality of the tensor corresponds to the number of dimensions' value in input
+        if(n != size) 
+            throw invalid_argument("The number of space dimensions inserted are not equal to the number of rank");
     }
+
+
+
+    //*************************************************************************************************************************
+    template <typename T, int n>
+    T RankedTensor<T, n>::operator()(vector<int> tensorIndexes){
+        return get(tensorIndexes);
+    }
+
+
+    template <typename T, int n>
+    template <typename... ints>
+    T RankedTensor<T, n>::operator()(ints... tensorIndexes){
+        return get(vector<int> ({tensorIndexes...}));
+    }
+
+
 
     // *****************************************************************************************************************************
 
@@ -652,6 +662,7 @@ namespace Tensor_Library{
 
     template <typename T, int n>
     RankedTensor<T, n-1> RankedTensor<T, n>::fix(const int space, const int spaceIndex){
+
         // Checking the exceptions
         if(space < 0 || space >= n) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
         if(spaceIndex < 0) throw invalid_argument("An index cannot be less than zero");

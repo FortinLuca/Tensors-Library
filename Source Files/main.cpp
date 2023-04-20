@@ -68,11 +68,8 @@ int main() {
     //char value = rt3(1, 2, 3);
     //cout<<endl<<"The element from the indexes {1, 2, 3} is ---> "<<+value<<endl<<endl;
 
-    // Trying to use the fix method
-    // RankedTensor<int, 2> newTensor1 = rt2.fix(2, 1);
-    // newTensor1.printData();
-    // newTensor1.printTensor();
 
+    // Window method
     vector<int> minIndexesVector = {0, 1, 0};
     vector<int> maxIndexesVector = {1, 1, 2};
 
@@ -82,15 +79,20 @@ int main() {
     UnknownRankedTensor<int> newTensor3 = rt2.window_copy(minIndexesVector, maxIndexesVector);
     newTensor3.printData();
 
+
     // Testing the flattening methods
-    //RankedTensor<int, 1> newTensor4 = rt2.flattening_copy();
-    //cout << newTensor4.getSizeDimensions()[0] << endl << endl;
+    UnknownRankedTensor<int> newTensor4 = rt2.flattening_copy();
+    newTensor4.printTensor();
 
-    //newTensor2.printTensor();
+    UnknownRankedTensor<int> newTensor5 = rt2.flattening();
+    newTensor5.printTensor();
 
-    UnknownRankedTensor<int> newTensorA(2, 3, 4);
+    // Get and set methods
+    cout << "get(1, 1, 1) = " << rt2(1, 1, 1) << endl;
+    rt2.set(100, 1, 1, 1);
+    cout << "After setting 100: get(1, 1, 1) = " << rt2(1, 1, 1) << endl << endl;
 
-
+    
     UnknownRankedTensor<int> prova1(2, 3, 4);
     UnknownRankedTensor<int> prova2(2, 3, 4);
     prova1.insertRandomData();
@@ -100,22 +102,60 @@ int main() {
     prova2.printData();
 
 
-    TensorIterator<int> it = prova2.getIterator(1, 2);
-    while(it.hasNext()){
-       cout << it.next() << " ";
+    // Iterators
+    TensorIterator<int> it1 = prova2.getIterator();
+    while(it1.hasNext()){
+       cout << it1.next() << " ";
     }
     cout << endl;
 
+    TensorIterator<int> it2 = prova2.getIterator(1, 2);
+    while(it2.hasNext()){
+       cout << it2.next() << " ";
+    }
+    cout << endl;
+
+    // Fix method
     UnknownRankedTensor<int> aa = prova2.fix(1, 2);
     aa.printData();
 
-    prova1.printData();
-    prova1.set(1, 0, 0, 1);
+    // Adding
+    prova1 = prova1 + prova2;
     prova1.printData();
 
-    RankedTensor<int, 3> rt(2, 3, 4);
-    rt.insertRandomData();
-    rt.printData();
+
+    cout << "------------------------------------------------------------------------"<< endl;
+
+    // RankedTensor example with printData and printTensor
+    RankedTensor<int, 3> nrt1(2, 3, 4);
+    nrt1.insertRandomData();
+    nrt1.printData();
+
+    RankedTensor<int, 3> nrt2(2, 3, 4);
+    nrt2.insertRandomData();
+    nrt2.printData();
+
+    nrt1.printTensor();
+
+
+    // Get and Set methods
+    cout << "get(1, 1, 1) = " << nrt1(1, 1, 1) << endl;
+    nrt1.set(100, 1, 1, 1);
+    cout << "After setting: get(1, 1, 1) = " << nrt1(1, 1, 1) << endl << endl;
+
+
+    // Flattening methods
+    RankedTensor<int, 1> nrt4 = nrt1.flattening();
+    nrt4.printTensor();
+
+
+    // Fix methods
+    //RankedTensor<int, 2> nrt3 = nrt1.fix(1, 1);
+    //nrt3.printData();
+
+
+    // Windows methods
+    
 
     return 0;
 }
