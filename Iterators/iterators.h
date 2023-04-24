@@ -22,7 +22,7 @@ using namespace std;
 namespace Iterators{
 
     /**
-     * @brief RankedTensorIterator class: iterator object of the RankedTensor class. The methods hasNext() and next() are inspired from
+     * @brief TensorIterator class: iterator object of the tensor's classes. The methods hasNext() and next() are inspired from
      * the Java's implementation
      * 
      * @tparam T: datatype of the correspondent tensor 
@@ -33,12 +33,13 @@ namespace Iterators{
 
         private:
 
-            int n;
-            friend class UnknownRankedTensor<T>;             // it can access private and protected members of the UnknownRankedTensor class
-            UnknownRankedTensor<T> *tensor;                  // tensor which compose the iterator object
+            int n;                                           // Rank of the tensor for which the iterator is built
+            UnknownRankedTensor<T> *tensor;                  // pointer to a UnknownRankedTensor object which compose the iterator object (subsumption in case of RankedTensor object)
             vector<int> indexes;                             // indexes which indicates the current position          
             vector<int> endIndexes;                          // indexes of the tensor's last element
-            
+
+            friend class UnknownRankedTensor<T>;             // it can access private and protected members of the UnknownRankedTensor class            
+
             // Space and index parameter used for the iterators 
             int space = -1; 
             int index = -1;
@@ -47,6 +48,7 @@ namespace Iterators{
         public:
             /**
              * @brief Constructor of the TensorIterator object: it initializes the private attributes of the class (excepts for space and index)
+             * In case of RankedTensor object in input, it works anyway for the concept of subsunction of a child class object to a superclass object
              * 
              * @param tensorInput: tensor which gives a shape to the iterator
              */
@@ -63,11 +65,13 @@ namespace Iterators{
              */
             TensorIterator(UnknownRankedTensor<T> &tensorInput, int space, int index);
 
+
             /**
              * @brief Destructor of the TensorIterator object
              * 
              */
             ~TensorIterator() = default;
+
 
             /**
              * @brief hasNext() method: it check the presence of a new element after the current one
@@ -75,6 +79,7 @@ namespace Iterators{
              * @return boolean which says true if a next element exists, false otherwise 
              */
             bool hasNext();
+
 
             /**
              * @brief next() method: it gives the current element of the tensor by seeing the indexes attribute and then it 
@@ -89,12 +94,10 @@ namespace Iterators{
              * @brief getIndexes() method: it asks for the indexes of the iterator that gives the current position during the iteration
              * This method was added because the class RankedTensor can't acceeds the private fields of this class (UnknownRankedTensor can access them because they are friend classes)
              * 
-             * @return vector of integer of the indixes
+             * @return vector of integer of the indexes
              */
             vector<int> getIndexes();
-            
-
+             
     };
     
-
 }

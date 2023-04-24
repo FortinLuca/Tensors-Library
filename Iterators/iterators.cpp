@@ -3,13 +3,16 @@
 
 namespace Iterators{
 
-    // Constructor implementation
+    // Constructor implementation, in case of RankedTensor object input, it works anyway for subsuption
     template <typename T>
     TensorIterator<T>::TensorIterator(UnknownRankedTensor<T> &tensorInput) : tensor(&tensorInput){
+
+        // Initialization of the rank
         n = tensor->getRank();
         indexes = vector<int>(n);
         endIndexes = vector<int>(n);
 
+        // Initializing the indexes and endIndexes fields by using space and index values
         for (int i = 0; i < n; i++) {
             indexes[i] = 0;
             endIndexes[i] = tensor->sizeDimensions[i] - 1;
@@ -104,6 +107,7 @@ namespace Iterators{
     }
 
 
+    // getter useful for the RankedTensor object because I can't set that as friend class for the different template
     template <typename T>
     vector<int> TensorIterator<T>::getIndexes(){
         return indexes;

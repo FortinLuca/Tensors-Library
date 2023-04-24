@@ -13,26 +13,31 @@ namespace Tensor_Library{
 
 
     /**
-     * @brief UnknownRankedTensor class: the tensor hasn't the rank information at the compile time
+     * @brief UnknownRankedTensor class: the tensor hasn't the rank information at compile-time
      * 
      * @tparam T: datatype of the tensor 
      */
     template <typename T>
     class UnknownRankedTensor {
 
-    protected:
-        // Rank value of the tensor. We don't know at compiler time this value, so the sizeDimensions and strides fields will be vector initialized in the constructor
+    protected:  // protected because in this ways the fields can be directly accessed by the RankedTensor class
+
+        // Rank value of the tensor: we don't know at compile-time this value, so the sizeDimensions and strides fields will be vector initialized in the constructor
         int rank;
 
         vector<int> sizeDimensions;         // int-array attribute which contains the dimensions' sizes of the tensor
         vector<int> strides;                // int-array attribute which contains the strides of the tensor
         int n_total_elements;               // int attribute which contains the value of the total elements of the tensor
         shared_ptr<vector<T>> data;         // int-vector pointer attribute which points to the vector that contains the data of tensor
-        int init_position;
+        int init_position;                  // int attribute which helps to keep track of the position in which retrieves elements or builds iterators
 
-        friend class TensorIterator<T>;
+        friend class TensorIterator<T>;     // it can access private and protected members of the TensorIterator class
 
-
+        /**
+         * @brief randomNumber() method: it produce a randomic arithmetic number. It's an auxiliar function used the insertRandomData method
+         * 
+         * @return T-type element produced randomically
+         */
         static T randomNumber();
     
         
@@ -98,34 +103,15 @@ namespace Tensor_Library{
         UnknownRankedTensor& operator=(UnknownRankedTensor&& tensor) = default;
 
 
-
-        // ********************************************************************************************
-
-        // Operator
-
-        /**
-         * @brief Direct access operator in which automatically will be applied the get method by only using the round brackets without specifying get
-         * 
-         * @param tensorIndexes: vector of integers that contains the indexes of the element which will be returned
-         * @return tensor's element of type T which corresponds to the indexes given in input
-         */
-        T operator()(vector<int> tensorIndexes);
-
-
-        /**
-         * @brief Direct access operator similar to the previous one, but with the difference that the input will be a series of integer corresponding to the positional indexes
-         * 
-         * @param tensorIndexes: series of integers which composes the indexes of the element to return
-         * @return tensor's element of type T which corresponds to the indexes given in input
-         */
-        template <typename... ints>
-        T operator()(ints... tensorIndexes);
-
         
         // *******************************************************************************
 
         // Getters and Setters
-
+        /**
+         * @brief getRank() method: it extract the rank of the tensot
+         * 
+         * @return int-value which corresponds to the rank of the tensor 
+         */
         int getRank();
 
         
@@ -148,7 +134,7 @@ namespace Tensor_Library{
         /**
          * @brief getData() method: it extracts the Data object
          * 
-         * @return shared_ptr<vector<T>> 
+         * @return data object of type shared_ptr<vector<T>> (an intelligent pointer of a vector)
          */
         shared_ptr<vector<T>> getData();
 
@@ -210,6 +196,26 @@ namespace Tensor_Library{
 
 
         /**
+         * @brief Direct access operator in which automatically will be applied the get method by only using the round brackets without specifying get
+         * 
+         * @param tensorIndexes: vector of integers that contains the indexes of the element which will be returned
+         * @return tensor's element of type T which corresponds to the indexes given in input
+         */
+        T operator()(vector<int> tensorIndexes);
+
+
+        /**
+         * @brief Direct access operator similar to the previous one, but with the difference that the input will be a series of integer corresponding to the positional indexes
+         * 
+         * @param tensorIndexes: series of integers which composes the indexes of the element to return
+         * @return tensor's element of type T which corresponds to the indexes given in input
+         */
+        template <typename... ints>
+        T operator()(ints... tensorIndexes);
+
+
+
+        /**
          * @brief set() method: it sets an element into the tensor given the input indexes
          * 
          * @param elem: element of type T to be inserted into the tensor 
@@ -245,7 +251,7 @@ namespace Tensor_Library{
          * 
          * @param space: integer that goes from 0 to n-1. It specifies the space which will be fixed
          * @param tensorIndexes: integer that specify the index of the space which will be fixed  
-         * @return new tensor of type UnknownRankedTensor<T> with the rank that will be reduced by one and the data doesn't point to the original tensor
+         * @return new UnknownRankedTensor object of type UnknownRankedTensor<T> with the rank that will be reduced by one and the data doesn't point to the original tensor
          */
         UnknownRankedTensor<T> fix_copy(const int space, const int tensorIndex);
 
@@ -254,7 +260,7 @@ namespace Tensor_Library{
         /**
          * @brief flattening() method: it applies the flattening to a tensor. The data will point to the original tensor
          * 
-         * @return tensor with the same type T and with rank 1. This tensor will share the data with the tensor from which we call this method 
+         * @return UnknownRankedTensor object with the same type T and with rank 1. This tensor will share the data with the tensor from which we call this method 
          */
         UnknownRankedTensor<T> flattening();
 
@@ -263,7 +269,7 @@ namespace Tensor_Library{
          * @brief flattening_copy() method: it creates new tensor of rank = 1 applying the flattening to a tensor. 
          * It will be created a completely new tensor in which the data doesn't point to the original one
          * 
-         * @return new tensor with the same type T and with rank 1
+         * @return new UnknownRankedTensor object with the same type T and with rank 1
          */
         UnknownRankedTensor<T> flattening_copy();
 
@@ -275,8 +281,7 @@ namespace Tensor_Library{
          *
          * @param min: vector of all starting (min) indexes 
          * @param max: vector of all ending (max) indexes
-         * 
-         * @return new tensor with the same type T and rank n but with low (or equal) total number of elements included in data 
+         * @return new UnknownRankedTensor object with the same type T and rank n but with low (or equal) total number of elements included in data 
          */
         UnknownRankedTensor<T> window(vector<int> min, vector<int> max);
 
@@ -287,7 +292,7 @@ namespace Tensor_Library{
          * 
          * @param min: vector of all starting (min) indexes  
          * @param max: vector of all ending (max) indexes 
-         * @return new tensor with the same type T and rank n but with low (or equal) total number of elements included in data.
+         * @return new UnknownRankedTensor object with the same type T and rank n but with low (or equal) total number of elements included in data.
          */
         UnknownRankedTensor<T> window_copy(vector<int> min, vector<int> max);
 
@@ -322,7 +327,7 @@ namespace Tensor_Library{
          * @brief insertRandomData() method: it inserts pseudo-randomic values into the vector attribute of type T data with a number of element correspondent to the n_total_elements attribute.
          * The insertion is done in order to the type T, the tensor dimensions and the uniform distribution.
          * It exploits the auxiliary, private and static function randomNumber()
-         * The range goes from -1000 and to 1000, ***RIMUOVEREI QUESTA PARTE*** --> unless the arithmetic types limits are smaller (like char)
+         * The range goes from -1000 and to 1000
          */
         void insertRandomData();
 
@@ -385,17 +390,14 @@ namespace Tensor_Library{
 
         // TODO: Product between tensors with Einstein's formalism
 
-
     };
 
 
 
 
 
-    // -----------------------------------------------------------------------------------------------------------------
     // ------------------------------------------------------------------------------------------------------------------
-
-
+    // ------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -482,29 +484,6 @@ namespace Tensor_Library{
 
         // ********************************************************************************************
 
-        // Operator
-
-        /**
-         * @brief Direct access operator in which automatically will be applied the get method by only using the round brackets without specifying get
-         * 
-         * @param tensorIndexes: vector of integers that contains the indexes of the element which will be returned
-         * @return tensor's element of type T which corresponds to the indexes given in input
-         */
-        //T operator()(vector<int> tensorIndexes);
-        //using UnknownRankedTensor<T>::operator();
-
-
-        /**
-         * @brief Direct access operator similar to the previous one, but with the difference that the input will be a series of integer corresponding to the positional indexes
-         * 
-         * @param tensorIndexes: series of integers which composes the indexes of the element to return
-         * @return tensor's element of type T which corresponds to the indexes given in input
-         */
-
-
-        
-        // *******************************************************************************
-
         // Getters and Setters
 
 
@@ -579,7 +558,7 @@ namespace Tensor_Library{
         /**
          * @brief flattening() method: it applies the flattening to a tensor. The data will point to the original tensor
          * 
-         * @return tensor with the same type T and with rank 1. This tensor will share the data with the tensor from which we call this method 
+         * @return RankedTensor object with the same type T and with rank 1. This tensor will share the data with the tensor from which we call this method 
          */
         RankedTensor<T, 1> flattening();
 
@@ -588,7 +567,7 @@ namespace Tensor_Library{
          * @brief flattening_copy() method: it creates new tensor of rank = 1 applying the flattening to a tensor. 
          * It will be created a completely new tensor in which the data doesn't point to the original one
          * 
-         * @return new tensor with the same type T and with rank 1
+         * @return new RankedTensor object with the same type T and with rank 1
          */
         RankedTensor<T, 1> flattening_copy();
 
@@ -600,7 +579,7 @@ namespace Tensor_Library{
          * @param min: vector of all starting (min) indexes 
          * @param max: vector of all ending (max) indexes
          * 
-         * @return new tensor with the same type T and rank n but with low (or equal) total number of elements included in data 
+         * @return new RankedTensor object with the same type T and rank n but with low (or equal) total number of elements included in data 
          */
         RankedTensor<T, n> window(vector<int> min, vector<int> max);
 
@@ -611,7 +590,7 @@ namespace Tensor_Library{
          * 
          * @param min: vector of all starting (min) indexes  
          * @param max: vector of all ending (max) indexes 
-         * @return new tensor with the same type T and rank n but with low (or equal) total number of elements included in data.
+         * @return new RankedTensor object with the same type T and rank n but with low (or equal) total number of elements included in data.
          */
         RankedTensor<T, n> window_copy(vector<int> min, vector<int> max);
 
@@ -646,7 +625,7 @@ namespace Tensor_Library{
 
         // *****************************************************************************************
 
-        // Methods for the operations between tensors
+        // Methods for the sum between tensors
         /**
          * @brief algebraicSum() method: it modifies all the elements of the tensor by summing each of its element with the element of the input's tensor 
          * 
@@ -686,6 +665,10 @@ namespace Tensor_Library{
         RankedTensor<T, n> operator+(T elem);
 
 
+
+        // *****************************************************************************************
+
+        // Methods for the product between tensors
 
         // TODO: Product between tensors with Einstein's formalism 
 
