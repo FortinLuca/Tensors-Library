@@ -109,7 +109,7 @@ int main() {
     }
     cout << endl;
 
-    TensorIterator<int> it2 = prova2.getIterator(1, 2);
+    TensorIterator<int> it2 = prova2.getIterator(1, {1,0});
     while(it2.hasNext()){
        cout << it2.next() << " ";
     }

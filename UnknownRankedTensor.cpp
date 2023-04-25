@@ -359,8 +359,8 @@ namespace Tensor_Library{
 
 
     template <typename T>
-    TensorIterator<T> UnknownRankedTensor<T>::getIterator(int space, int index){
-        TensorIterator<T> iterator(*this, space, index);
+    TensorIterator<T> UnknownRankedTensor<T>::getIterator(int excludingSpace, vector<int> inputIndexes){
+        TensorIterator<T> iterator(*this, excludingSpace, inputIndexes);
         return iterator;
     }
 

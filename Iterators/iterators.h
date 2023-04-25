@@ -40,8 +40,9 @@ namespace Iterators{
             vector<int> endIndexes;                          // indexes of the tensor's last element
             
             // Space and index parameter used for the iterators 
-            int space = -1; 
-            int index = -1;
+            vector<int> tensorIndexes;
+            vector<int> tensorSpaces;
+            bool isIteratorAllContent = true;
             
             
         public:
@@ -61,7 +62,7 @@ namespace Iterators{
              * @param space: integer that goes from 0 to n-1. It specifies the space which will be fixed
              * @param index: integer that specify the index of the space which will be fixed
              */
-            TensorIterator(UnknownRankedTensor<T> &tensorInput, int space, int index);
+            TensorIterator(UnknownRankedTensor<T> &tensorInput, int excludingSpace, vector<int> inputIndexes);
 
             /**
              * @brief Destructor of the TensorIterator object

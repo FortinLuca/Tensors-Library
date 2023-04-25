@@ -18,28 +18,42 @@ namespace Iterators{
 
     
     template <typename T>
-    TensorIterator<T>::TensorIterator(UnknownRankedTensor<T> &tensorInput, int space, int index) : tensor(&tensorInput){
+    TensorIterator<T>::TensorIterator(UnknownRankedTensor<T> &tensorInput, int excludingSpace, vector<int> inputIndexes) : tensor(&tensorInput){
         n = tensor->getRank();
         indexes = vector<int>(n);
         endIndexes = vector<int>(n);
 
         // Checking the validity of the two parameters
-        if(space < 0 || index < 0)
-            throw invalid_argument("The space and the index in which iterate must be greater than zero");
+        if (excludingSpace < 0) throw invalid_argument("The space to exclude in which to iterate must be greater than zero");
+        if (excludingSpace > n-1) throw invalid_argument("The space to exclude in which to iterate must be lower than the rank - 1 size (starting from 0)");
+        if (inputIndexes.size() != n-1) throw invalid_argument("The inputIndexes size must have exactly rank - 1 size elements (staring from 0)");
+        for (int i=0; i<n-1; i++) {
+            if (inputIndexes[i] < 0) throw invalid_argument("One of the indexes chosen in which to iterate is lower than zero");
+            if (inputIndexes[i] > this->tensor->getSizeDimensions()[i]-1) throw invalid_argument("One of the indexes chosen in which to iterate is greater than the relative size dimension of the original tensor");
+        }
 
-        // Initializing the space and index fields
-        this->space = space;
-        this->index = index;
+        // Initializing the tensorSpaces and tensorIndexes support vectors to enable the check on which space to iterate and from which indeces to start   
+        int i;
+        for (i=0; i<=n-1; i++) {
+            this->tensorSpaces.push_back(i);
+        }
+        this->tensorSpaces.erase(tensorSpaces.begin() + excludingSpace);
+        this->tensorIndexes.insert(tensorIndexes.begin(), std::begin(inputIndexes), std::end(inputIndexes));
+        this->isIteratorAllContent = false;
 
-        // Initializing the indexes and endIndexes fields by using space and index values
+        bool flag = false;
+        int sup = 0;
+        // Initializing the indexes and endIndexes fields by using excludingSpace and indexes values and exploiting the "flag" and "sup" variables 
+        // to understand if we have already meet the excluding space to skip
         for (int i = 0; i < n; i++) {
-            if(i != space){
+            if(i == excludingSpace){
                 indexes[i] = 0;
                 endIndexes[i] = tensor->sizeDimensions[i] - 1;
-            }        
-            else{
-                indexes[i] = index;
-                endIndexes[i] = index;
+                flag = true;
+            } else {
+                if (flag) sup = 1;
+                indexes[i] = inputIndexes[i- sup] ;
+                endIndexes[i] = inputIndexes[i- sup];
             }
         }
     }
@@ -73,20 +87,23 @@ namespace Iterators{
         int idx = n-1;
         bool check = false;
         int checkLast = indexes[0];
+        int sup = 1;
 
         // Saving the element of the current position into the elem variable by using the get method
         vector<int> vectIndexes(begin(indexes), end(indexes));
         T elem = tensor->get(vectIndexes);
 
-        // Ordered sliding of the tensor elements
+        // Ordered smoothness of the tensor elements
         while(!check && idx >= 0){ 
             if(indexes[idx] == endIndexes[idx]){
-                // Checking the fixed index of the given space
-                if(space < 0 || idx != space)
+                // Checking the fixed index of the given spaces and if it's the case of the iterator of all content (or not)
+                // "sup" variable is used also in this case to understand if we have already meet the excluding space to skip
+                if(isIteratorAllContent || idx != tensorSpaces[idx-sup]) {
                     indexes[idx] = 0;
-                else
-                    indexes[idx] = index;
-
+                    sup = 0;
+                } else {
+                    indexes[idx] = tensorIndexes[idx-sup];
+                }
                 idx--;
             }
             else{

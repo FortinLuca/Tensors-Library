@@ -311,7 +311,7 @@ namespace Tensor_Library{
          * @param index: integer that specify the index of the space which will be fixed 
          * @return new iterator that iterates only on the elements correspondent to the correspondent fixed index on the given space  
          */
-        TensorIterator<T> getIterator(int space, int index);
+        TensorIterator<T> getIterator(int excludingSpace, vector<int> inputIndexes);
 
 
 
