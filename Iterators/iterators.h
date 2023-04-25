@@ -43,7 +43,8 @@ namespace Iterators{
             // Space and index parameter used for the iterators 
             vector<int> tensorIndexes;
             vector<int> tensorSpaces;
-            bool isIteratorAllContent = true;
+
+            bool isIteratorAllContent; // Flag which says if the iterator has to iterate all the tensor's content or not
             
             
         public:

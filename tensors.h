@@ -59,7 +59,7 @@ namespace Tensor_Library{
          * @param sizes: series of integers correspondent to the dimensions' sizes
          */
         template <typename... ints>
-        UnknownRankedTensor(ints...sizes) : UnknownRankedTensor(vector<int>({sizes...})){}
+        UnknownRankedTensor(ints...sizes);
 
         // Rule of five
         /**
@@ -312,11 +312,22 @@ namespace Tensor_Library{
         /**
          * @brief getIterator() method: it produces an iterator which will iterate only on the element with the fixed index on the given space
          * 
-         * @param space: integer that goes from 0 to n-1. It specifies the space which will be fixed
-         * @param index: integer that specify the index of the space which will be fixed 
-         * @return new iterator that iterates only on the elements correspondent to the correspondent fixed index on the given space  
+         * @param excludingSpace: integer that goes from 0 to n-1. It specifies the space which will be iterated
+         * @param inputIndexes: vector integer that specify the indexes that will be fixed 
+         * @return new iterator that iterates only on the elements correspondent to the correspondent fixed index and the not-fixed space 
          */
         TensorIterator<T> getIterator(int excludingSpace, vector<int> inputIndexes);
+
+
+        /**
+         * @brief getIterator() method: it produces an iterator which will iterate only on the element with the fixed index on the given space
+         * 
+         * @param excludingSpace: integer that goes from 0 to n-1. It specifies the space which will be iterated
+         * @param inputIndexes: vector integer that specify the indexes that will be fixed 
+         * @return new iterator that iterates only on the elements correspondent to the correspondent fixed index and the not-fixed space 
+         */
+        template <typename... ints>
+        TensorIterator<T> getIterator(int excludingSpace, ints... inputIndexes);
 
 
 
@@ -440,7 +451,7 @@ namespace Tensor_Library{
          * @param sizes: series of integers correspondent to the dimensions' sizes
          */
         template <typename... ints>
-        RankedTensor(ints...sizes) : RankedTensor(vector<int>({sizes...})){}
+        RankedTensor(ints...sizes);
 
 
         /**

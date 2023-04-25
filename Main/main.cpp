@@ -103,6 +103,7 @@ int main() {
     prova1.printData();
     prova2.printData();
 
+    cout << "------------------------------------------------------------------------"<< endl;
 
     // Iterators
     TensorIterator<int> it1 = prova2.getIterator();
@@ -111,7 +112,7 @@ int main() {
     }
     cout << endl;
 
-    TensorIterator<int> it2 = prova2.getIterator(1, {1,0});
+    TensorIterator<int> it2 = prova2.getIterator(1, {1, 0});
     while(it2.hasNext()){
        cout << it2.next() << " ";
     }

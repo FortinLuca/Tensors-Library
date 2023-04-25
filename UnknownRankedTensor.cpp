@@ -30,6 +30,11 @@ namespace Tensor_Library{
             }
         }
     }
+
+
+    template <typename T>
+    template <typename... ints>
+    UnknownRankedTensor<T>::UnknownRankedTensor(ints...sizes) : UnknownRankedTensor<T>::UnknownRankedTensor(vector<int>({sizes...})){ }
     
 
     //*****************************************************************************************************************************
@@ -362,6 +367,13 @@ namespace Tensor_Library{
     TensorIterator<T> UnknownRankedTensor<T>::getIterator(int excludingSpace, vector<int> inputIndexes){
         TensorIterator<T> iterator(*this, excludingSpace, inputIndexes);
         return iterator;
+    }
+
+
+    template <typename T>
+    template <typename... ints>
+    TensorIterator<T> UnknownRankedTensor<T>::getIterator(int excludingSpace, ints... inputIndexes){
+        return getIterator(excludingSpace, vector<int>({inputIndexes...}));
     }
 
 

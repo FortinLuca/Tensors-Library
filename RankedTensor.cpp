@@ -15,6 +15,11 @@ namespace Tensor_Library {
         // Setting the rank equal to n
         this->rank = n;
     }
+
+
+    template <typename T, int n>
+    template <typename... ints>
+    RankedTensor<T, n>::RankedTensor(ints...sizes) : RankedTensor<T, n>::RankedTensor(vector<int>({sizes...})){ }
     
 
 

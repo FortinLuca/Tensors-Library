@@ -7,10 +7,11 @@ namespace Iterators{
     template <typename T>
     TensorIterator<T>::TensorIterator(UnknownRankedTensor<T> &tensorInput) : tensor(&tensorInput){
 
-        // Initialization of the rank
+        // Initialization of the rank and the flag
         n = tensor->getRank();
         indexes = vector<int>(n);
         endIndexes = vector<int>(n);
+        this->isIteratorAllContent = true;
 
         // Initializing the indexes and endIndexes fields by using space and index values
         for (int i = 0; i < n; i++) {
@@ -26,10 +27,13 @@ namespace Iterators{
         indexes = vector<int>(n);
         endIndexes = vector<int>(n);
 
-        // Checking the validity of the two parameters
+        int inputIndexesSize = inputIndexes.size();
+
+        // Checking the validity of the parameters
         if (excludingSpace < 0) throw invalid_argument("The space to exclude in which to iterate must be greater than zero");
         if (excludingSpace > n-1) throw invalid_argument("The space to exclude in which to iterate must be lower than the rank - 1 size (starting from 0)");
-        if (inputIndexes.size() != n-1) throw invalid_argument("The inputIndexes size must have exactly rank - 1 size elements (staring from 0)");
+        if (inputIndexesSize != n-1) throw invalid_argument("The inputIndexes size must have exactly rank - 1 size elements (staring from 0)");
+
         for (int i=0; i<n-1; i++) {
             if (inputIndexes[i] < 0) throw invalid_argument("One of the indexes chosen in which to iterate is lower than zero");
             if (inputIndexes[i] > this->tensor->getSizeDimensions()[i]-1) throw invalid_argument("One of the indexes chosen in which to iterate is greater than the relative size dimension of the original tensor");
@@ -40,12 +44,14 @@ namespace Iterators{
         for (i=0; i<=n-1; i++) {
             this->tensorSpaces.push_back(i);
         }
+
         this->tensorSpaces.erase(tensorSpaces.begin() + excludingSpace);
         this->tensorIndexes.insert(tensorIndexes.begin(), std::begin(inputIndexes), std::end(inputIndexes));
         this->isIteratorAllContent = false;
 
         bool flag = false;
         int sup = 0;
+
         // Initializing the indexes and endIndexes fields by using excludingSpace and indexes values and exploiting the "flag" and "sup" variables 
         // to understand if we have already meet the excluding space to skip
         for (int i = 0; i < n; i++) {
@@ -74,7 +80,7 @@ namespace Iterators{
             else if(indexes[i] > endIndexes[i])
                 return false;
         }
-        //if we are here then we are in te last vector space "i"
+        //if we are here then we are in the last vector space "i"
 
         // Checking if we are at the last element
         if(indexes[0] == endIndexes[0])
@@ -99,6 +105,7 @@ namespace Iterators{
         // Ordered smoothness of the tensor elements
         while(!check && idx >= 0){ 
             if(indexes[idx] == endIndexes[idx]){
+
                 // Checking the fixed index of the given spaces and if it's the case of the iterator of all content (or not)
                 // "sup" variable is used also in this case to understand if we have already meet the excluding space to skip
                 if(isIteratorAllContent || idx != tensorSpaces[idx-sup]) {
