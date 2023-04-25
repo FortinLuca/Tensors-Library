@@ -1,5 +1,7 @@
 #include "../Utils/TensorUtils.cpp"
 
+// Execution line: g++ -std=c++17 -g -Wall -o3 main.cpp -o  main
+
 
 using namespace Tensor_Library;
 
@@ -170,10 +172,13 @@ int main() {
 
 
     // Adding operation
-    //nrt1.printData();
-    //nrt2.printData();
-    //nrt1 = nrt1 + nrt2;
-    //nrt1.printData();
+    nrt1.printData();
+    nrt2.printData();
+    nrt1 = nrt1 + nrt2;
+    nrt1.printData();
+
+    nrt1 = nrt1 + 15;
+    nrt1.printData();
     
 
     return 0;

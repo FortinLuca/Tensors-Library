@@ -30,21 +30,7 @@ namespace Tensor_Library{
             }
         }
     }
-
     
-
-    //*************************************************************************************************************************
-    template <typename T>
-    T UnknownRankedTensor<T>::operator()(vector<int> tensorIndexes){
-        return get(tensorIndexes);
-    }
-
-
-    template <typename T>
-    template <typename... ints>
-    T UnknownRankedTensor<T>::operator()(ints... tensorIndexes){
-        return get(vector<int> ({tensorIndexes...}));
-    }
 
     //*****************************************************************************************************************************
 
@@ -125,6 +111,19 @@ namespace Tensor_Library{
     }
 
 
+    template <typename T>
+    T UnknownRankedTensor<T>::operator()(vector<int> tensorIndexes){
+        return get(tensorIndexes);
+    }
+
+
+    template <typename T>
+    template <typename... ints>
+    T UnknownRankedTensor<T>::operator()(ints... tensorIndexes){
+        return get(vector<int> ({tensorIndexes...}));
+    }
+
+
 
     template <typename T>
     void UnknownRankedTensor<T>::set(T elem, vector<int> tensorIndexes){
@@ -134,7 +133,7 @@ namespace Tensor_Library{
 
         if(size_indexes != rank) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
 
-        //check of the association of tensor index provided and corrispective dimension vector
+        // Check of the association of tensor index provided and corrispective dimension vector
         for (int tensorIndex : tensorIndexes) {
             if (sizeDimensions[i] <= tensorIndex ) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
             if (tensorIndex < 0) throw invalid_argument("An index cannot be less than zero");
@@ -196,6 +195,7 @@ namespace Tensor_Library{
     
     template <typename T>
     UnknownRankedTensor<T> UnknownRankedTensor<T>::fix_copy(const int space, const int spaceIndex){
+
         // Checking the exceptions
         if(space < 0 || space >= rank) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
         if(spaceIndex < 0) throw invalid_argument("An index cannot be less than zero");
@@ -368,13 +368,13 @@ namespace Tensor_Library{
 
     //************************************************************************************************************************
 
-    // Methods for testing in the folder Utils
+    // Methods for testing inserted in the folder Utils
 
 
 
     //************************************************************************************************************************
 
-    // Methods for operations between tensors
+    // Methods for the sum between tensors
 
     // Algebraic Sum between tensors
     template <typename T>
@@ -439,10 +439,11 @@ namespace Tensor_Library{
     }
 
 
+    //************************************************************************************************************************
+
+    // Methods for the product between tensors
 
     // TODO: Product with Einstein Formalism
-
-   
     
 }
 

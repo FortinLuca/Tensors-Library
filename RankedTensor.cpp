@@ -11,23 +11,15 @@ namespace Tensor_Library {
         // Checking the dimensionality of the tensor corresponds to the number of dimensions' value in input
         if(n != size) 
             throw invalid_argument("The number of space dimensions inserted are not equal to the number of rank");
+
+        // Setting the rank equal to n
+        this->rank = n;
     }
     
 
 
-
-    //*************************************************************************************************************************
-
-
-
-
     // *****************************************************************************************************************************
 
-    // Getters and setters
-
-    
-
-    // -----------------------------------------------------
     // Methods 
 
     template <typename T, int n>
@@ -136,6 +128,7 @@ namespace Tensor_Library {
         int min_size = min.size();
         int max_size = max.size();
 
+        // Checking the input arguments of the function
         if (min_size != n) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
         if (max_size != n) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
         
@@ -175,6 +168,7 @@ namespace Tensor_Library {
         int min_size = min.size();
         int max_size = max.size();
 
+        // Checking the input arguments of the function
         if (min_size != n) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
         if (max_size != n) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
         
@@ -221,31 +215,40 @@ namespace Tensor_Library {
 
 
 
-    //***************************************************************************************************************
-    // Methods for the iterator
-    
-
-
+    //************************************************************************************************************************
     //************************************************************************************************************************
 
-    // Methods for testing into the Utils folder  
+    // Methods for the sum between tensors
 
-
-
-    //************************************************************************************************************************
-    /*
-    //TODO: Replace this with the correct methods
-
-    // Methods for operations between tensors
+    // Algebraic Sum between tensors
     template <typename T, int n>
     RankedTensor<T, n> RankedTensor<T, n>::algebraicSum(RankedTensor<T, n> tensor){
-        return UnknownRankedTensor<T>::algebraicSum(tensor);
-    }
+        
+        // The dimensions of the tensors must be equal
+        for (int i = 0; i < n; i++){
+            if(getSizeDimensions()[i] != tensor.getSizeDimensions()[i])
+                throw invalid_argument("In order to apply the algebraic sum, the dimensions of the two tensors must to be equal");
+        }
 
-    
-    template <typename T, int n>
-    RankedTensor<T, n> RankedTensor<T, n>::algebraicSum(T elem){
-        return UnknownRankedTensor<T>::algebraicSum(elem);
+        // Creating a new data vector pointer
+        shared_ptr<vector<T>> newData = make_shared<vector<T>>(get_n_total_elements());
+
+        // Creating the two iterators
+        TensorIterator<T> it1 = getIterator();
+        TensorIterator<T> it2 = tensor.getIterator();
+        int index = 0;
+
+        // Since there are the same dimensions, the iterators iterates in the same number of steps
+        while(it1.hasNext() && it2.hasNext()){
+            T elem1 = it1.next();
+            T elem2 = it2.next();
+            newData->at(index) = elem1 + elem2;
+            index++;
+        }
+
+        // Inserting the new pointer of data and returning the current tensor
+        this->setData(newData);
+        return *this;  
     }
 
 
@@ -255,10 +258,29 @@ namespace Tensor_Library {
     }
 
 
+    
+    // Algebraic Sum between a tensor and an element
+    template <typename T, int n>
+    RankedTensor<T, n> RankedTensor<T, n>::algebraicSum(T elem){
+        shared_ptr<vector<T>> newData = make_shared<vector<T>>(get_n_total_elements());
+        int index = 0; 
+        TensorIterator<T> it = getIterator();
+
+        // Adding the element to every element of the tensor
+        while(it.hasNext()){
+            newData->at(index) = elem + it.next();
+            index++;
+        }
+
+        // Inserting the new pointer of data and returning the current tensor
+        this->setData(newData);
+        return *this;
+    }
+
+
     template <typename T, int n>
     RankedTensor<T, n> RankedTensor<T, n>::operator+(T elem){
         return algebraicSum(elem);
     }
-    */
 
 }
