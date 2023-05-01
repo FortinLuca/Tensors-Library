@@ -25,8 +25,8 @@ namespace Tensor_Library{
         // Rank value of the tensor: we don't know at compile-time this value, so the sizeDimensions and strides fields will be vector initialized in the constructor
         int rank;
 
-        vector<int> sizeDimensions;         // int-array attribute which contains the dimensions' sizes of the tensor
-        vector<int> strides;                // int-array attribute which contains the strides of the tensor
+        vector<int> sizeDimensions;         // int-vector attribute which contains the dimensions' sizes of the tensor
+        vector<int> strides;                // int-vector attribute which contains the strides of the tensor
         int n_total_elements;               // int attribute which contains the value of the total elements of the tensor
         shared_ptr<vector<T>> data;         // int-vector pointer attribute which points to the vector that contains the data of tensor
         int init_position;                  // int attribute which helps to keep track of the position in which retrieves elements or builds iterators
@@ -61,6 +61,7 @@ namespace Tensor_Library{
         template <typename... ints>
         UnknownRankedTensor(ints...sizes);
 
+
         // Rule of five
         /**
          * @brief Copy-constructor of the UnknownRankedTensor class: it produces a tensor which is the copy of the input one
@@ -68,7 +69,7 @@ namespace Tensor_Library{
          * 
          * @param tensor: tensor which will be copied
          */
-        UnknownRankedTensor(const UnknownRankedTensor<T> &tensor) = default;
+        UnknownRankedTensor(UnknownRankedTensor<T> &tensor) = default;
 
 
         /**
@@ -84,7 +85,7 @@ namespace Tensor_Library{
         /**
          * @brief Destructor of the UnknownRankedTensor class: it forces the compiler to produce automatically the destructor
          */
-        ~UnknownRankedTensor() = default;
+        virtual ~UnknownRankedTensor() = default;
 
 
         /**
