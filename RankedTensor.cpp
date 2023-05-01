@@ -4,7 +4,7 @@
 namespace Tensor_Library { 
     // Constructor and methods implementations of the RankedTensor class
     template <typename T, int n>
-    RankedTensor<T, n>::RankedTensor(std::vector<int> args) : UnknownRankedTensor<T>::UnknownRankedTensor(args){
+    RankedTensor<T, n>::RankedTensor(vector<int> args) : UnknownRankedTensor<T>::UnknownRankedTensor(args){
         
         int size = args.size(); 
 
