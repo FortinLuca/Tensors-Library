@@ -1,8 +1,15 @@
 #include "../Utils/TensorUtils.cpp"
 
 namespace TensorIndexes{
-    class Index{
+    template <typename T>
+    class Index {
 
+        private:
+            int space;
+
+        public:
+            Index(int space);
+    
     };
 
 }
