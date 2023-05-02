@@ -2,9 +2,8 @@
 
 namespace TensorIndexes{
 
-    template <typename T>
-    Index<T>::Index(int space){
-        this.space = space;
+    Index::Index(int space){
+        this->space = space;
     }
     
 }
