@@ -54,6 +54,9 @@ namespace TensorIndexes{
              */
             vector<Index> getSpaces();
 
+            template <typename... tensorWithIndexes>
+            MultiplierTensor<T> operator*(tensorWithIndexes... tensorIndexes);
+
     };
 
 }

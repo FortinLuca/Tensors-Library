@@ -25,8 +25,6 @@ namespace TensorIndexes{
 
     }
 
-
-
     template <typename T>
     UnknownRankedTensor<T>& TensorWithIndexes<T>::getTensor(){
         return *tensor;
@@ -38,5 +36,11 @@ namespace TensorIndexes{
         return spaces;
     }
 
+
+    template <typename T>
+    template <typename... tensorWithIndexes>
+    MultiplierTensor<T> TensorWithIndexes<T>::operator*(tensorWithIndexes... tensorIndexes) {
+
+    }
 
 }
