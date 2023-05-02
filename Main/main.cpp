@@ -1,4 +1,4 @@
-#include "../Utils/TensorUtils.cpp"
+#include "../EinsteinFormalism/tensorWithIndexes.cpp"
 
 // Execution line: g++ -std=c++17 -g -Wall -o3 main.cpp -o  main
 
