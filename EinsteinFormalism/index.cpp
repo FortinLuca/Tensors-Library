@@ -1,4 +1,4 @@
-#include "indexes.h"
+#include "index.h"
 
 namespace TensorIndexes{
     
