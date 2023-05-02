@@ -3,9 +3,6 @@
 // Execution line: g++ -std=c++17 -g -Wall -o3 main.cpp -o  main
 
 
-using namespace Tensor_Library;
-
-
 /*
 Temporanea, solo per ripasso funzionamento puntatori/referenze
     int v[] = {1, 2, 3, 4, 5};
@@ -180,7 +177,20 @@ int main() {
 
     nrt1 = nrt1 + 15;
     nrt1.printData();
-    
+
+
+    // Product operation
+    Index i(0);
+    Index j(1);
+    Index k(2);
+
+
+    TensorWithIndexes<int> rt2WithIndexes1 = rt2({i, j, k});
+    rt2WithIndexes1.getTensor().printTensor();
+
+
+    TensorWithIndexes<int> rt2WithIndexes2 = nrt2({i, j, k});
+    rt2WithIndexes2.getTensor().printTensor();      
 
     return 0;
 }

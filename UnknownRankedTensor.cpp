@@ -454,8 +454,12 @@ namespace Tensor_Library{
     //************************************************************************************************************************
 
     // Methods for the product between tensors
+    // Einstein Formalism
 
-    // TODO: Product with Einstein Formalism
+    template <typename T>
+    TensorWithIndexes<T> UnknownRankedTensor<T>::operator()(vector<Index> spaces){
+        return TensorWithIndexes<T>(spaces, *this);
+    }
     
 }
 

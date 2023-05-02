@@ -5,7 +5,16 @@
 #include "Iterators/iterators.cpp"
 
 
+namespace TensorIndexes{
+    class Index;
+
+    template <typename T>
+    class TensorWithIndexes;
+}
+
+
 using namespace Iterators;
+using namespace TensorIndexes;
 
 
 // Tensor_Library definition
@@ -360,7 +369,7 @@ namespace Tensor_Library{
 
         // *****************************************************************************************
 
-        // Methods for the operations between tensors
+        // Methods for the sum between tensors
         /**
          * @brief algebraicSum() method: it modifies all the elements of the tensor by summing each of its element with the element of the input's tensor 
          * 
@@ -400,7 +409,17 @@ namespace Tensor_Library{
         UnknownRankedTensor<T> operator+(T elem);
 
 
-        // TODO: Product between tensors with Einstein's formalism
+        // **************************************************************************************************************
+        // Einstein Formalism
+
+        // Operator which returns the TensorWithIndexes object by giving the indexes to the tensor object
+        /**
+         * @brief Operator which allows us to produce a TensorWithIndexes objects from a tensor by giving a vector of Index objects
+         * 
+         * @param spaces: vector of Index objects which will be given to the tensor object
+         * @return TensorWithIndexes<T> object which will be useful to the product operation 
+         */
+        TensorWithIndexes<T> operator()(vector<Index> spaces);
 
     };
 
@@ -681,8 +700,8 @@ namespace Tensor_Library{
         // *****************************************************************************************
 
         // Methods for the product between tensors
-
-        // TODO: Product between tensors with Einstein's formalism 
+        // Einstein Formalism
+        using UnknownRankedTensor<T>::operator();
 
     };
 
