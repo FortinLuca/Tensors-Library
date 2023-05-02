@@ -1,4 +1,4 @@
-#include "../EinsteinFormalism/tensorWithIndexes.cpp"
+#include "../EinsteinFormalism/multiplierTensor.cpp"
 
 // Execution line: g++ -std=c++17 -g -Wall -o3 main.cpp -o  main
 
@@ -190,7 +190,7 @@ int main() {
 
 
     TensorWithIndexes<int> rt2WithIndexes2 = nrt2({i, j, k});
-    rt2WithIndexes2.getTensor().printTensor();      
+    rt2WithIndexes2.getTensor().printTensor();
 
     return 0;
 }

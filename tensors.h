@@ -10,6 +10,9 @@ namespace TensorIndexes{
 
     template <typename T>
     class TensorWithIndexes;
+
+    template <typename T>
+    class MultiplierTensor;
 }
 
 
