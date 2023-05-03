@@ -18,6 +18,13 @@ namespace TensorIndexes{
              * @param space: int-value which corresponds to the dimensional space represented by the Index object
              */
             Index(int space);
+
+            /**
+             * @brief getSpace() method: it extracts the dimensional space represented by to the Index object
+             * 
+             * @return space: int-value which corresponds to the dimensional space represented by the Index object
+             */
+            int getSpace();
     
     };
 

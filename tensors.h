@@ -1,6 +1,7 @@
 #include <random>
 #include <time.h>
 #include <limits>
+#include <algorithm>
 
 #include "Iterators/iterators.cpp"
 
@@ -121,7 +122,7 @@ namespace Tensor_Library{
 
         // Getters and Setters
         /**
-         * @brief getRank() method: it extract the rank of the tensot
+         * @brief getRank() method: it extracts the rank of the tensor
          * 
          * @return int-value which corresponds to the rank of the tensor 
          */

@@ -53,9 +53,16 @@ namespace TensorIndexes{
              * @return vector<Index> field contained in this class
              */
             vector<Index> getSpaces();
-
-            template <typename... tensorWithIndexes>
-            MultiplierTensor<T> operator*(tensorWithIndexes... tensorIndexes);
+            
+            
+            /**
+             * @brief * operator: it enables the scalar product among more tensor "with indexes" in order to rappresent this operation as Einstein formalism  
+             * 
+             * @param TensorWithIndexes<T> to multiply to the subject TensorWithIndexes<T> 
+             * 
+             * @return TensorWithIndexes<T> with rank equal to the number of dimensional space (or spaces) not repeated in the moltiplication between the two tensors
+             */
+            TensorWithIndexes<T> operator *(TensorWithIndexes<T> tensorWithIndexes);
 
     };
 

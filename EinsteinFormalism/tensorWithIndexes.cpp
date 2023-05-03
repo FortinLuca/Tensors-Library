@@ -38,8 +38,30 @@ namespace TensorIndexes{
 
 
     template <typename T>
-    template <typename... tensorWithIndexes>
-    MultiplierTensor<T> TensorWithIndexes<T>::operator*(tensorWithIndexes... tensorIndexes) {
+    TensorWithIndexes<T> TensorWithIndexes<T>::operator *(TensorWithIndexes<T> tensorWithIndexes) { 
+        // creation of support vector of integer "spacesOfThis_int" where the elements are the mapped values of the vector of Index "spacesOfThis"
+        // in this way we exploit the vector iterator function find() to make all more readble  
+        vector<Index> spacesOfThis = this->getSpaces();
+        int sizeOfThis = spacesOfThis.size();
+        vector<int> spacesOfThis_int = vector<int>(sizeOfThis);
+        for(int i = 0; i<sizeOfThis; i++) {
+            spacesOfThis_int[i]=spacesOfThis[i].getSpace();
+        }
+
+        // through find() function, we search (and then check) if the dimensional spaces (indexes) as parameters of the first tensor "with indexes" 
+        // are included in the ones of the second tensor "with indexes", or viceversa
+        vector<int>::iterator it;
+        vector<Index> spacesOfInput = tensorWithIndexes.getSpaces();
+        int sizeOfInput = spacesOfInput.size();
+        for(int i = 0; i<sizeOfInput; i++) {
+            int spaceToFind = spacesOfInput[i].getSpace();
+            it = find(spacesOfThis_int.begin(), spacesOfThis_int.end(), spaceToFind);
+            if (it == spacesOfThis_int.end()) throw invalid_argument("No match between the two tensors'spaces. It's mandatory that the tensor of lower rank has the same identical spaces (i,j,k,etc..) of the greater one");
+        }
+
+        //TODO: completare i controlli e tutto il resto delle operazioni
+
+        return *this;
 
     }
 

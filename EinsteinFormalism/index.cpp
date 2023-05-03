@@ -6,4 +6,8 @@ namespace TensorIndexes{
         this->space = space;
     }
     
+    int Index::getSpace() {
+        return space;
+    }
+    
 }

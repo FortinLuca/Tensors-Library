@@ -180,17 +180,34 @@ int main() {
 
 
     // Product operation
+    UnknownRankedTensor<int> test1(2, 3, 4);
+    test1.insertRandomData();
+
+    UnknownRankedTensor<int> test2(2, 3);
+    test2.insertRandomData();
+
+    UnknownRankedTensor<int> test3(3);
+    test3.insertRandomData();
+
     Index i(0);
     Index j(1);
     Index k(2);
+    Index w(3);
 
 
-    TensorWithIndexes<int> rt2WithIndexes1 = rt2({i, j, k});
-    rt2WithIndexes1.getTensor().printTensor();
+    TensorWithIndexes<int> test1WithIndexes = test1({i, j, k});
+    test1WithIndexes.getTensor().printData();
+
+    TensorWithIndexes<int> test2WithIndexes = test2({i, k});
+    test2WithIndexes.getTensor().printData();
+
+    TensorWithIndexes<int> test3WithIndexes = test3({j});
+    test3WithIndexes.getTensor().printData();
 
 
-    TensorWithIndexes<int> rt2WithIndexes2 = nrt2({i, j, k});
-    rt2WithIndexes2.getTensor().printTensor();
+    TensorWithIndexes<int> mtest = test1WithIndexes * test2WithIndexes * test3WithIndexes;
+
+
 
     return 0;
 }
