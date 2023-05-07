@@ -10,9 +10,22 @@ namespace TensorIndexes{
         int sizeInputSpaces = inputSpaces.size();
 
         // Checking if the rank and the dimension of the Index-vector corresponds
-        if(tensor->getRank() != sizeInputSpaces)
-            throw invalid_argument("The rank must corresponds to the number of indexes inserted in input");
+        if(tensor->getRank() != sizeInputSpaces) throw invalid_argument("The rank must corresponds to the number of indexes inserted in input");
         
+        int sizeOfThis = inputSpaces.size();
+        vector<int> inputSpaces_int = vector<int>(sizeOfThis);
+        for(int i=0; i<sizeOfThis; i++) {
+            inputSpaces_int[i]=inputSpaces[i].getSpace();
+        }
+
+        // TODO: portare inputSpaces_int come variabile globale per usufruirne nella funzione operator * ?
+        // Checking if in the inputSpaces parameter there are the same space more times
+        vector<int>::iterator it;
+        for (int i=0; i<inputSpaces.size(); i++) {
+            it = find(inputSpaces_int.begin(), inputSpaces_int.end(), inputSpaces_int[i]);
+            if (it != inputSpaces_int.end()) throw invalid_argument("A tensorWithIndexes can't have two or more identical dimensional spaces (indexes)");
+        }
+
         // Copying into the field all the elements of the input vector
         for (int i=0; i<tensor->getRank(); i++) 
             spaces.push_back(inputSpaces[i]); 
@@ -39,28 +52,74 @@ namespace TensorIndexes{
 
     template <typename T>
     TensorWithIndexes<T> TensorWithIndexes<T>::operator *(TensorWithIndexes<T> tensorWithIndexes) { 
-        // creation of support vector of integer "spacesOfThis_int" where the elements are the mapped values of the vector of Index "spacesOfThis"
-        // in this way we exploit the vector iterator function find() to make all more readble  
+        // we retrieve the spaces (indexes) and relative size of "this" (first tensor before the operator *) and the parameter of input "tensorWithIndexes" (second tensor after the operator *)
+        // from now on the first tensor is related to the key word "this" and the second tensor is related to the key word "input"
         vector<Index> spacesOfThis = this->getSpaces();
+        vector<Index> spacesOfInput = tensorWithIndexes.getSpaces();
         int sizeOfThis = spacesOfThis.size();
+        int sizeOfInput = spacesOfInput.size();
+
+        // we retrieve the vectors containing the sizeDimensions of this tensor and input tensor and the relative sizes of the both vectors
+        vector<int> tensorSizeDimensionsOfInput = tensorWithIndexes.getTensor().getSizeDimensions();
+        vector<int> tensorSizeDimensionsOfThis = this->getTensor().getSizeDimensions();
+        int sizeTensorSizeDimensionsOfInput = tensorSizeDimensionsOfInput.size();
+        int sizeTensorSizeDimensionsOfThis = tensorSizeDimensionsOfThis.size();
+
+        // creation of support vectors of integer "spacesOfThis_int" and "spacesOfInput_int" where the elements are the mapped values of the respective vectors of Index "spacesOfThis" and "spacesOfInput"
+        // in this way we exploit the vector iterator function find() to make all more readble
         vector<int> spacesOfThis_int = vector<int>(sizeOfThis);
-        for(int i = 0; i<sizeOfThis; i++) {
+        for(int i=0; i<sizeOfThis; i++) {
             spacesOfThis_int[i]=spacesOfThis[i].getSpace();
         }
-
-        // through find() function, we search (and then check) if the dimensional spaces (indexes) as parameters of the first tensor "with indexes" 
-        // are included in the ones of the second tensor "with indexes", or viceversa
-        vector<int>::iterator it;
-        vector<Index> spacesOfInput = tensorWithIndexes.getSpaces();
-        int sizeOfInput = spacesOfInput.size();
-        for(int i = 0; i<sizeOfInput; i++) {
-            int spaceToFind = spacesOfInput[i].getSpace();
-            it = find(spacesOfThis_int.begin(), spacesOfThis_int.end(), spaceToFind);
-            if (it == spacesOfThis_int.end()) throw invalid_argument("No match between the two tensors'spaces. It's mandatory that the tensor of lower rank has the same identical spaces (i,j,k,etc..) of the greater one");
+        vector<int> spacesOfInput_int = vector<int>(sizeOfInput);
+        for(int i=0; i<sizeOfInput; i++) {
+            spacesOfInput_int[i]=spacesOfInput[i].getSpace();
         }
 
-        //TODO: completare i controlli e tutto il resto delle operazioni
+        // creation of support maps "mapTensorSizeDimensionsOfThis" and "mapTensorSizeDimensionsOfInput" with key equal to the dimensional space (index) of the relative tensorWithIndexes and value equal to its sizeDimension (corresponding to that dimensional space) 
+        map<int, int> mapTensorSizeDimensionsOfThis;
+        map<int, int> mapTensorSizeDimensionsOfInput;
+        for (int i = 0; i<sizeTensorSizeDimensionsOfThis; i++) {
+            mapTensorSizeDimensionsOfThis[spacesOfThis_int[i]] = tensorSizeDimensionsOfThis[i];
+        }
+        for (int i = 0; i<sizeTensorSizeDimensionsOfInput; i++) {
+            mapTensorSizeDimensionsOfInput[spacesOfInput_int[i]] = tensorSizeDimensionsOfInput[i];
+        }
 
+        // according to the dimensional spaces' size, we decide to use the one with the bigger size as parameter of the find() function
+        // in this way we iterate along all the bigger vector to find the same space from the lower vector without losing possible dimensional spaces (indexes)
+        if (spacesOfThis.size() >= spacesOfInput.size()) {
+            vector<int>::iterator it;
+            for(int i = 0; i<sizeOfInput; i++) {
+                // inside this "if" block, through find() function, we search (and then check) if the dimensional spaces (indexes) of the first tensor 
+                // are included in the ones of the second tensor, or viceversa
+                int spaceToFind = spacesOfInput[i].getSpace();
+                it = find(spacesOfThis_int.begin(), spacesOfThis_int.end(), spaceToFind);
+                if (it == spacesOfThis_int.end()) throw invalid_argument("No match between the two tensors'spaces. It's mandatory that the second tensor (with lower rank) has the same identical spaces (i,j,k,etc..) of the first one (with greater rank)");
+                
+                // through the two support maps, we check the two sizeDimensions's equality of the same dimensional space  
+                int dimensionSizeOfThis = mapTensorSizeDimensionsOfThis.at(spaceToFind);
+                int dimensionSizeOfInput = mapTensorSizeDimensionsOfInput.at(spaceToFind);
+                if (dimensionSizeOfInput != dimensionSizeOfThis) throw invalid_argument("The dimensional space's size of the first tensor must be equal to that of the same dimensional space of the second tensor");
+            }
+        } else {
+            vector<int>::iterator it;
+            for(int i = 0; i<sizeOfThis; i++) {
+                // inside this "if" block, through find() function, we search (and then check) if the dimensional spaces (indexes) of the second tensor 
+                // are included in the ones of the first tensor, or viceversa
+                int spaceToFind = spacesOfThis[i].getSpace();
+                it = find(spacesOfInput_int.begin(), spacesOfInput_int.end(), spaceToFind);
+                if (it == spacesOfInput_int.end()) throw invalid_argument("No match between the two tensors'spaces. It's mandatory that the first tensor (with lower rank) has the same identical spaces (i,j,k,etc..) of the second one (with greater rank)");
+
+                // through the two support maps, we check the two sizeDimensions's equality of the same dimensional space  
+                int dimensionSizeOfThis = mapTensorSizeDimensionsOfThis[spaceToFind];
+                int dimensionSizeOfInput = mapTensorSizeDimensionsOfInput[spaceToFind];
+                if (dimensionSizeOfInput != dimensionSizeOfThis) throw invalid_argument("The dimensional space's size of the second tensor must be equal to that of the same dimensional space of the first tensor");
+            }
+        }
+        
+
+        // ATENZIONE: al momento non funziona perchè torna this e non il tensore risultante, poi sarà corretto il controllo
         return *this;
 
     }

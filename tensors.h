@@ -2,6 +2,7 @@
 #include <time.h>
 #include <limits>
 #include <algorithm>
+#include <map>
 
 #include "Iterators/iterators.cpp"
 

@@ -180,10 +180,10 @@ int main() {
 
 
     // Product operation
-    UnknownRankedTensor<int> test1(2, 3, 4);
+    UnknownRankedTensor<int> test1(4, 3, 4, 4);
     test1.insertRandomData();
 
-    UnknownRankedTensor<int> test2(2, 3);
+    UnknownRankedTensor<int> test2(4, 4, 4);
     test2.insertRandomData();
 
     UnknownRankedTensor<int> test3(3);
@@ -195,13 +195,13 @@ int main() {
     Index w(3);
 
 
-    TensorWithIndexes<int> test1WithIndexes = test1({i, j, k});
+    TensorWithIndexes<int> test1WithIndexes = test1({i, j, k, i});
     test1WithIndexes.getTensor().printData();
 
-    TensorWithIndexes<int> test2WithIndexes = test2({i, k});
+    TensorWithIndexes<int> test2WithIndexes = test2({i, i, k});
     test2WithIndexes.getTensor().printData();
 
-    TensorWithIndexes<int> test3WithIndexes = test3({j});
+    TensorWithIndexes<int> test3WithIndexes = test3({i});
     test3WithIndexes.getTensor().printData();
 
 

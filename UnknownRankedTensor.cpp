@@ -393,6 +393,7 @@ namespace Tensor_Library{
     UnknownRankedTensor<T> UnknownRankedTensor<T>::algebraicSum(UnknownRankedTensor<T> tensor){
         // The dimensions of the tensors must be equal
         for (int i = 0; i < rank; i++){
+            // non va fatto il controllo anche su sizeDimensions.size() (ovvero il rank) che devono essere uguali??? si può fare la somma tra due tensori con rank diverso??
             if(sizeDimensions[i] != tensor.sizeDimensions[i])
                 throw invalid_argument("In order to apply the algebraic sum, the dimensions of the two tensors must to be equal");
         }
