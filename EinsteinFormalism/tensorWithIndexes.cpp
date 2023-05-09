@@ -21,9 +21,8 @@ namespace TensorIndexes{
         // TODO: portare inputSpaces_int come variabile globale per usufruirne nella funzione operator * ?
         // Checking if in the inputSpaces parameter there are the same space more times
         vector<int>::iterator it;
-        for (int i=0; i<inputSpaces.size(); i++) {
-            it = find(inputSpaces_int.begin(), inputSpaces_int.end(), inputSpaces_int[i]);
-            if (it != inputSpaces_int.end()) throw invalid_argument("A tensorWithIndexes can't have two or more identical dimensional spaces (indexes)");
+        for (int i=0; i<sizeOfThis; i++) {
+            if (count(inputSpaces_int.begin(), inputSpaces_int.end(), inputSpaces_int[i]) > 1) throw invalid_argument("A tensorWithIndexes can't have two or more identical dimensional spaces (indexes)");
         }
 
         // Copying into the field all the elements of the input vector
@@ -86,6 +85,29 @@ namespace TensorIndexes{
             mapTensorSizeDimensionsOfInput[spacesOfInput_int[i]] = tensorSizeDimensionsOfInput[i];
         }
 
+        vector<int>::iterator it;
+        for(int i = 0; i<sizeOfInput; i++) {
+            // through the two support maps, we check the two sizeDimensions's equality of the same dimensional space
+            int spaceKey = spacesOfInput_int[i];
+            it = find(spacesOfThis_int.begin(), spacesOfThis_int.end(), spaceKey);
+            if (it != spacesOfThis_int.end()) {
+                int dimensionSizeOfThis = mapTensorSizeDimensionsOfThis.at(spaceKey);
+                int dimensionSizeOfInput = mapTensorSizeDimensionsOfInput.at(spaceKey);
+                if (dimensionSizeOfInput != dimensionSizeOfThis) throw invalid_argument("The dimensional space's size of the first tensor must be equal to that of the same dimensional space of the second tensor");
+            }
+        }
+
+        // ATENZIONE: al momento non funziona perchè torna this e non il tensore risultante, poi sarà corretto il controllo
+        return *this;
+
+    }
+
+}
+
+
+
+/*   codice che può tornare utile per sapere quali indici ho in comune tra i 2 tensori
+
         // according to the dimensional spaces' size, we decide to use the one with the bigger size as parameter of the find() function
         // in this way we iterate along all the bigger vector to find the same space from the lower vector without losing possible dimensional spaces (indexes)
         if (spacesOfThis.size() >= spacesOfInput.size()) {
@@ -117,11 +139,5 @@ namespace TensorIndexes{
                 if (dimensionSizeOfInput != dimensionSizeOfThis) throw invalid_argument("The dimensional space's size of the second tensor must be equal to that of the same dimensional space of the first tensor");
             }
         }
-        
 
-        // ATENZIONE: al momento non funziona perchè torna this e non il tensore risultante, poi sarà corretto il controllo
-        return *this;
-
-    }
-
-}
+*/

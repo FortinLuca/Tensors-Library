@@ -193,12 +193,13 @@ int main() {
     Index j(1);
     Index k(2);
     Index w(3);
+    Index z(4);
 
 
-    TensorWithIndexes<int> test1WithIndexes = test1({i, j, k, i});
+    TensorWithIndexes<int> test1WithIndexes = test1({i, j, k, w});
     test1WithIndexes.getTensor().printData();
 
-    TensorWithIndexes<int> test2WithIndexes = test2({i, i, k});
+    TensorWithIndexes<int> test2WithIndexes = test2({i, z, k});
     test2WithIndexes.getTensor().printData();
 
     TensorWithIndexes<int> test3WithIndexes = test3({i});
