@@ -140,6 +140,9 @@ namespace TensorIndexes{
         }
 
         vector<int>::iterator it;
+        vector<int> equalSpaces;
+        vector<int> differentSpaces;
+
         for(int i = 0; i<sizeOfInput; i++) {
             // through the two support maps, we check the two sizeDimensions's equality of the same dimensional space
             int spaceKey = spacesOfInput_int[i];
@@ -148,10 +151,50 @@ namespace TensorIndexes{
                 int dimensionSizeOfThis = mapTensorSizeDimensionsOfThis.at(spaceKey);
                 int dimensionSizeOfInput = mapTensorSizeDimensionsOfInput.at(spaceKey);
                 if (dimensionSizeOfInput != dimensionSizeOfThis) throw invalid_argument("The dimensional space's size of the first tensor must be equal to that of the same dimensional space of the second tensor");
+                equalSpaces.push_back(spaceKey);
             }
         }
 
-        // ATENZIONE: al momento non funziona perchè torna this e non il tensore risultante, poi sarà corretto il controllo
+        differentSpaces.assign(spacesOfThis_int.begin(), spacesOfThis_int.end());
+        differentSpaces.insert(differentSpaces.end(), spacesOfInput_int.begin(), spacesOfInput_int.end());
+
+        bool isPresentEqualSpace = true;
+        vector<int>::iterator it_positionToErase;
+        for (int i = 0; i < (int)equalSpaces.size(); i++) {
+            int equalSpace = equalSpaces[i];
+            if (count(differentSpaces.begin(), differentSpaces.end(), equalSpace) > 1) {
+                while (isPresentEqualSpace) {
+                    it_positionToErase = find(differentSpaces.begin(), differentSpaces.end(), equalSpace);
+                    differentSpaces.erase(it_positionToErase);
+                    if (count(differentSpaces.begin(), differentSpaces.end(), equalSpace) == 0) {
+                        isPresentEqualSpace = false;
+                    }
+                }
+                isPresentEqualSpace = true;
+            }
+            
+        }
+        
+
+        int dimensionMultiplierTrace = 1;
+        for (int i = 0; i < (int)differentSpaces.size(); i++) {
+            if (mapTensorSizeDimensionsOfThis.find(differentSpaces[i]) != mapTensorSizeDimensionsOfThis.end()) 
+                dimensionMultiplierTrace *= mapTensorSizeDimensionsOfThis[differentSpaces[i]]; 
+            else 
+                dimensionMultiplierTrace *= mapTensorSizeDimensionsOfInput[differentSpaces[i]]; 
+        }
+
+        vector<int> multiplierOperations(dimensionMultiplierTrace);
+
+        // only for test
+        for (int i = 0; i < (int)multiplierOperations.size() ; i++) {
+            multiplierOperations[i]=(3);
+        }
+
+        MultiplierTensor<T> x(multiplierOperations, equalSpaces);
+
+        // ATTENZIONE: al momento non funziona perchè torna this e non il tensore risultante, poi sarà corretto il controllo
+
         return *this;
 
     }

@@ -13,7 +13,8 @@ namespace TensorIndexes{
         private:
             vector<Index> spaces;                   // vector which contains the Index objects which will be used for the product operation
             UnknownRankedTensor<T> *tensor;         // pointer to a UnknownRankedTensor object which compose the TensorWithIndexes object (subsumption in case of RankedTensor object)
-
+            MultiplierTensor<T> *multiplierTensor;  // pointer to a MultiplierTensor that arranges the moltiplication beetwen teo or more tensors
+            
             friend class Indexes;                   // it can access the private or protected fields of the Index objects too
             friend class UnknownRankedTensor<T>;    // it can access the private or protected fields of the UnknownRankedTensor objects too
 
