@@ -179,12 +179,11 @@ int main() {
     Index k(2);
 
     TensorWithIndexes<int> test1WithIndexes = test1({i, j, k});
-    test1WithIndexes.getTensor().printData();
 
     TensorWithIndexes<int> test2WithIndexes = test2({i, j, k});
-    test2WithIndexes.getTensor().printData();
 
     TensorWithIndexes<int> sum1 = test1WithIndexes + test2WithIndexes;
+    sum1.getTensor().printData();
 
 
     /*
