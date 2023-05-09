@@ -53,6 +53,15 @@ namespace TensorIndexes{
              * @return vector<Index> field contained in this class
              */
             vector<Index> getSpaces();
+
+
+            /**
+             * @brief 
+             * 
+             * @param tensorWithIndexes 
+             * @return TensorWithIndexes<T> 
+             */
+            TensorWithIndexes<T> operator +(TensorWithIndexes<T> tensorWithIndexes);
             
             
             /**

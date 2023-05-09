@@ -119,10 +119,6 @@ int main() {
     UnknownRankedTensor<int> aa = prova2.fix(1, 2);
     aa.printData();
 
-    // Adding
-    prova1 = prova1 + prova2;
-    prova1.printData();
-
 
     cout << "------------------------------------------------------------------------"<< endl;
 
@@ -170,15 +166,28 @@ int main() {
 
 
     // Adding operation
-    nrt1.printData();
-    nrt2.printData();
-    nrt1 = nrt1 + nrt2;
-    nrt1.printData();
+    UnknownRankedTensor<int> test1(4, 4, 4);
+    test1.insertRandomData();
+    test1.printData();
 
-    nrt1 = nrt1 + 15;
-    nrt1.printData();
+    UnknownRankedTensor<int> test2(4, 4, 4);
+    test2.insertRandomData();
+    test2.printData();
+
+    Index i(0);
+    Index j(1);
+    Index k(2);
+
+    TensorWithIndexes<int> test1WithIndexes = test1({i, j, k});
+    test1WithIndexes.getTensor().printData();
+
+    TensorWithIndexes<int> test2WithIndexes = test2({i, j, k});
+    test2WithIndexes.getTensor().printData();
+
+    TensorWithIndexes<int> sum1 = test1WithIndexes + test2WithIndexes;
 
 
+    /*
     // Product operation
     UnknownRankedTensor<int> test1(4, 3, 4, 4);
     test1.insertRandomData();
@@ -206,6 +215,7 @@ int main() {
 
 
     TensorWithIndexes<int> mtest = test1WithIndexes * test2WithIndexes * test3WithIndexes;
+    */
 
 
 

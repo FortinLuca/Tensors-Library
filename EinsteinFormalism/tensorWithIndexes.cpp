@@ -21,7 +21,7 @@ namespace TensorIndexes{
         // TODO: portare inputSpaces_int come variabile globale per usufruirne nella funzione operator * ?
         // Checking if in the inputSpaces parameter there are the same space more times
         vector<int>::iterator it;
-        for (int i=0; i<inputSpaces.size(); i++) {
+        for (int i=0; i<sizeOfThis; i++) {
             it = find(inputSpaces_int.begin(), inputSpaces_int.end(), inputSpaces_int[i]);
             if (it != inputSpaces_int.end()) throw invalid_argument("A tensorWithIndexes can't have two or more identical dimensional spaces (indexes)");
         }
@@ -48,6 +48,39 @@ namespace TensorIndexes{
     vector<Index> TensorWithIndexes<T>::getSpaces(){
         return spaces;
     }
+
+
+    template <typename T>
+    TensorWithIndexes<T> TensorWithIndexes<T>::operator +(TensorWithIndexes<T> tensorWithIndexes) {
+        // we retrieve the spaces (indexes) and relative size of "this" (first tensor before the operator *) and the parameter of input "tensorWithIndexes" (second tensor after the operator *)
+        // from now on the first tensor is related to the key word "this" and the second tensor is related to the key word "input"
+        vector<Index> spacesOfThis = this->getSpaces();
+        vector<Index> spacesOfInput = tensorWithIndexes.getSpaces();
+        int sizeOfThis = spacesOfThis.size();
+        int sizeOfInput = spacesOfInput.size();
+
+        // checking the ranks of the tensors to sum
+        if(sizeOfThis != sizeOfInput) throw invalid_argument("The tensors for algebraic sums must be with the same rank");
+
+
+        vector<int> sizeDimensionsOfThis = this->getTensor().getSizeDimensions();
+        vector<int> sizeDimensionsOfInput = this->getTensor().getSizeDimensions();
+
+
+        // checking the order of the indexes and their dimensionality
+        for(int i = 0; i < sizeOfThis; i++){
+            if(spacesOfThis[i].getSpace() != spacesOfInput[i].getSpace()) 
+                throw invalid_argument("The tensors must have the same spaces in the same order for the application of the algebraic sum");
+            
+            if(sizeDimensionsOfThis[i] != sizeDimensionsOfInput[i])
+                throw invalid_argument("The tensors must have the same sizeDimensions value in the same order fot the application of the algebraic sum");
+
+        }
+
+        return *this;    
+        
+    }
+
 
 
     template <typename T>

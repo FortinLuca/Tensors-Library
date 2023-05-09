@@ -372,50 +372,9 @@ namespace Tensor_Library{
         void printTensor();
 
 
-        // *****************************************************************************************
-
-        // Methods for the sum between tensors
-        /**
-         * @brief algebraicSum() method: it modifies all the elements of the tensor by summing each of its element with the element of the input's tensor 
-         * 
-         * @param tensor: tensor with the same rank and type of the current one. The two tensors must have the same dimensions
-         * @return the current tensor with all elements modified by the algebraic sum of the elements
-         */
-        UnknownRankedTensor<T> algebraicSum(UnknownRankedTensor<T> tensor);
-
-
-        /**
-         * @brief algebraicSum() method: it modifies all the elements of the tensor by summing each of its element with the input element of type T
-         * 
-         * @param elem: element of type T which will be summed to each element of the tensor
-         * @return the current tensor with all elements modified by the algebraic sum of the elements with the input one
-         */
-        UnknownRankedTensor<T> algebraicSum(T elem);
-
-
-
-        /**
-         * @brief Operator which lets the application of the algebraic sum between two tensors with the + operator. 
-         * It applies the algebraicSum() method between the current tensor and the input one
-         * 
-         * @param tensor: tensor with the same rank and type of the current one. The two tensors must have the same dimensions
-         * @return the current tensor with all elements modified by the algebraic sum of the elements
-         */
-        UnknownRankedTensor<T> operator+(UnknownRankedTensor<T> tensor);
-
-
-        /**
-         * @brief Operator which lets the application of the algebraic sum between two tensors with the + operator.
-         * It applies the algebraicSum() method between the current tensor and the input element of type T
-         * 
-         * @param elem: element of type T which will be summed to each element of the tensor
-         * @return the current tensor with all elements modified by the algebraic sum of the elements with the input one
-         */
-        UnknownRankedTensor<T> operator+(T elem);
-
 
         // **************************************************************************************************************
-        // Einstein Formalism
+        // Operations between tensors
 
         // Operator which returns the TensorWithIndexes object by giving the indexes to the tensor object
         /**
@@ -661,51 +620,8 @@ namespace Tensor_Library{
 
         // *****************************************************************************************
 
-        // Methods for the sum between tensors
-        /**
-         * @brief algebraicSum() method: it modifies all the elements of the tensor by summing each of its element with the element of the input's tensor 
-         * 
-         * @param tensor: tensor with the same rank and type of the current one. The two tensors must have the same dimensions
-         * @return the current tensor with all elements modified by the algebraic sum of the elements
-         */
-        RankedTensor<T, n> algebraicSum(RankedTensor<T, n> tensor);
+        // Methods for the operations between tensors
 
-
-        /**
-         * @brief algebraicSum() method: it modifies all the elements of the tensor by summing each of its element with the input element of type T
-         * 
-         * @param elem: element of type T which will be summed to each element of the tensor
-         * @return the current tensor with all elements modified by the algebraic sum of the elements with the input one
-         */
-        RankedTensor<T, n> algebraicSum(T elem);
-
-
-
-        /**
-         * @brief Operator which lets the application of the algebraic sum between two tensors with the + operator. 
-         * It applies the algebraicSum() method between the current tensor and the input one
-         * 
-         * @param tensor: tensor with the same rank and type of the current one. The two tensors must have the same dimensions
-         * @return the current tensor with all elements modified by the algebraic sum of the elements
-         */
-        RankedTensor<T, n> operator+(RankedTensor<T, n> tensor);
-
-
-        /**
-         * @brief Operator which lets the application of the algebraic sum between two tensors with the + operator.
-         * It applies the algebraicSum() method between the current tensor and the input element of type T
-         * 
-         * @param elem: element of type T which will be summed to each element of the tensor
-         * @return the current tensor with all elements modified by the algebraic sum of the elements with the input one
-         */
-        RankedTensor<T, n> operator+(T elem);
-
-
-
-        // *****************************************************************************************
-
-        // Methods for the product between tensors
-        // Einstein Formalism
         using UnknownRankedTensor<T>::operator();
 
     };
