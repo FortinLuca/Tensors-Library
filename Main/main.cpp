@@ -185,7 +185,7 @@ int main() {
     // TensorWithIndexes<int> sum1 = test1WithIndexes + test2WithIndexes;
     // sum1.getTensor().printData();
 
-
+    
     // Product operation
     UnknownRankedTensor<int> test1(4, 3, 4, 4);
     test1.insertRandomData();

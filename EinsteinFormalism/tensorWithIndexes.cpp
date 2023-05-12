@@ -76,8 +76,7 @@ namespace TensorIndexes{
         }
 
         // Creating a new data vector and a new tensor
-        UnknownRankedTensor<T> newTensor(sizeDimensionsOfThis);
-        int n_total_elements = newTensor.get_n_total_elements();
+        int n_total_elements = this->getTensor().get_n_total_elements();
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
 
         // Creating the two iterators
