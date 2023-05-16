@@ -3,9 +3,12 @@
 namespace TensorIndexes{
 
     template <typename T>
-    MultiplierTensor<T>::MultiplierTensor(vector<int> multiplierOperationsInput, vector<int> vectorOfSpacesInput){
-        resultMultiplier.assign(multiplierOperationsInput.begin(), multiplierOperationsInput.end());
-        vectorOfSpaces.assign(vectorOfSpacesInput.begin(), vectorOfSpacesInput.end());
+    MultiplierTensor<T>::MultiplierTensor(map<int,int> mapOfSpacesAndDimensionsInput){
+        mapOfSpacesAndDimensions = map<int,int> (mapOfSpacesAndDimensionsInput);
+    };
+
+    template <typename T>
+    MultiplierTensor<T>::MultiplierTensor(){
     };
 
 

@@ -7,15 +7,17 @@ namespace TensorIndexes{
 
         private:
 
-            vector<int> vectorOfSpaces;
-            vector<int> resultMultiplier;
+            map<int,int> mapOfSpacesAndDimensions;
+            vector<Index> vectorOfIndexes;
             friend class Indexes;   
             friend class TensorWithIndexes<T>;
 
         
         public:
         
-            MultiplierTensor(vector<int> multiplierOperationsInput, vector<int> vectorOfSpacesInput);
+            MultiplierTensor(map<int,int> mapOfSpacesAndDimensionsInput);
+
+            MultiplierTensor();
 
     };
 

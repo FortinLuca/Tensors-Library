@@ -28,6 +28,8 @@ namespace TensorIndexes{
         // Copying into the field all the elements of the input vector
         for (int i=0; i<tensor->getRank(); i++) 
             spaces.push_back(inputSpaces[i]); 
+
+        multiplierTensor = MultiplierTensor<T>();
     }
 
 
@@ -46,6 +48,11 @@ namespace TensorIndexes{
     template <typename T>
     vector<Index> TensorWithIndexes<T>::getSpaces(){
         return spaces;
+    }
+
+    template <typename T>
+    void TensorWithIndexes<T>::setMultiplierTensor(MultiplierTensor<T> multiplierTensorInput){
+        multiplierTensor = multiplierTensorInput;
     }
 
 
@@ -140,6 +147,7 @@ namespace TensorIndexes{
 
         vector<int>::iterator it;
         vector<int> equalSpaces;
+        vector<int> equalSizeDimensions;
         vector<int> differentSpaces;
 
         for(int i = 0; i<sizeOfInput; i++) {
@@ -151,6 +159,8 @@ namespace TensorIndexes{
                 int dimensionSizeOfInput = mapTensorSizeDimensionsOfInput.at(spaceKey);
                 if (dimensionSizeOfInput != dimensionSizeOfThis) throw invalid_argument("The dimensional space's size of the first tensor must be equal to that of the same dimensional space of the second tensor");
                 equalSpaces.push_back(spaceKey);
+                equalSizeDimensions.push_back(dimensionSizeOfInput);
+
             }
         }
 
@@ -176,25 +186,69 @@ namespace TensorIndexes{
         
 
         int dimensionMultiplierTrace = 1;
+        vector<int> vectorResultTensorSizeDimensions((int)differentSpaces.size());
         for (int i = 0; i < (int)differentSpaces.size(); i++) {
-            if (mapTensorSizeDimensionsOfThis.find(differentSpaces[i]) != mapTensorSizeDimensionsOfThis.end()) 
-                dimensionMultiplierTrace *= mapTensorSizeDimensionsOfThis[differentSpaces[i]]; 
-            else 
-                dimensionMultiplierTrace *= mapTensorSizeDimensionsOfInput[differentSpaces[i]]; 
+            if (mapTensorSizeDimensionsOfThis.find(differentSpaces[i]) != mapTensorSizeDimensionsOfThis.end()) {
+                dimensionMultiplierTrace *= mapTensorSizeDimensionsOfThis[differentSpaces[i]];
+                vectorResultTensorSizeDimensions[i] = mapTensorSizeDimensionsOfThis.at(differentSpaces[i]);
+            } else {
+                dimensionMultiplierTrace *= mapTensorSizeDimensionsOfInput[differentSpaces[i]];
+                vectorResultTensorSizeDimensions[i] = mapTensorSizeDimensionsOfInput.at(differentSpaces[i]);
+            }
         }
 
-        vector<int> multiplierOperations(dimensionMultiplierTrace);
-
-        // only for test
-        for (int i = 0; i < (int)multiplierOperations.size() ; i++) {
-            multiplierOperations[i]=(3);
+        map<int, int> mapCommonIndexes;
+        for (int i=0; i<sizeOfThis; i++) {
+            if (tensorWithIndexes.multiplierTensor.mapOfSpacesAndDimensions.count(spacesOfThis_int[i]) > 0) {
+                mapCommonIndexes[spacesOfThis_int[i]] = tensorSizeDimensionsOfThis[i];
+            }
+        }
+        for (int i=0; i<sizeOfInput; i++) {
+            if (this->multiplierTensor.mapOfSpacesAndDimensions.count(spacesOfInput_int[i]) > 0) {
+                mapCommonIndexes[spacesOfInput_int[i]] = tensorSizeDimensionsOfInput[i];
+            }
         }
 
-        MultiplierTensor<T> x(multiplierOperations, equalSpaces);
+        map<int,int> mapOfEqualSpaces;
+        for (int i = 0; i < (int)equalSpaces.size(); i++) {
+            mapOfEqualSpaces[equalSpaces[i]] = equalSizeDimensions[i];
+        }
 
-        // ATTENZIONE: al momento non funziona perchè torna this e non il tensore risultante, poi sarà corretto il controllo
+        mapCommonIndexes.insert(mapOfEqualSpaces.begin(), mapOfEqualSpaces.end());
 
-        return *this;
+        vector<Index> differentIndexes;
+        for(int i=0; i<sizeOfThis; i++){
+            if(mapOfEqualSpaces.count(spacesOfThis_int[i]) == 0)
+                differentIndexes.push_back(this->getSpaces()[i]);
+        }
+        
+        for(int i=0; i<sizeOfInput; i++){
+            if(mapOfEqualSpaces.count(spacesOfInput_int[i]) == 0)
+                differentIndexes.push_back(tensorWithIndexes.getSpaces()[i]);
+        }
+
+        for (int i=0; i<(int)mapCommonIndexes.size(); i++) {
+            int ris = 0;
+            for (int j=0; j<mapCommonIndexes.at(i); j++) {
+                data = 
+            }
+
+        }
+
+
+        //TensorWithIndexes<T> result;
+        MultiplierTensor<T> multiplierTensor(mapOfEqualSpaces);
+        UnknownRankedTensor<T> resultTensor(vectorResultTensorSizeDimensions);
+        shared_ptr<vector<T>> multipliedData = make_shared<vector<T>>(dimensionMultiplierTrace);
+        for ( int i=0; i<dimensionMultiplierTrace; i++ ) {
+            multipliedData->at(i) = 14; //TODO
+            i++;
+        }
+        resultTensor.setData(multipliedData);
+         
+        TensorWithIndexes<T> result = resultTensor(differentIndexes);
+        result.setMultiplierTensor(multiplierTensor);
+        return result;
 
     }
 
