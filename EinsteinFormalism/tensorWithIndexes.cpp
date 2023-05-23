@@ -228,11 +228,6 @@ namespace TensorIndexes{
         }
 
         for (int i=0; i<(int)mapCommonIndexes.size(); i++) {
-            int ris = 0;
-            for (int j=0; j<mapCommonIndexes.at(i); j++) {
-                data = 
-            }
-
         }
 
 
