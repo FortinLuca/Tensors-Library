@@ -245,13 +245,24 @@ namespace TensorIndexes{
             for(int i = 0; i < sizeDimension; i++){
                 UnknownRankedTensor<T> prodThis = supp.fix(spacePositionThis, i);
                 UnknownRankedTensor<T> prodInput = tensorWithIndexes.getTensor().fix(spacePositionInput, i);
+
+                if(i == 0){
+                    totalDataThis.resize(prodThis.get_n_total_elements(), vector<T>(sizeDimension));
+                    totalDataInput.resize(prodInput.get_n_total_elements(), vector<T>(sizeDimension));
+                }
+
                 shared_ptr<vector<T>> dataThis = prodThis.getData();
                 shared_ptr<vector<T>> dataInput = prodInput.getData();
 
                 for(int j = 0; j < prodThis.get_n_total_elements(); j++){
                     T elem = dataThis->at(j);
                     totalDataThis[j].push_back(elem);
-                }        
+                }
+
+                for(int j = 0; j < prodInput.get_n_total_elements(); j++){
+                    T elem = dataInput->at(j);
+                    totalDataInput[j].push_back(elem);
+                }
                 
             }
 
