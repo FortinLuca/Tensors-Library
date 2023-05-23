@@ -243,8 +243,8 @@ namespace TensorIndexes{
             vector<vector<T>> totalDataInput;
 
             for(int i = 0; i < sizeDimension; i++){
-                UnknownRankedTensor<T> prodThis = supp.fix(spacePositionThis, i);
-                UnknownRankedTensor<T> prodInput = tensorWithIndexes.getTensor().fix(spacePositionInput, i);
+                UnknownRankedTensor<T> prodThis = supp.fix_copy(spacePositionThis, i);
+                UnknownRankedTensor<T> prodInput = tensorWithIndexes.getTensor().fix_copy(spacePositionInput, i);
 
                 if(i == 0){
                     totalDataThis.resize(prodThis.get_n_total_elements(), vector<T>(sizeDimension));
@@ -256,12 +256,12 @@ namespace TensorIndexes{
 
                 for(int j = 0; j < prodThis.get_n_total_elements(); j++){
                     T elem = dataThis->at(j);
-                    totalDataThis[j].push_back(elem);
+                    totalDataThis[j][i]=elem;
                 }
 
                 for(int j = 0; j < prodInput.get_n_total_elements(); j++){
                     T elem = dataInput->at(j);
-                    totalDataInput[j].push_back(elem);
+                    totalDataInput[j][i]=elem;
                 }
                 
             }

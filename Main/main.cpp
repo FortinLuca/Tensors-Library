@@ -213,7 +213,7 @@ int main() {
     test3WithIndexes.getTensor().printData();
 
 
-    TensorWithIndexes<int> mtest = test1WithIndexes * test2WithIndexes;
+    TensorWithIndexes<int> mtest = test2WithIndexes * test1WithIndexes;
 
 
 

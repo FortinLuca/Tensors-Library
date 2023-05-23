@@ -218,14 +218,20 @@ namespace Tensor_Library{
         int i = 0;
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
         auto it = getIterator();
+        bool checkIndex;
         while( it.hasNext() ) {
+            if (it.indexes[space] == spaceIndex) 
+                checkIndex = true;
+            else 
+                checkIndex = false;
+
             T elem = it.next();
-            if(it.indexes[space] == spaceIndex) {
+            if(checkIndex) {
                 newData->at(i) = elem;
                 i++;
             }
         }
-
+        
         newTensor.setData(newData);
 
         return newTensor;
