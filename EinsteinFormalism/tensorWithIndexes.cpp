@@ -265,6 +265,17 @@ namespace TensorIndexes{
                 }
                 
             }
+            vector<T> prodVector;
+            int ris;
+            for (int i=0; i<(int)totalDataThis.size(); i++) {
+                for (int j=0; j<(int)totalDataInput.size(); j++) {
+                    ris = 0;
+                    for (int k=0; k<sizeDimension; k++) {
+                        ris += totalDataThis[i][k] * totalDataInput[j][k];
+                    }
+                    prodVector.push_back(ris);
+                }
+            }
 
             cout << "--------------------------------------------" << endl;
         }
