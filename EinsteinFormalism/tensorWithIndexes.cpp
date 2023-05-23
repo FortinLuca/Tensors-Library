@@ -227,7 +227,35 @@ namespace TensorIndexes{
                 differentIndexes.push_back(tensorWithIndexes.getSpaces()[i]);
         }
 
-        for (int i=0; i<(int)mapCommonIndexes.size(); i++) {
+        cout << "--------------------------------------------" << endl;
+        UnknownRankedTensor<T> supp = UnknownRankedTensor<T>(this->getTensor());
+        for (map<int, int>::iterator it = mapCommonIndexes.begin(); it != mapCommonIndexes.end(); it++) {
+            int space = it -> first;
+            int sizeDimension = it->second;
+
+            std::vector<int>::iterator itr = find(spacesOfThis_int.begin(), spacesOfThis_int.end(), space);
+            int spacePositionThis = distance(spacesOfThis_int.begin(), itr);
+
+            itr = find(spacesOfInput_int.begin(), spacesOfInput_int.end(), space);
+            int spacePositionInput = distance(spacesOfInput_int.begin(), itr);
+
+            vector<vector<T>> totalDataThis;
+            vector<vector<T>> totalDataInput;
+
+            for(int i = 0; i < sizeDimension; i++){
+                UnknownRankedTensor<T> prodThis = supp.fix(spacePositionThis, i);
+                UnknownRankedTensor<T> prodInput = tensorWithIndexes.getTensor().fix(spacePositionInput, i);
+                shared_ptr<vector<T>> dataThis = prodThis.getData();
+                shared_ptr<vector<T>> dataInput = prodInput.getData();
+
+                for(int j = 0; j < prodThis.get_n_total_elements(); j++){
+                    T elem = dataThis->at(j);
+                    totalDataThis[j].push_back(elem);
+                }        
+                
+            }
+
+            cout << "--------------------------------------------" << endl;
         }
 
 
@@ -235,7 +263,7 @@ namespace TensorIndexes{
         MultiplierTensor<T> multiplierTensor(mapOfEqualSpaces);
         UnknownRankedTensor<T> resultTensor(vectorResultTensorSizeDimensions);
         shared_ptr<vector<T>> multipliedData = make_shared<vector<T>>(dimensionMultiplierTrace);
-        for ( int i=0; i<dimensionMultiplierTrace; i++ ) {
+        for (int i=0; i<dimensionMultiplierTrace; i++) {
             multipliedData->at(i) = 14; //TODO
             i++;
         }
