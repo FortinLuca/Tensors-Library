@@ -12,9 +12,7 @@ namespace TensorIndexes{
 
         private:
             vector<Index> spaces;                   // vector which contains the Index objects which will be used for the product operation
-            UnknownRankedTensor<T> *tensor;         // pointer to a UnknownRankedTensor object which compose the TensorWithIndexes object (subsumption in case of RankedTensor object)
-            MultiplierTensor<T> multiplierTensor;   // MultiplierTensor that arranges the moltiplication beetwen teo or more tensors
-            
+            UnknownRankedTensor<T> *tensor;         // pointer to a UnknownRankedTensor object which compose the TensorWithIndexes object (subsumption in case of RankedTensor object)          
             friend class Indexes;                   // it can access the private or protected fields of the Index objects too
             friend class UnknownRankedTensor<T>;    // it can access the private or protected fields of the UnknownRankedTensor objects too
 
@@ -54,28 +52,6 @@ namespace TensorIndexes{
              * @return vector<Index> field contained in this class
              */
             vector<Index> getSpaces();
-
-            void setMultiplierTensor(MultiplierTensor<T> multiplierTensorInput);
-
-
-
-            /**
-             * @brief 
-             * 
-             * @param tensorWithIndexes 
-             * @return TensorWithIndexes<T> 
-             */
-            TensorWithIndexes<T> operator +(TensorWithIndexes<T> tensorWithIndexes);
-            
-            
-            /**
-             * @brief * operator: it enables the scalar product among more tensor "with indexes" in order to rappresent this operation as Einstein formalism  
-             * 
-             * @param TensorWithIndexes<T> to multiply to the subject TensorWithIndexes<T> 
-             * 
-             * @return TensorWithIndexes<T> with rank equal to the number of dimensional space (or spaces) not repeated in the moltiplication between the two tensors
-             */
-            TensorWithIndexes<T> operator *(TensorWithIndexes<T> tensorWithIndexes);
 
     };
 

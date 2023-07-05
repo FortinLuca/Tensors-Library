@@ -1,18 +1,6 @@
-#include "../EinsteinFormalism/multiplierTensor.cpp"
+#include "../EinsteinFormalism/operators.cpp"
 
 // Execution line: g++ -std=c++17 -g -Wall -o3 main.cpp -o  main
-
-
-/*
-Temporanea, solo per ripasso funzionamento puntatori/referenze
-    int v[] = {1, 2, 3, 4, 5};
-    int * elem = &v[0];
-
-    for(int i=0; i<5; i++){
-        cout<<elem[i]<<endl;
-    }
-    cout<<&v[0]<<endl;
-*/
 
 
 int main() {
@@ -164,28 +152,31 @@ int main() {
     // nrt1.printData();
     // nrt5.printData();
 
+    using namespace operators;
 
-    // // Adding operation
-    // UnknownRankedTensor<int> test1(4, 4, 4);
-    // test1.insertRandomData();
-    // test1.printData();
+    /*
+    // Adding operation
+    UnknownRankedTensor<int> test1(4, 4, 4);
+    test1.insertRandomData();
+    test1.printData();
 
-    // UnknownRankedTensor<int> test2(4, 4, 4);
-    // test2.insertRandomData();
-    // test2.printData();
+    UnknownRankedTensor<int> test2(4, 4, 4);
+    test2.insertRandomData();
+    test2.printData();
 
-    // Index i(0);
-    // Index j(1);
-    // Index k(2);
+    Index i(0);
+    Index j(1);
+    Index k(2);
 
-    // TensorWithIndexes<int> test1WithIndexes = test1({i, j, k});
+    TensorWithIndexes<int> test1WithIndexes = test1({i, j, k});
 
-    // TensorWithIndexes<int> test2WithIndexes = test2({i, j, k});
+    TensorWithIndexes<int> test2WithIndexes = test2({i, j, k});
 
-    // TensorWithIndexes<int> sum1 = test1WithIndexes + test2WithIndexes;
-    // sum1.getTensor().printData();
-
+    TensorWithIndexes<int> sum1 = test1WithIndexes + test2WithIndexes;
+    sum1.getTensor().printData();
+    */
     
+
     // Product operation
     UnknownRankedTensor<int> test1(4, 3, 4, 4);
     test1.insertRandomData();
@@ -213,9 +204,8 @@ int main() {
     test3WithIndexes.getTensor().printData();
 
 
-    TensorWithIndexes<int> mtest = test2WithIndexes * test1WithIndexes;
-
-
+    MultiplierTensor<int> mtest = test2WithIndexes * test1WithIndexes;
+    
 
     return 0;
 }

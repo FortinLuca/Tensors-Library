@@ -29,7 +29,7 @@ namespace TensorIndexes{
         for (int i=0; i<tensor->getRank(); i++) 
             spaces.push_back(inputSpaces[i]); 
 
-        multiplierTensor = MultiplierTensor<T>();
+        //multiplierTensor = MultiplierTensor<T>();
     }
 
 
@@ -50,65 +50,8 @@ namespace TensorIndexes{
         return spaces;
     }
 
-    template <typename T>
-    void TensorWithIndexes<T>::setMultiplierTensor(MultiplierTensor<T> multiplierTensorInput){
-        multiplierTensor = multiplierTensorInput;
-    }
 
-
-    template <typename T>
-    TensorWithIndexes<T> TensorWithIndexes<T>::operator +(TensorWithIndexes<T> tensorWithIndexes) {
-
-        // We retrieve the spaces (indexes) and relative size of "this" (first tensor before the operator *) and the parameter of input "tensorWithIndexes" (second tensor after the operator *)
-        // from now on the first tensor is related to the key word "this" and the second tensor is related to the key word "input"
-        vector<Index> spacesOfThis = this->getSpaces();
-        vector<Index> spacesOfInput = tensorWithIndexes.getSpaces();
-        int sizeOfThis = spacesOfThis.size();
-        int sizeOfInput = spacesOfInput.size();
-
-        // Checking the ranks of the tensors to sum
-        if(sizeOfThis != sizeOfInput) throw invalid_argument("The tensors for algebraic sums must be with the same rank");
-
-        vector<int> sizeDimensionsOfThis = this->getTensor().getSizeDimensions();
-        vector<int> sizeDimensionsOfInput = tensorWithIndexes.getTensor().getSizeDimensions();
-
-        // Checking the order of the indexes and their dimensionality
-        for(int i = 0; i < sizeOfThis; i++){
-            if(spacesOfThis[i].getSpace() != spacesOfInput[i].getSpace()) 
-                throw invalid_argument("The tensors must have the same spaces in the same order for the application of the algebraic sum");
-            
-            if(sizeDimensionsOfThis[i] != sizeDimensionsOfInput[i])
-                throw invalid_argument("The tensors must have the same sizeDimensions value in the same order fot the application of the algebraic sum");
-
-        }
-
-        // Creating a new data vector and a new tensor
-        int n_total_elements = this->getTensor().get_n_total_elements();
-        shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
-
-        // Creating the two iterators
-        TensorIterator<T> itOfThis = this->getTensor().getIterator();
-        TensorIterator<T> itOfInput = tensorWithIndexes.getTensor().getIterator();
-        int index = 0;
-
-        // Since there are the same dimensions, the iterators iterates in the same number of steps
-        while(itOfThis.hasNext() && itOfInput.hasNext()){         
-            T elem1 = itOfThis.next();
-            T elem2 = itOfInput.next();
-            newData->at(index) = elem1 + elem2;
-            index++;
-        }
-
-        // Inserting the new pointer of data and returning the current tensor
-        this->getTensor().setData(newData);
-        
-        // Returning the final result
-        return *this;    
-        
-    }
-
-
-
+    /*
     template <typename T>
     TensorWithIndexes<T> TensorWithIndexes<T>::operator *(TensorWithIndexes<T> tensorWithIndexes) { 
         // we retrieve the spaces (indexes) and relative size of "this" (first tensor before the operator *) and the parameter of input "tensorWithIndexes" (second tensor after the operator *)
@@ -280,5 +223,6 @@ namespace TensorIndexes{
         return NULL;
 
     }
+    */
 
 }
