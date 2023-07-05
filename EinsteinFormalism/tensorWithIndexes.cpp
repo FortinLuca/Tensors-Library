@@ -198,23 +198,30 @@ namespace TensorIndexes{
         }
 
         map<int, int> mapCommonIndexes;
+        vector<int> vectorCommonIndexes; 
         for (int i=0; i<sizeOfThis; i++) {
             if (tensorWithIndexes.multiplierTensor.mapOfSpacesAndDimensions.count(spacesOfThis_int[i]) > 0) {
                 mapCommonIndexes[spacesOfThis_int[i]] = tensorSizeDimensionsOfThis[i];
+                vectorCommonIndexes.push_back(spacesOfThis_int[i]);
             }
         }
         for (int i=0; i<sizeOfInput; i++) {
             if (this->multiplierTensor.mapOfSpacesAndDimensions.count(spacesOfInput_int[i]) > 0) {
                 mapCommonIndexes[spacesOfInput_int[i]] = tensorSizeDimensionsOfInput[i];
+                vectorCommonIndexes.push_back(spacesOfInput_int[i]);
             }
         }
 
         map<int,int> mapOfEqualSpaces;
+        vector<int> vectorOfEqualSpaces;
         for (int i = 0; i < (int)equalSpaces.size(); i++) {
             mapOfEqualSpaces[equalSpaces[i]] = equalSizeDimensions[i];
+            vectorOfEqualSpaces.push_back(equalSpaces[i]);
         }
 
         mapCommonIndexes.insert(mapOfEqualSpaces.begin(), mapOfEqualSpaces.end());
+        vectorCommonIndexes.insert(vectorCommonIndexes.end(), vectorOfEqualSpaces.begin(), vectorOfEqualSpaces.end());
+        
 
         vector<Index> differentIndexes;
         for(int i=0; i<sizeOfThis; i++){
@@ -227,112 +234,51 @@ namespace TensorIndexes{
                 differentIndexes.push_back(tensorWithIndexes.getSpaces()[i]);
         }
 
-        cout << "--------------------------------------------" << endl;
-        UnknownRankedTensor<T> supp = UnknownRankedTensor<T>(this->getTensor());
-        for (map<int, int>::iterator it = mapCommonIndexes.begin(); it != mapCommonIndexes.end(); it++) {
-            int space = it -> first;
-            int sizeDimension = it->second;
+        // cout << "--------------------------------------------" << endl;
+        // UnknownRankedTensor<T> supp = UnknownRankedTensor<T>(this->getTensor());
+        // for (map<int, int>::iterator it = mapCommonIndexes.begin(); it != mapCommonIndexes.end(); it++) {
+        //     int indexOfCycle = 0;
+        //     int space = it -> first;
+        //     int sizeDimension = it->second;
 
-            std::vector<int>::iterator itr = find(spacesOfThis_int.begin(), spacesOfThis_int.end(), space);
-            int spacePositionThis = distance(spacesOfThis_int.begin(), itr);
+        //     std::vector<int>::iterator itr = find(spacesOfThis_int.begin(), spacesOfThis_int.end(), space);
+        //     int spacePositionThis = distance(spacesOfThis_int.begin(), itr);
 
-            itr = find(spacesOfInput_int.begin(), spacesOfInput_int.end(), space);
-            int spacePositionInput = distance(spacesOfInput_int.begin(), itr);
+        //     itr = find(spacesOfInput_int.begin(), spacesOfInput_int.end(), space);
+        //     int spacePositionInput = distance(spacesOfInput_int.begin(), itr);
 
-            vector<vector<T>> totalDataThis;
-            vector<vector<T>> totalDataInput;
+        //     vector<vector<T>> totalDataThis;
+        //     vector<vector<T>> totalDataInput;
 
-            for(int i = 0; i < sizeDimension; i++){
-                UnknownRankedTensor<T> prodThis = supp.fix_copy(spacePositionThis, i);
-                UnknownRankedTensor<T> prodInput = tensorWithIndexes.getTensor().fix_copy(spacePositionInput, i);
+        //     for(int i = 0; i < sizeDimension; i++){
+        //         UnknownRankedTensor<T> prodThis = supp.fix_copy(spacePositionThis, i);
+        //         UnknownRankedTensor<T> prodInput = tensorWithIndexes.getTensor().fix_copy(spacePositionInput, i);
 
-                if(i == 0){
-                    totalDataThis.resize(prodThis.get_n_total_elements(), vector<T>(sizeDimension));
-                    totalDataInput.resize(prodInput.get_n_total_elements(), vector<T>(sizeDimension));
-                }
+        //         if(i == 0){
+        //             totalDataThis.resize(prodThis.get_n_total_elements(), vector<T>(sizeDimension));
+        //             totalDataInput.resize(prodInput.get_n_total_elements(), vector<T>(sizeDimension));
+        //         }
 
-                shared_ptr<vector<T>> dataThis = prodThis.getData();
-                shared_ptr<vector<T>> dataInput = prodInput.getData();
+        //         shared_ptr<vector<T>> dataThis = prodThis.getData();
+        //         shared_ptr<vector<T>> dataInput = prodInput.getData();
 
-                for(int j = 0; j < prodThis.get_n_total_elements(); j++){
-                    T elem = dataThis->at(j);
-                    totalDataThis[j][i]=elem;
-                }
+        //         for(int j = 0; j < prodThis.get_n_total_elements(); j++){
+        //             T elem = dataThis->at(j);
+        //             totalDataThis[j][i]=elem;
+        //         }
 
-                for(int j = 0; j < prodInput.get_n_total_elements(); j++){
-                    T elem = dataInput->at(j);
-                    totalDataInput[j][i]=elem;
-                }
+        //         for(int j = 0; j < prodInput.get_n_total_elements(); j++){
+        //             T elem = dataInput->at(j);
+        //             totalDataInput[j][i]=elem;
+        //         }
                 
-            }
-            vector<T> prodVector;
-            int ris;
-            for (int i=0; i<(int)totalDataThis.size(); i++) {
-                for (int j=0; j<(int)totalDataInput.size(); j++) {
-                    ris = 0;
-                    for (int k=0; k<sizeDimension; k++) {
-                        ris += totalDataThis[i][k] * totalDataInput[j][k];
-                    }
-                    prodVector.push_back(ris);
-                }
-            }
+        //     }
+        //     vector<T> prodVector;
+        //     int ris;
+        // }
 
-            cout << "--------------------------------------------" << endl;
-        }
-
-
-        //TensorWithIndexes<T> result;
-        MultiplierTensor<T> multiplierTensor(mapOfEqualSpaces);
-        UnknownRankedTensor<T> resultTensor(vectorResultTensorSizeDimensions);
-        shared_ptr<vector<T>> multipliedData = make_shared<vector<T>>(dimensionMultiplierTrace);
-        for (int i=0; i<dimensionMultiplierTrace; i++) {
-            multipliedData->at(i) = 14; //TODO
-            i++;
-        }
-        resultTensor.setData(multipliedData);
-         
-        TensorWithIndexes<T> result = resultTensor(differentIndexes);
-        result.setMultiplierTensor(multiplierTensor);
-        return result;
+        return NULL;
 
     }
 
 }
-
-
-
-/*   codice che può tornare utile per sapere quali indici ho in comune tra i 2 tensori
-
-        // according to the dimensional spaces' size, we decide to use the one with the bigger size as parameter of the find() function
-        // in this way we iterate along all the bigger vector to find the same space from the lower vector without losing possible dimensional spaces (indexes)
-        if (spacesOfThis.size() >= spacesOfInput.size()) {
-            vector<int>::iterator it;
-            for(int i = 0; i<sizeOfInput; i++) {
-                // inside this "if" block, through find() function, we search (and then check) if the dimensional spaces (indexes) of the first tensor 
-                // are included in the ones of the second tensor, or viceversa
-                int spaceToFind = spacesOfInput[i].getSpace();
-                it = find(spacesOfThis_int.begin(), spacesOfThis_int.end(), spaceToFind);
-                if (it == spacesOfThis_int.end()) throw invalid_argument("No match between the two tensors'spaces. It's mandatory that the second tensor (with lower rank) has the same identical spaces (i,j,k,etc..) of the first one (with greater rank)");
-                
-                // through the two support maps, we check the two sizeDimensions's equality of the same dimensional space  
-                int dimensionSizeOfThis = mapTensorSizeDimensionsOfThis.at(spaceToFind);
-                int dimensionSizeOfInput = mapTensorSizeDimensionsOfInput.at(spaceToFind);
-                if (dimensionSizeOfInput != dimensionSizeOfThis) throw invalid_argument("The dimensional space's size of the first tensor must be equal to that of the same dimensional space of the second tensor");
-            }
-        } else {
-            vector<int>::iterator it;
-            for(int i = 0; i<sizeOfThis; i++) {
-                // inside this "if" block, through find() function, we search (and then check) if the dimensional spaces (indexes) of the second tensor 
-                // are included in the ones of the first tensor, or viceversa
-                int spaceToFind = spacesOfThis[i].getSpace();
-                it = find(spacesOfInput_int.begin(), spacesOfInput_int.end(), spaceToFind);
-                if (it == spacesOfInput_int.end()) throw invalid_argument("No match between the two tensors'spaces. It's mandatory that the first tensor (with lower rank) has the same identical spaces (i,j,k,etc..) of the second one (with greater rank)");
-
-                // through the two support maps, we check the two sizeDimensions's equality of the same dimensional space  
-                int dimensionSizeOfThis = mapTensorSizeDimensionsOfThis[spaceToFind];
-                int dimensionSizeOfInput = mapTensorSizeDimensionsOfInput[spaceToFind];
-                if (dimensionSizeOfInput != dimensionSizeOfThis) throw invalid_argument("The dimensional space's size of the second tensor must be equal to that of the same dimensional space of the first tensor");
-            }
-        }
-
-*/
