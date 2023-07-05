@@ -64,10 +64,10 @@ namespace operators{
         int size2 = spaces2.size();
 
         // we retrieve the vectors containing the sizeDimensions of this tensor and input tensor and the relative sizes of the both vectors
-        vector<int> tensorSizeDimensions1 = tensorWithIndexes2.getTensor().getSizeDimensions();
-        vector<int> tensorSizeDimensions2 = tensorWithIndexes1.getTensor().getSizeDimensions();
-        int sizeTensorSizeDimensions1 = tensorSizeDimensions2.size();
-        int sizeTensorSizeDimensions2 = tensorSizeDimensions1.size();
+        vector<int> tensorSizeDimensions1 = tensorWithIndexes1.getTensor().getSizeDimensions();
+        vector<int> tensorSizeDimensions2 = tensorWithIndexes2.getTensor().getSizeDimensions();
+        int sizeTensorSizeDimensions1 = tensorSizeDimensions1.size();
+        int sizeTensorSizeDimensions2 = tensorSizeDimensions2.size();
 
         // creation of support vectors of integer "spaces1_int" and "spaces2_int" where the elements are the mapped values of the respective vectors of Index "spaces1" and "spaces2"
         // in this way we exploit the vector iterator function find() to make all more readble
@@ -144,9 +144,18 @@ namespace operators{
             }
         }
 
+        map<int,int> mapOfSpacesAndDimensions;
+        for (int i=0; i<differentSpaces.size(); i++) {
+            mapOfSpacesAndDimensions[differentSpaces[i]] = vectorResultTensorSizeDimensions[i];
+        }
 
+        MultiplierTensor<T> temp = MultiplierTensor<T>(mapOfSpacesAndDimensions);
+        return temp;
+    }
+
+    template <typename T>
+    MultiplierTensor<T> operator*(MultiplierTensor<T> multiplierTensor, TensorWithIndexes<T> tensorWithIndexes2){
         MultiplierTensor<T> temp = MultiplierTensor<T>();
-
         return temp;
     }
 }
