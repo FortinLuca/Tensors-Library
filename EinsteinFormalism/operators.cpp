@@ -56,8 +56,8 @@ namespace operators{
 
     template <typename T>
     MultiplierTensor<T> operator*(TensorWithIndexes<T> tensorWithIndexes1, TensorWithIndexes<T> tensorWithIndexes2){
-        // we retrieve the spaces (indexes) and relative size of "this" (first tensor before the operator *) and the parameter of input "tensorWithIndexes" (second tensor after the operator *)
-        // from now on the first tensor is related to the key word "this" and the second tensor is related to the key word "input"
+        // we retrieve the spaces (indexes) and relative size1 (first tensor before the operator *) and the parameter of input "tensorWithIndexes" (second tensor after the operator *)
+        // from now on the first tensor is related to the number 1 and the second tensor is related to the number 2
         vector<Index> spaces1 = tensorWithIndexes1.getSpaces();
         vector<Index> spaces2 = tensorWithIndexes2.getSpaces();
         int size1 = spaces1.size();
@@ -107,7 +107,6 @@ namespace operators{
                 if (dimensionSize2 != dimensionSize1) throw invalid_argument("The dimensional space's size of the first tensor must be equal to that of the same dimensional space of the second tensor");
                 equalSpaces.push_back(spaceKey);
                 equalSizeDimensions.push_back(dimensionSize2);
-
             }
         }
 
@@ -127,8 +126,7 @@ namespace operators{
                     }
                 }
                 isPresentEqualSpace = true;
-            }
-            
+            }   
         }
         
 
@@ -144,14 +142,24 @@ namespace operators{
             }
         }
 
+        // Map that contains indexes of the potential new tensor after the product
         map<int,int> mapOfSpacesAndDimensions;
         for (int i=0; i<differentSpaces.size(); i++) {
             mapOfSpacesAndDimensions[differentSpaces[i]] = vectorResultTensorSizeDimensions[i];
         }
 
-        MultiplierTensor<T> temp = MultiplierTensor<T>(mapOfSpacesAndDimensions);
+        // Map that contains the common index of the two factors of the product
+        map<int, int> mapOfEqualIndexes;
+        for (int i=0; i<equalSpaces.size(); i++) {
+            mapOfEqualIndexes[equalSpaces[i]] = equalSizeDimensions[i];
+        }
+
+
+        MultiplierTensor<T> temp = MultiplierTensor<T>(tensorWithIndexes1, tensorWithIndexes2, mapOfSpacesAndDimensions, mapOfEqualIndexes);
         return temp;
     }
+
+
 
     template <typename T>
     MultiplierTensor<T> operator*(MultiplierTensor<T> multiplierTensor, TensorWithIndexes<T> tensorWithIndexes2){
