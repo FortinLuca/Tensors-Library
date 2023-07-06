@@ -30,11 +30,12 @@ namespace operators{
 
     template <typename T>
     /**
-     * @brief 
+     * @brief * operator: it produces a MultiplierTensor<T> object which will save the useful informations in order to apply the product 
+     * The product will be postponed on the constructor of the class MultiplierTensor because otherwise we loose some common indexes of other factors
      * 
-     * @param multiplierTensor 
-     * @param tensorWithIndexes 
-     * @return MultiplierTensor<T> 
+     * @param multiplierTensor MultiplierTensor<T> object which contains all the factors accumulated until now
+     * @param tensorWithIndexes TensorWithIndexes<T> object on which will be applied the product between itself and the MultiplierTensor
+     * @return MultiplierTensor<T> object with the parameters updated with the tensorWithIndexes parameter which is another factor of the product
      */
     MultiplierTensor<T> operator *(MultiplierTensor<T> multiplierTensor, TensorWithIndexes<T> tensorWithIndexes);
 

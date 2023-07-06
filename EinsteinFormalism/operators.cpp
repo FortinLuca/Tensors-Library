@@ -2,6 +2,7 @@
 
 namespace operators{
 
+    // Sum between tensors
     template <typename T>
     TensorWithIndexes<T> operator +(TensorWithIndexes<T> tensorWithIndexes1, TensorWithIndexes<T> tensorWithIndexes2) {
 
@@ -54,6 +55,8 @@ namespace operators{
 
 
 
+
+    // Product between tensors with Einstein's Formalism
     template <typename T>
     MultiplierTensor<T> operator*(TensorWithIndexes<T> tensorWithIndexes1, TensorWithIndexes<T> tensorWithIndexes2){
         // we retrieve the spaces (indexes) and relative size1 (first tensor before the operator *) and the parameter of input "tensorWithIndexes" (second tensor after the operator *)
@@ -81,6 +84,7 @@ namespace operators{
             spaces2_int[i]=spaces2[i].getSpace();
         }
 
+
         // creation of support maps "mapTensorSizeDimensions1" and "mapTensorSizeDimensions2" with key equal to the dimensional space (index) of the relative tensorWithIndexes and value equal to its sizeDimension (corresponding to that dimensional space) 
         map<int, int> mapTensorSizeDimensions1;
         map<int, int> mapTensorSizeDimensions2;
@@ -92,13 +96,15 @@ namespace operators{
             mapTensorSizeDimensions2[spaces2_int[i]] = tensorSizeDimensions2[i];
         }
 
+
+        // Creation of vectors that contain the equal spaces of the common indexes or the non-common indexes and the dimensions of the common dimensionalities
         vector<int>::iterator it;
         vector<int> equalSpaces;
         vector<int> equalSizeDimensions;
         vector<int> differentSpaces;
 
+        // Through the two support maps, we check the two sizeDimensions's equality of the same dimensional space
         for(int i = 0; i<size2; i++) {
-            // through the two support maps, we check the two sizeDimensions's equality of the same dimensional space
             int spaceKey = spaces2_int[i];
             it = find(spaces1_int.begin(), spaces1_int.end(), spaceKey);
             if (it != spaces1_int.end()) {
@@ -110,6 +116,8 @@ namespace operators{
             }
         }
 
+
+        // Creation of the vector of the spaces of the non-common indexes
         differentSpaces.assign(spaces1_int.begin(), spaces1_int.end());
         differentSpaces.insert(differentSpaces.end(), spaces2_int.begin(), spaces2_int.end());
 
@@ -130,6 +138,7 @@ namespace operators{
         }
         
 
+        // Compute the number of elements of the resulting tensor and the size dimensions of the non-common indexes
         int dimensionMultiplierTrace = 1;
         vector<int> vectorResultTensorSizeDimensions((int)differentSpaces.size());
         for (int i = 0; i < (int)differentSpaces.size(); i++) {
@@ -141,6 +150,7 @@ namespace operators{
                 vectorResultTensorSizeDimensions[i] = mapTensorSizeDimensions2.at(differentSpaces[i]);
             }
         }
+
 
         // Map that contains indexes of the potential new tensor after the product
         map<int,int> mapOfSpacesAndDimensions;
@@ -155,6 +165,7 @@ namespace operators{
         }
 
 
+        // Creation of a new MultiplierTensor object
         MultiplierTensor<T> temp = MultiplierTensor<T>(tensorWithIndexes1, tensorWithIndexes2, mapOfSpacesAndDimensions, mapOfEqualIndexes);
         return temp;
     }
