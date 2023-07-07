@@ -19,10 +19,9 @@ namespace TensorIndexes{
 
 
     template <typename T>
-    MultiplierTensor<T>::MultiplierTensor(MultiplierTensor<T> mt, TensorWithIndexes<T> factor){
+    MultiplierTensor<T>::MultiplierTensor(MultiplierTensor<T> mt){
         
-        // TODO: differenciate and update the operator * between MultiplierTensor and TensorWithIndexes
-        // Saving the two maps parameters
+        // Saving all the parameters
         mapOfSpacesAndDimensions = map<int,int> (mt.mapOfSpacesAndDimensions);
         mapOfEqualIndexes = map<int, int> (mt.mapOfEqualIndexes);
         factors = vector<TensorWithIndexes<T>>(mt.factors);
@@ -52,6 +51,58 @@ namespace TensorIndexes{
     template <typename T>
     map<int, int> MultiplierTensor<T>::getMapOfEqualIndexes(){
         return mapOfEqualIndexes;
+    }
+
+
+
+    // Methods
+    template <typename T>
+    //TensorWithIndexes<T> MultiplierTensor<T>::applyProduct(){
+    void MultiplierTensor<T>::applyProduct(){
+
+        // Obtain all the useful attributes in order to apply the product
+        vector<TensorWithIndexes<T>> factors = getFactors();
+        int n_factors = get_N_factors();
+        map<int, int> commonIndexes = getMapOfEqualIndexes();
+        map<int, int> nonCommonIndexes = getMapOfSpacesAndDimensions();
+
+        // Extract the sizeDimensions of the common and non-common indexes
+        vector<int> sizeDimensions = vector<int> ();
+        for(auto it = mapOfSpacesAndDimensions.cbegin(); it != mapOfSpacesAndDimensions.cend(); ++it){
+            sizeDimensions.push_back(it->second);
+        }
+
+        vector<int> sizeDimensionsCommonIndexes = vector<int> ();
+        for(auto it = mapOfSpacesAndDimensions.cbegin(); it != mapOfSpacesAndDimensions.cend(); ++it){
+            sizeDimensionsCommonIndexes.push_back(it->second);
+        }
+
+        // Create a new tensor in order to compute the resulting tensor
+        UnknownRankedTensor<T> result = UnknownRankedTensor<T>(sizeDimensions);
+        
+        // Insert zeros into the resulting tensor
+        shared_ptr<vector<T>> newData = make_shared<vector<T>>(result.get_n_total_elements());
+        for (int i = 0; i < result.get_n_total_elements(); i++)
+            newData->at(i) = 0;
+        result.setData(newData);
+
+        result.printData();
+
+        // Apply the product considering the common and the non-common indexes and their dimensions 
+        for (int z = 0; z < (int)sizeDimensionsCommonIndexes.size(); z++){
+            for(int i = 0; i < sizeDimensionsCommonIndexes[z]; i++){
+
+            }
+        }
+
+        /*
+        // Multiplying matrix a and b and storing in array mult.
+        for(i = 0; i < r1; ++i)
+            for(j = 0; j < c2; ++j)
+                for(k = 0; k < c1; ++k)
+                    mult[i][j] += a[i][k] * b[k][j];
+        */
+
     }
 
 

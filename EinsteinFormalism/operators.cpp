@@ -173,8 +173,33 @@ namespace operators{
 
 
     template <typename T>
-    MultiplierTensor<T> operator*(MultiplierTensor<T> multiplierTensor, TensorWithIndexes<T> tensorWithIndexes2){
-        MultiplierTensor<T> temp = MultiplierTensor<T>();
-        return temp;
+    MultiplierTensor<T> operator*(MultiplierTensor<T> multiplierTensor, TensorWithIndexes<T> tensorWithIndexes){
+        // Retrieve the spaces (indexes) and relative size (tensor after the operator *)
+        vector<Index> spaces = tensorWithIndexes.getSpaces();
+        int size = spaces.size();
+
+        // Retrieve the vectors containing the sizeDimensions of this tensor and input tensor and the relative sizes of the both vectors
+        vector<int> tensorSizeDimensions = tensorWithIndexes.getTensor().getSizeDimensions();
+        int sizeTensorSizeDimensions = tensorSizeDimensions.size();
+
+        // Creation of support vector of integer "spaces_int" a where the elements are the mapped values of the vector of Index "spaces"
+        // in this way we exploit the vector iterator function find() to make all more readble
+        vector<int> spaces_int = vector<int>(size);
+        for(int i=0; i<size; i++) {
+            spaces_int[i]=spaces1[i].getSpace();
+        }
+
+        // Creation of support map "mapTensorSizeDimensions" with key equal to the dimensional space (index) of the relative tensorWithIndexes and value equal to its sizeDimension (corresponding to that dimensional space) 
+        map<int, int> mapTensorSizeDimensions;
+        for (int i = 0; i<sizeTensorSizeDimensions; i++) {
+            mapTensorSizeDimensions[spaces_int[i]] = tensorSizeDimensions[i];
+        }
+
+        // TODO: Update the common and the non-common indexes and check if the dimensions corresponds, otherwise throw exceptions
+        
+
+        // Return the new MultiplierTensor object
+        MultiplierTensor<T> res = MultiplierTensor<T>(multiplierTensor, tensorWithIndexes);
+        return res;
     }
 }

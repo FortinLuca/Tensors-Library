@@ -22,7 +22,7 @@ namespace TensorIndexes{
             // Constructors
             MultiplierTensor(TensorWithIndexes<T> fact1, TensorWithIndexes<T> fact2, map<int,int> mapOfSpacesAndDimensionsInput, map<int, int> mapOfEqualIndexesInput);
 
-            MultiplierTensor(MultiplierTensor<T> mt, TensorWithIndexes<T> factor);
+            MultiplierTensor(MultiplierTensor<T> mt);
 
 
             // getters and setters
@@ -53,6 +53,11 @@ namespace TensorIndexes{
              * @return map<int, int> object which contains the spaces of the common indexes and their dimensions
              */
             map<int, int> getMapOfEqualIndexes();
+
+
+            // Methods
+            //TensorWithIndexes<T> applyProduct();
+            void applyProduct();
     };
 
 }

@@ -216,6 +216,8 @@ int main() {
         std::cout << it2->first << " " << it2->second << endl;
     cout << endl;
 
+    mtest.applyProduct();
+
 
     return 0;
 }
