@@ -7,7 +7,7 @@ namespace TensorIndexes{
 
         private:
 
-            map<int,int> mapOfSpacesAndDimensions;   // map of the non-common indexes in which the keys are the spaces of the indexes and the values are the dimensions of the spaces
+            map<int,int> mapOfDifferentIndexes;   // map of the non-common indexes in which the keys are the spaces of the indexes and the values are the dimensions of the spaces
             map<int, int> mapOfEqualIndexes;         // map of the common indexes in which the keys are the spaces of the indexes and the values are the dimensions of the spaces
             int n_factors;                           // number of factors of the products
             vector<TensorWithIndexes<T>> factors;    // vector which contains the TensorWithIndexes objects that are the factor of the product
@@ -22,7 +22,7 @@ namespace TensorIndexes{
             // Constructors
             MultiplierTensor(TensorWithIndexes<T> fact1, TensorWithIndexes<T> fact2, map<int,int> mapOfSpacesAndDimensionsInput, map<int, int> mapOfEqualIndexesInput);
 
-            MultiplierTensor(MultiplierTensor<T> mt);
+            MultiplierTensor(MultiplierTensor<T>& mt);
 
 
             // getters and setters
@@ -41,11 +41,11 @@ namespace TensorIndexes{
             int get_N_factors();
 
             /**
-             * @brief getMapOfSpacesAndDimensions method: it extracts the map of the non-common indexes
+             * @brief getMapOfDifferentIndexes method: it extracts the map of the non-common indexes
              * 
              * @return map<int,int> object which contains the spaces of the non-common indexes and their dimensions
              */
-            map<int,int> getMapOfSpacesAndDimensions();
+            map<int,int> getMapOfDifferentIndexes();
 
             /**
              * @brief getMapOfEqualIndexes method: it extracts the map of the common indexes

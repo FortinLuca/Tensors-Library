@@ -154,13 +154,13 @@ namespace operators{
 
         // Map that contains indexes of the potential new tensor after the product
         map<int,int> mapOfSpacesAndDimensions;
-        for (int i=0; i<differentSpaces.size(); i++) {
+        for (int i=0; i<(int)differentSpaces.size(); i++) {
             mapOfSpacesAndDimensions[differentSpaces[i]] = vectorResultTensorSizeDimensions[i];
         }
 
         // Map that contains the common index of the two factors of the product
         map<int, int> mapOfEqualIndexes;
-        for (int i=0; i<equalSpaces.size(); i++) {
+        for (int i=0; i<(int)equalSpaces.size(); i++) {
             mapOfEqualIndexes[equalSpaces[i]] = equalSizeDimensions[i];
         }
 
@@ -186,7 +186,7 @@ namespace operators{
         // in this way we exploit the vector iterator function find() to make all more readble
         vector<int> spaces_int = vector<int>(size);
         for(int i=0; i<size; i++) {
-            spaces_int[i]=spaces1[i].getSpace();
+            spaces_int[i]=spaces[i].getSpace();
         }
 
         // Creation of support map "mapTensorSizeDimensions" with key equal to the dimensional space (index) of the relative tensorWithIndexes and value equal to its sizeDimension (corresponding to that dimensional space) 

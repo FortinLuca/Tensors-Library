@@ -206,7 +206,7 @@ int main() {
 
     MultiplierTensor<int> mtest = test2WithIndexes * test1WithIndexes;
 
-    map<int, int> mapOfSpacesAndDimensions = mtest.getMapOfSpacesAndDimensions();
+    map<int, int> mapOfSpacesAndDimensions = mtest.getMapOfDifferentIndexes();
     for(auto it = mapOfSpacesAndDimensions.cbegin(); it != mapOfSpacesAndDimensions.cend(); ++it)
         std::cout << it->first << " " << it->second << endl;
     cout << endl;

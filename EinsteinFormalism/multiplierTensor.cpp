@@ -4,10 +4,10 @@ namespace TensorIndexes{
 
     // Constructors
     template <typename T>
-    MultiplierTensor<T>::MultiplierTensor(TensorWithIndexes<T> fact1, TensorWithIndexes<T> fact2, map<int,int> mapOfSpacesAndDimensionsInput, map<int, int> mapOfEqualIndexesInput){
+    MultiplierTensor<T>::MultiplierTensor(TensorWithIndexes<T> fact1, TensorWithIndexes<T> fact2, map<int,int> mapOfDifferentIndexesInput, map<int, int> mapOfEqualIndexesInput){
         
         // Saving the two maps parameters
-        mapOfSpacesAndDimensions = map<int,int> (mapOfSpacesAndDimensionsInput);
+        mapOfDifferentIndexes = map<int,int> (mapOfDifferentIndexesInput);
         mapOfEqualIndexes = map<int, int> (mapOfEqualIndexesInput);
 
         // Filling the vector with the two TensorWithIndexes factors
@@ -19,10 +19,10 @@ namespace TensorIndexes{
 
 
     template <typename T>
-    MultiplierTensor<T>::MultiplierTensor(MultiplierTensor<T> mt){
+    MultiplierTensor<T>::MultiplierTensor(MultiplierTensor<T> &mt){
         
         // Saving all the parameters
-        mapOfSpacesAndDimensions = map<int,int> (mt.mapOfSpacesAndDimensions);
+        mapOfDifferentIndexes = map<int,int> (mt.mapOfDifferentIndexes);
         mapOfEqualIndexes = map<int, int> (mt.mapOfEqualIndexes);
         factors = vector<TensorWithIndexes<T>>(mt.factors);
         n_factors = mt.n_factors + 1;
@@ -44,8 +44,8 @@ namespace TensorIndexes{
 
 
     template <typename T>
-    map<int,int> MultiplierTensor<T>::getMapOfSpacesAndDimensions(){
-        return mapOfSpacesAndDimensions;
+    map<int,int> MultiplierTensor<T>::getMapOfDifferentIndexes(){
+        return mapOfDifferentIndexes;
     }
 
     template <typename T>
@@ -62,23 +62,23 @@ namespace TensorIndexes{
 
         // Obtain all the useful attributes in order to apply the product
         vector<TensorWithIndexes<T>> factors = getFactors();
-        int n_factors = get_N_factors();
+        //int n_factors = get_N_factors();
         map<int, int> commonIndexes = getMapOfEqualIndexes();
-        map<int, int> nonCommonIndexes = getMapOfSpacesAndDimensions();
+        map<int, int> nonCommonIndexes = getMapOfDifferentIndexes();
 
         // Extract the sizeDimensions of the common and non-common indexes
-        vector<int> sizeDimensions = vector<int> ();
-        for(auto it = mapOfSpacesAndDimensions.cbegin(); it != mapOfSpacesAndDimensions.cend(); ++it){
-            sizeDimensions.push_back(it->second);
+        vector<int> sizeDimensionsDifferentIndexes = vector<int> ();
+        for(auto it = nonCommonIndexes.cbegin(); it != nonCommonIndexes.cend(); ++it){
+            sizeDimensionsDifferentIndexes.push_back(it->second);
         }
 
         vector<int> sizeDimensionsCommonIndexes = vector<int> ();
-        for(auto it = mapOfSpacesAndDimensions.cbegin(); it != mapOfSpacesAndDimensions.cend(); ++it){
+        for(auto it = commonIndexes.cbegin(); it != commonIndexes.cend(); ++it){
             sizeDimensionsCommonIndexes.push_back(it->second);
         }
 
         // Create a new tensor in order to compute the resulting tensor
-        UnknownRankedTensor<T> result = UnknownRankedTensor<T>(sizeDimensions);
+        UnknownRankedTensor<T> result = UnknownRankedTensor<T>(sizeDimensionsDifferentIndexes);
         
         // Insert zeros into the resulting tensor
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(result.get_n_total_elements());
@@ -86,7 +86,7 @@ namespace TensorIndexes{
             newData->at(i) = 0;
         result.setData(newData);
 
-        result.printData();
+        //result.printData();
 
         // Apply the product considering the common and the non-common indexes and their dimensions 
         for (int z = 0; z < (int)sizeDimensionsCommonIndexes.size(); z++){
