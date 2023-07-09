@@ -195,11 +195,27 @@ namespace operators{
             mapTensorSizeDimensions[spaces_int[i]] = tensorSizeDimensions[i];
         }
 
-        // TODO: Update the common and the non-common indexes and check if the dimensions corresponds, otherwise throw exceptions
-        
+        // Update the common and the non-common indexes from the maps mapOfDifferentIndexes and mapOfEqualIndexes in the MultiplierTensor
+        // TODO: Check if the dimensions corresponds, otherwise throw exceptions
+        map<int, int> mapOfDifferentIndexes = multiplierTensor.getMapOfDifferentIndexes();
+        map<int, int> mapOfEqualIndexes = multiplierTensor.getMapOfEqualIndexes();
+
+        for(auto it = mapTensorSizeDimensions.cbegin(); it != mapTensorSizeDimensions.cend(); ++it){
+            if (mapOfDifferentIndexes.find(it->first) == mapOfDifferentIndexes.end()){
+                if (mapOfEqualIndexes.find(it->first) != mapOfDifferentIndexes.end()){
+                    mapOfDifferentIndexes.insert({it->first, it->second});
+                }
+            } else {
+                mapOfEqualIndexes.insert({it->first, it->second});
+                mapOfDifferentIndexes.erase(it->first);
+            }
+        }
+
+        multiplierTensor.setMapOfDifferentIndexes(mapOfDifferentIndexes);
+        multiplierTensor.setMapOfEqualIndexes(mapOfEqualIndexes);
 
         // Return the new MultiplierTensor object
-        MultiplierTensor<T> res = MultiplierTensor<T>(multiplierTensor, tensorWithIndexes);
+        MultiplierTensor<T> res = MultiplierTensor<T>(multiplierTensor);
         return res;
     }
 }
