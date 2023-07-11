@@ -7,7 +7,7 @@ namespace TensorIndexes{
 
         private:
 
-            map<int,int> mapOfDifferentIndexes;   // map of the non-common indexes in which the keys are the spaces of the indexes and the values are the dimensions of the spaces
+            map<int,int> mapOfDifferentIndexes;      // map of the non-common indexes in which the keys are the spaces of the indexes and the values are the dimensions of the spaces
             map<int, int> mapOfEqualIndexes;         // map of the common indexes in which the keys are the spaces of the indexes and the values are the dimensions of the spaces
             int n_factors;                           // number of factors of the products
             vector<TensorWithIndexes<T>> factors;    // vector which contains the TensorWithIndexes objects that are the factor of the product
@@ -53,6 +53,20 @@ namespace TensorIndexes{
              * @return map<int, int> object which contains the spaces of the common indexes and their dimensions
              */
             map<int, int> getMapOfEqualIndexes();
+
+            /**
+             * @brief getMapOfDifferentIndexes method:: it sets the map of the different indexes with the input one
+             * 
+             * @param mapOfDifferentIndexesInput: input map to be set as mapOfDifferentIndexes attribute
+             */
+            void setMapOfDifferentIndexes(map<int, int> mapOfDifferentIndexesInput);
+
+            /**
+             * @brief getMapOfEqualIndexes method:: it sets the map of the different indexes with the input one
+             * 
+             * @param mapOfEqualIndexesInput: input map to be set as mapOfEqualIndexes attribute
+             */
+            void setMapOfEqualIndexes(map<int, int> mapOfEqualIndexesInput);
 
 
             // Methods

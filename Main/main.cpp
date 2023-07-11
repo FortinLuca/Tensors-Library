@@ -184,7 +184,7 @@ int main() {
     UnknownRankedTensor<int> test2(4, 4, 4);
     test2.insertRandomData();
 
-    UnknownRankedTensor<int> test3(3);
+    UnknownRankedTensor<int> test3(3, 7);
     test3.insertRandomData();
 
     Index i(0);
@@ -192,6 +192,7 @@ int main() {
     Index k(2);
     Index w(3);
     Index z(4);
+    Index f(5);
 
 
     TensorWithIndexes<int> test1WithIndexes = test1({i, j, k, w});
@@ -200,14 +201,14 @@ int main() {
     TensorWithIndexes<int> test2WithIndexes = test2({i, z, k});
     test2WithIndexes.getTensor().printData();
 
-    TensorWithIndexes<int> test3WithIndexes = test3({i});
+    TensorWithIndexes<int> test3WithIndexes = test3({j, f});
     test3WithIndexes.getTensor().printData();
 
 
-    MultiplierTensor<int> mtest = test2WithIndexes * test1WithIndexes;
+    MultiplierTensor<int> mtest = test1WithIndexes * test2WithIndexes * test3WithIndexes;
 
-    map<int, int> mapOfSpacesAndDimensions = mtest.getMapOfDifferentIndexes();
-    for(auto it = mapOfSpacesAndDimensions.cbegin(); it != mapOfSpacesAndDimensions.cend(); ++it)
+    map<int, int> mapOfDifferentIndexes = mtest.getMapOfDifferentIndexes();
+    for(auto it = mapOfDifferentIndexes.cbegin(); it != mapOfDifferentIndexes.cend(); ++it)
         std::cout << it->first << " " << it->second << endl;
     cout << endl;
     

@@ -48,9 +48,22 @@ namespace TensorIndexes{
         return mapOfDifferentIndexes;
     }
 
+
     template <typename T>
     map<int, int> MultiplierTensor<T>::getMapOfEqualIndexes(){
         return mapOfEqualIndexes;
+    }
+
+
+    template <typename T>
+    void MultiplierTensor<T>::setMapOfDifferentIndexes(map<int, int> mapOfDifferentIndexesInput){
+        this->mapOfDifferentIndexes = map<int,int> (mapOfDifferentIndexesInput);
+    }
+
+
+    template <typename T>
+    void MultiplierTensor<T>::setMapOfEqualIndexes(map<int, int> mapOfEqualIndexesInput){
+        this->mapOfEqualIndexes = map<int, int> (mapOfEqualIndexesInput);
     }
 
 
