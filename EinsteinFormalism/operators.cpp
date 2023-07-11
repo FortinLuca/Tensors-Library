@@ -227,7 +227,7 @@ namespace operators{
         vector<TensorWithIndexes<T>> factors = multiplierTensor.getFactors();
         factors.push_back(tensorWithIndexes);
         multiplierTensor.setFactors(factors);
-    
+
 
         // Return the new MultiplierTensor object
         MultiplierTensor<T> res = MultiplierTensor<T>(multiplierTensor);

@@ -75,6 +75,25 @@ namespace TensorIndexes{
 
     // Methods
     template <typename T>
+    void MultiplierTensor<T>::looper(map<int, int> indexes, size_t index, UnknownRankedTensor<T> resultInput, T prod) {
+        if (index >= indexes.size()) 
+            return;
+        for (int i = 0; i < indexes[index]; ++i) {
+            looper(indexes, index + 1, resultInput, prod);
+            if (index == indexes.size() - 1) {
+                // Product
+                for(int j = 0; j < (int) factors.size(); j++){
+                    //prod *= factors[j].getTensor()[];
+                }
+
+                // Sum of the product
+                //resultInput[i, i, i] += prod;
+            }
+        }
+    }
+
+
+    template <typename T>
     //TensorWithIndexes<T> MultiplierTensor<T>::applyProduct(){
     void MultiplierTensor<T>::applyProduct(){
 
@@ -104,14 +123,13 @@ namespace TensorIndexes{
             newData->at(i) = 0;
         result.setData(newData);
 
-        //result.printData();
 
-        // Apply the product considering the common and the non-common indexes and their dimensions 
-        for (int z = 0; z < (int)sizeDimensionsCommonIndexes.size(); z++){
-            for(int i = 0; i < sizeDimensionsCommonIndexes[z]; i++){
+        // Apply the product considering the common and the non-common indexes and their dimensions
 
-            }
-        }
+        
+
+        // Recurive application of the product between all the factors
+        looper(nonCommonIndexes, 0, result, 1);
 
         /*
         // Multiplying matrix a and b and storing in array mult.

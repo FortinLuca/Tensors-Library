@@ -16,6 +16,12 @@ namespace TensorIndexes{
             friend class Indexes;                    
             friend class TensorWithIndexes<T>;
 
+            /**
+             * @brief 
+             * 
+             */
+            void looper(map<int, int>, size_t, UnknownRankedTensor<T> result, T prod);
+
         
         public:
 
