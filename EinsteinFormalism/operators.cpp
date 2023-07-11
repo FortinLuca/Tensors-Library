@@ -199,13 +199,21 @@ namespace operators{
         // TODO: Check if the dimensions corresponds, otherwise throw exceptions
         map<int, int> mapOfDifferentIndexes = multiplierTensor.getMapOfDifferentIndexes();
         map<int, int> mapOfEqualIndexes = multiplierTensor.getMapOfEqualIndexes();
+        
 
         for(auto it = mapTensorSizeDimensions.cbegin(); it != mapTensorSizeDimensions.cend(); ++it){
             if (mapOfDifferentIndexes.find(it->first) == mapOfDifferentIndexes.end()){
                 if (mapOfEqualIndexes.find(it->first) == mapOfEqualIndexes.end()){
                     mapOfDifferentIndexes.insert({it->first, it->second});
+                } else {
+                    if (mapOfEqualIndexes.at(it->first) != it->second) {
+                         throw invalid_argument("The dimensional space's size of the tensor must be equal to that of the same dimensional space of the multiplier tensor");
+                    }
                 }
             } else {
+                if (mapOfDifferentIndexes.at(it->first) != it->second) {
+                    throw invalid_argument("The dimensional space's size of the tensor must be equal to that of the same dimensional space of the multiplier tensor");
+                }
                 mapOfEqualIndexes.insert({it->first, it->second});
                 mapOfDifferentIndexes.erase(it->first);
             }
