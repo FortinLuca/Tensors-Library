@@ -20,7 +20,7 @@ namespace TensorIndexes{
              * @brief 
              * 
              */
-            void looper(map<int, int>, size_t, UnknownRankedTensor<T> result, T prod);
+            void looper(map<int, int> indexes, map<int,int>::const_iterator index, map<int,int>::const_iterator end, map<int,int>::const_iterator secondEnd, UnknownRankedTensor<T> result, T prod);
 
         
         public:
