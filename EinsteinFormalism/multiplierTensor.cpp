@@ -67,6 +67,11 @@ namespace TensorIndexes{
     }
 
 
+    template <typename T>
+    void MultiplierTensor<T>::setFactors(vector<TensorWithIndexes<T>> factorsInput){
+        this->factors = vector<TensorWithIndexes<T>>(factorsInput);
+    }
+
 
     // Methods
     template <typename T>

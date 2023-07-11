@@ -55,18 +55,25 @@ namespace TensorIndexes{
             map<int, int> getMapOfEqualIndexes();
 
             /**
-             * @brief getMapOfDifferentIndexes method:: it sets the map of the different indexes with the input one
+             * @brief setMapOfDifferentIndexes method: it sets the map of the different indexes with the input one
              * 
              * @param mapOfDifferentIndexesInput: input map to be set as mapOfDifferentIndexes attribute
              */
             void setMapOfDifferentIndexes(map<int, int> mapOfDifferentIndexesInput);
 
             /**
-             * @brief getMapOfEqualIndexes method:: it sets the map of the different indexes with the input one
+             * @brief setMapOfEqualIndexes method: it sets the map of the different indexes with the input one
              * 
              * @param mapOfEqualIndexesInput: input map to be set as mapOfEqualIndexes attribute
              */
             void setMapOfEqualIndexes(map<int, int> mapOfEqualIndexesInput);
+
+            /**
+             * @brief setFactors method: it sets the vector containing the factors of the products
+             * 
+             * @param tensors: a vector of tensorWithIndexes objects that contains the updated factors
+             */
+            void setFactors(vector<TensorWithIndexes<T>> tensors);
 
 
             // Methods

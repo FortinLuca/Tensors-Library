@@ -214,6 +214,13 @@ namespace operators{
         multiplierTensor.setMapOfDifferentIndexes(mapOfDifferentIndexes);
         multiplierTensor.setMapOfEqualIndexes(mapOfEqualIndexes);
 
+
+        // Update the factors by adding the new tensorWithIndexes
+        vector<TensorWithIndexes<T>> factors = multiplierTensor.getFactors();
+        factors.push_back(tensorWithIndexes);
+        multiplierTensor.setFactors(factors);
+    
+
         // Return the new MultiplierTensor object
         MultiplierTensor<T> res = MultiplierTensor<T>(multiplierTensor);
         return res;
