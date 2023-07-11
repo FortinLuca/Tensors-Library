@@ -196,7 +196,7 @@ namespace operators{
         }
 
         // Update the common and the non-common indexes from the maps mapOfDifferentIndexes and mapOfEqualIndexes in the MultiplierTensor
-        // TODO: Check if the dimensions corresponds, otherwise throw exceptions
+        // and we check the two sizeDimensions's equality of the same dimensional space
         map<int, int> mapOfDifferentIndexes = multiplierTensor.getMapOfDifferentIndexes();
         map<int, int> mapOfEqualIndexes = multiplierTensor.getMapOfEqualIndexes();
         
