@@ -202,7 +202,7 @@ namespace operators{
 
         for(auto it = mapTensorSizeDimensions.cbegin(); it != mapTensorSizeDimensions.cend(); ++it){
             if (mapOfDifferentIndexes.find(it->first) == mapOfDifferentIndexes.end()){
-                if (mapOfEqualIndexes.find(it->first) != mapOfDifferentIndexes.end()){
+                if (mapOfEqualIndexes.find(it->first) == mapOfEqualIndexes.end()){
                     mapOfDifferentIndexes.insert({it->first, it->second});
                 }
             } else {
