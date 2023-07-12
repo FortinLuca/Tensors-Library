@@ -27,7 +27,7 @@ namespace TensorIndexes{
              * 
              * @param resultInput 
              */
-            void prod(UnknownRankedTensor<T> resultInput);
+            T prod(vector<vector<int>> vectorFactorsIndexes);
 
         
         public:

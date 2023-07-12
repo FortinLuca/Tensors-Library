@@ -77,14 +77,14 @@ namespace TensorIndexes{
     template <typename T>
     void MultiplierTensor<T>::looper(map<int, int> totalIndexes, map<int,int>::const_iterator index,  map<int,int>::const_iterator end, map<int,int>::const_iterator secondEnd, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, size_t counter, size_t sizeUncommonIndexes) {
         if (index == end){
-            // Product
-            //resultInput(resultIndexes) += prod(vectorFactorsIndexes, factors);
+            //resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
             return;
         }
+
         for (int i = 0; i<index->second; i++) {
             int space = index->first;
 
-            // Insert indexes into the factors and the result in the right position
+            // Insert indexes into the factors in the right position
             for(int j = 0; j < (int) factors.size(); j++){
                 vector<Index> indexes = factors[j].getSpaces();
                 for(int z = 0; z < (int)indexes.size(); z++){
@@ -93,28 +93,42 @@ namespace TensorIndexes{
                 }               
             }
 
-            //resultIndexes
+            // Insert indexes into the result in the right position
             if(counter < sizeUncommonIndexes){
                 resultIndexes[counter] = i;
             }
 
             looper(totalIndexes, ++index, end, secondEnd, resultInput, vectorFactorsIndexes, resultIndexes, counter + 1, sizeUncommonIndexes);
-            /*
+        
             if (index == secondEnd) {
                 // Product
-                // 
+                resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
 
-                // Sum of the product
-                //resultInput[i, i, i] += prod;
+                // test
+                for (auto element : resultIndexes) {
+                    cout << element << " ";
+                }
+                cout << endl;
+
+                for (auto element : vectorFactorsIndexes) {
+                    for (auto elem : element)
+                        cout << elem << " ";
+                    cout << endl;
+                }
+                cout << endl << endl;
             }
-            */
         }
     }
 
 
     template <typename T>
-    void MultiplierTensor<T>::prod(UnknownRankedTensor<T> resultInput) {
-    
+    T MultiplierTensor<T>::prod(vector<vector<int>> vectorFactorsIndexes) {
+        T elem = 1;
+        for(int i = 0; i < (int) factors.size(); i++){
+            elem *= factors[i].getTensor()(vectorFactorsIndexes[i]);
+        }
+
+        return elem;
     }
 
 
@@ -163,7 +177,7 @@ namespace TensorIndexes{
 
         // Recurive application of the product between all the factors
         looper(totalIndexes, totalIndexes.cbegin(), totalIndexes.cend(), --totalIndexes.cend(), result, vectorFactorsIndexes, resultIndexes, 0, mapOfDifferentIndexes.size());
-
+        result.printTensor();
         /*
         // Multiplying matrix a and b and storing in array mult.
         for(i = 0; i < r1; ++i)
