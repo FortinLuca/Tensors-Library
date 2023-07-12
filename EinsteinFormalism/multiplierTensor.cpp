@@ -77,45 +77,49 @@ namespace TensorIndexes{
     template <typename T>
     void MultiplierTensor<T>::looper(map<int, int> totalIndexes, map<int,int>::const_iterator index,  map<int,int>::const_iterator end, map<int,int>::const_iterator secondEnd, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, size_t counter, size_t sizeUncommonIndexes) {
         if (index == end){
-            //resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
-            return;
-        }
-
-        for (int i = 0; i<index->second; i++) {
-            int space = index->first;
-
-            // Insert indexes into the factors in the right position
-            for(int j = 0; j < (int) factors.size(); j++){
-                vector<Index> indexes = factors[j].getSpaces();
-                for(int z = 0; z < (int)indexes.size(); z++){
-                    if(space == indexes[z].getSpace())
-                        vectorFactorsIndexes[j][z] = i;
-                }               
+            // cout << i << " - " << index->second << "   " << index->first << endl;
+            // test
+            for (auto element : resultIndexes) {
+                cout << element << " ";
             }
+            cout << endl;
 
-            // Insert indexes into the result in the right position
-            if(counter < sizeUncommonIndexes){
-                resultIndexes[counter] = i;
-            }
-
-            looper(totalIndexes, ++index, end, secondEnd, resultInput, vectorFactorsIndexes, resultIndexes, counter + 1, sizeUncommonIndexes);
-        
-            if (index == secondEnd) {
-                // Product
-                resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
-
-                // test
-                for (auto element : resultIndexes) {
-                    cout << element << " ";
-                }
+            for (auto element : vectorFactorsIndexes) {
+                for (auto elem : element)
+                    cout << elem << " ";
                 cout << endl;
+            }
+            cout << endl << endl;
 
-                for (auto element : vectorFactorsIndexes) {
-                    for (auto elem : element)
-                        cout << elem << " ";
-                    cout << endl;
+            // Product
+            resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
+        }
+        else{
+            for (int i = 0; i<index->second; ++i) {
+                
+                looper(totalIndexes, ++index, end, secondEnd, resultInput, vectorFactorsIndexes, resultIndexes, counter + 1, sizeUncommonIndexes);
+
+                int space = index->first;           
+
+                // Insert indexes into the factors in the right position
+                for(int j = 0; j < (int)factors.size(); j++){
+                    vector<Index> indexes = factors[j].getSpaces();
+                    for(int z = 0; z < (int)indexes.size(); z++){
+                        if(space == indexes[z].getSpace())
+                            vectorFactorsIndexes[j][z] = i;
+                    }               
                 }
-                cout << endl << endl;
+
+                // Insert indexes into the result in the right position
+                if(counter < sizeUncommonIndexes){
+                    resultIndexes[counter] = i;
+                }
+
+                
+            
+                //if (index == secondEnd) {
+                    
+                //}
             }
         }
     }
