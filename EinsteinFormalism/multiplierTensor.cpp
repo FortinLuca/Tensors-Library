@@ -75,21 +75,46 @@ namespace TensorIndexes{
 
     // Methods
     template <typename T>
-    void MultiplierTensor<T>::looper(map<int, int> indexes, map<int,int>::const_iterator index,  map<int,int>::const_iterator end, map<int,int>::const_iterator secondEnd, UnknownRankedTensor<T> resultInput, T prod) {
-        if (index == end)
+    void MultiplierTensor<T>::looper(map<int, int> totalIndexes, map<int,int>::const_iterator index,  map<int,int>::const_iterator end, map<int,int>::const_iterator secondEnd, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, size_t counter, size_t sizeUncommonIndexes) {
+        if (index == end){
+            // Product
+            //resultInput(resultIndexes) += prod(vectorFactorsIndexes, factors);
             return;
-        for (int i=0; i<index->second; i++) {
-            looper(indexes, ++index, end, secondEnd, resultInput, prod);
+        }
+        for (int i = 0; i<index->second; i++) {
+            int space = index->first;
+
+            // Insert indexes into the factors and the result in the right position
+            for(int j = 0; j < (int) factors.size(); j++){
+                vector<Index> indexes = factors[j].getSpaces();
+                for(int z = 0; z < (int)indexes.size(); z++){
+                    if(space == indexes[z].getSpace())
+                        vectorFactorsIndexes[j][z] = i;
+                }               
+            }
+
+            //resultIndexes
+            if(counter < sizeUncommonIndexes){
+                resultIndexes[counter] = i;
+            }
+
+            looper(totalIndexes, ++index, end, secondEnd, resultInput, vectorFactorsIndexes, resultIndexes, counter + 1, sizeUncommonIndexes);
+            /*
             if (index == secondEnd) {
                 // Product
-                for(int j = 0; j < (int) factors.size(); j++){
-                    //prod *= factors[j].getTensor()[];
-                }
+                // 
 
                 // Sum of the product
                 //resultInput[i, i, i] += prod;
             }
+            */
         }
+    }
+
+
+    template <typename T>
+    void MultiplierTensor<T>::prod(UnknownRankedTensor<T> resultInput) {
+    
     }
 
 
@@ -124,12 +149,20 @@ namespace TensorIndexes{
         result.setData(newData);
 
 
-        // Apply the product considering the common and the non-common indexes and their dimensions
+        // Initialize the data structures which will contains the indexes for each tensor
+        vector<vector<int>> vectorFactorsIndexes = vector<vector<int>> (factors.size());
+        for(int i = 0; i < (int) vectorFactorsIndexes.size(); i++){
+            vectorFactorsIndexes[i] = vector<int>(factors[i].getTensor().getSizeDimensions().size());
+        }
 
+        vector<int> resultIndexes = vector<int>(result.getSizeDimensions().size());
+
+        map<int, int> totalIndexes = mapOfDifferentIndexes;
+        totalIndexes.insert(mapOfEqualIndexes.begin(), mapOfEqualIndexes.end());
         
 
         // Recurive application of the product between all the factors
-        looper(nonCommonIndexes, nonCommonIndexes.cbegin(), nonCommonIndexes.cend(), --nonCommonIndexes.cend(), result, 1);
+        looper(totalIndexes, totalIndexes.cbegin(), totalIndexes.cend(), --totalIndexes.cend(), result, vectorFactorsIndexes, resultIndexes, 0, mapOfDifferentIndexes.size());
 
         /*
         // Multiplying matrix a and b and storing in array mult.
