@@ -9,7 +9,7 @@ namespace TensorIndexes{
 
             map<int,int> mapOfDifferentIndexes;      // map of the non-common indexes in which the keys are the spaces of the indexes and the values are the dimensions of the spaces
             map<int, int> mapOfEqualIndexes;         // map of the common indexes in which the keys are the spaces of the indexes and the values are the dimensions of the spaces
-            vector<Index> vectorDifferentIndexes;  // vector which contains the indexes of the resulting tensor
+            vector<Index> vectorDifferentIndexes;    // vector which contains the indexes of the resulting tensor
             vector<TensorWithIndexes<T>> factors;    // vector which contains the TensorWithIndexes objects that are the factor of the product
 
             // the attributes of this class can be accessed from the classes Indexes and TensorWithIndexes
