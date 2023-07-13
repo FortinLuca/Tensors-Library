@@ -75,14 +75,14 @@ namespace TensorIndexes{
 
     // Methods
     template <typename T>
-    void MultiplierTensor<T>::looper(map<int, int> totalIndexes, map<int,int>::const_iterator index,  map<int,int>::const_iterator end, map<int,int>::const_iterator secondEnd, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, size_t counter, size_t sizeUncommonIndexes) {
-        if (index == end){
-            //resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
+    void MultiplierTensor<T>::looper(vector<int> vectorSpace, vector<int> vectorSize, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, size_t iter) {
+        if (vectorSpace[iter] == vectorSpace[vectorSpace.size()]){
+            resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
             return;
         }
 
-        for (int i = 0; i<index->second; i++) {
-            int space = index->first;
+        for (int i = 0; i<vectorSize[iter]; i++) {
+            int space = vectorSpace[iter];
 
             // Insert indexes into the factors in the right position
             for(int j = 0; j < (int) factors.size(); j++){
@@ -92,31 +92,33 @@ namespace TensorIndexes{
                         vectorFactorsIndexes[j][z] = i;
                 }               
             }
-
-            // Insert indexes into the result in the right position
-            if(counter < sizeUncommonIndexes){
-                resultIndexes[counter] = i;
+            
+            int idx = 0;
+            for (auto it = mapOfDifferentIndexes.begin(); it != mapOfDifferentIndexes.end(); ++it) {
+                if (space == it->first)
+                    resultIndexes[idx] = i;
+                idx++;
             }
-
-            looper(totalIndexes, ++index, end, secondEnd, resultInput, vectorFactorsIndexes, resultIndexes, counter + 1, sizeUncommonIndexes);
+            
+            looper(vectorSpace, vectorSize, resultInput, vectorFactorsIndexes, resultIndexes, iter + 1);
         
-            if (index == secondEnd) {
-                // Product
-                resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
+            // if (index == secondEnd) {
+            //     // Product
+            //     resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
 
-                // test
-                for (auto element : resultIndexes) {
-                    cout << element << " ";
-                }
-                cout << endl;
+            //     // test
+            //     for (auto element : resultIndexes) {
+            //         cout << element << " ";
+            //     }
+            //     cout << endl;
 
-                for (auto element : vectorFactorsIndexes) {
-                    for (auto elem : element)
-                        cout << elem << " ";
-                    cout << endl;
-                }
-                cout << endl << endl;
-            }
+            //     for (auto element : vectorFactorsIndexes) {
+            //         for (auto elem : element)
+            //             cout << elem << " ";
+            //         cout << endl;
+            //     }
+            //     cout << endl << endl;
+            // }
         }
     }
 
@@ -173,10 +175,18 @@ namespace TensorIndexes{
 
         map<int, int> totalIndexes = mapOfDifferentIndexes;
         totalIndexes.insert(mapOfEqualIndexes.begin(), mapOfEqualIndexes.end());
+        vector<int> vectorSpace = vector<int>();
+        vector<int> vectorSize = vector<int>();
+
+        for (auto it = totalIndexes.begin(); it!=totalIndexes.end(); ++it) {
+            vectorSpace.push_back(it->first);
+            vectorSize.push_back(it->second);
+        }
+
         
 
         // Recurive application of the product between all the factors
-        looper(totalIndexes, totalIndexes.cbegin(), totalIndexes.cend(), --totalIndexes.cend(), result, vectorFactorsIndexes, resultIndexes, 0, mapOfDifferentIndexes.size());
+        looper(vectorSpace, vectorSize, result, vectorFactorsIndexes, resultIndexes, 0);
         result.printTensor();
         /*
         // Multiplying matrix a and b and storing in array mult.
