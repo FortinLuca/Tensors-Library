@@ -187,7 +187,6 @@ namespace TensorIndexes{
         recursiveProduct(sizeTotalIndexes, spaceTotalIndexes, 0, result, vectorFactorsIndexes, resultIndexes, spaceDifferentIndexes);
         result.printTensor();
 
-        TensorWithIndexes<T> final_result = result(vectorDifferentIndexes);
-        return final_result;
+        return result(vectorDifferentIndexes);
     }
 }
