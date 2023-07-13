@@ -75,7 +75,41 @@ namespace TensorIndexes{
 
     // Methods
     template <typename T>
-    void MultiplierTensor<T>::looper(map<int, int> totalIndexes, map<int,int>::const_iterator index,  map<int,int>::const_iterator end, map<int,int>::const_iterator secondEnd, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, size_t counter, size_t sizeUncommonIndexes) {
+    void MultiplierTensor<T>::looper(vector<int> sizeTotalIndexes, vector<int> spaceTotalIndexes, size_t index, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, vector<int> spaceDifferentIndexes){
+        if (index >= sizeTotalIndexes.size()) 
+            return;
+
+        for (int i = 0; i < sizeTotalIndexes[index]; ++i) {
+            
+            // Insert indexes into the factors in the right position
+            for(int j = 0; j < (int)factors.size(); j++){
+                vector<Index> indexes = factors[j].getSpaces();
+                for(int z = 0; z < (int)indexes.size(); z++){
+                    if(spaceTotalIndexes[index] == indexes[z].getSpace())
+                        vectorFactorsIndexes[j][z] = i;
+                }               
+            }
+
+            // Insert indexes into the result in the right position
+            for(int j = 0; j < (int)spaceDifferentIndexes.size(); j++){
+                if(spaceDifferentIndexes[j] == spaceTotalIndexes[index])
+                    resultIndexes[j] = i;              
+            }
+
+            looper(sizeTotalIndexes, spaceTotalIndexes, index + 1, resultInput, vectorFactorsIndexes, resultIndexes, spaceDifferentIndexes);
+
+            if (index == sizeTotalIndexes.size() - 1) {
+                // Product
+                resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
+                //cout<< "hello" << endl;
+            }
+        }
+    }
+
+
+    /*
+    template <typename T>
+    void MultiplierTensor<T>::looper(map<int, int> totalIndexes, map<int,int>::const_iterator index,  map<int,int>::const_iterator end, map<int,int>::const_iterator secondEnd, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, map<int, int> mapOfDifferentIndexes) {
         if (index == end){
             // cout << i << " - " << index->second << "   " << index->first << endl;
             // test
@@ -97,7 +131,7 @@ namespace TensorIndexes{
         else{
             for (int i = 0; i<index->second; ++i) {
                 
-                looper(totalIndexes, ++index, end, secondEnd, resultInput, vectorFactorsIndexes, resultIndexes, counter + 1, sizeUncommonIndexes);
+                looper(totalIndexes, ++index, end, secondEnd, resultInput, vectorFactorsIndexes, resultIndexes, mapOfDifferentIndexes);
 
                 int space = index->first;           
 
@@ -111,10 +145,13 @@ namespace TensorIndexes{
                 }
 
                 // Insert indexes into the result in the right position
-                if(counter < sizeUncommonIndexes){
-                    resultIndexes[counter] = i;
-                }
-
+                int z = 0;
+                for(auto it = mapOfDifferentIndexes.cbegin(); it != mapOfDifferentIndexes.cend(); ++it){
+                    if(space == it->second){
+                        resultIndexes[z] = i;
+                        z++;
+                    }
+                } 
                 
             
                 //if (index == secondEnd) {
@@ -123,6 +160,7 @@ namespace TensorIndexes{
             }
         }
     }
+    */
 
 
     template <typename T>
@@ -177,10 +215,21 @@ namespace TensorIndexes{
 
         map<int, int> totalIndexes = mapOfDifferentIndexes;
         totalIndexes.insert(mapOfEqualIndexes.begin(), mapOfEqualIndexes.end());
+
+        vector<int> spaceTotalIndexes, sizeTotalIndexes;
+        for(map<int,int>::iterator it = totalIndexes.begin(); it != totalIndexes.end(); ++it) {
+            spaceTotalIndexes.push_back(it->first);
+            sizeTotalIndexes.push_back(it->second);
+        }
+
+        vector<int> spaceDifferentIndexes;
+        for(map<int,int>::iterator it = mapOfDifferentIndexes.begin(); it != mapOfDifferentIndexes.end(); ++it) {
+            spaceDifferentIndexes.push_back(it->first);
+        }
         
 
         // Recurive application of the product between all the factors
-        looper(totalIndexes, totalIndexes.cbegin(), totalIndexes.cend(), --totalIndexes.cend(), result, vectorFactorsIndexes, resultIndexes, 0, mapOfDifferentIndexes.size());
+        looper(sizeTotalIndexes, spaceTotalIndexes, 0, result, vectorFactorsIndexes, resultIndexes, spaceDifferentIndexes);
         result.printTensor();
         /*
         // Multiplying matrix a and b and storing in array mult.
