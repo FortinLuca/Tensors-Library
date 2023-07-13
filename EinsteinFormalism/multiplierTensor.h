@@ -9,7 +9,7 @@ namespace TensorIndexes{
 
             map<int,int> mapOfDifferentIndexes;      // map of the non-common indexes in which the keys are the spaces of the indexes and the values are the dimensions of the spaces
             map<int, int> mapOfEqualIndexes;         // map of the common indexes in which the keys are the spaces of the indexes and the values are the dimensions of the spaces
-            int n_factors;                           // number of factors of the products
+            vector<Index> vectorDifferentIndexes;  // vector which contains the indexes of the resulting tensor
             vector<TensorWithIndexes<T>> factors;    // vector which contains the TensorWithIndexes objects that are the factor of the product
 
             // the attributes of this class can be accessed from the classes Indexes and TensorWithIndexes
@@ -20,8 +20,8 @@ namespace TensorIndexes{
              * @brief 
              * 
              */
-            void looper(vector<int> sizeTotalIndexes, vector<int> spaceTotalIndexes, size_t index, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, vector<int> spaceDifferentIndexes);
-            //void looper(map<int, int> indexes, map<int,int>::const_iterator index, map<int,int>::const_iterator end, map<int,int>::const_iterator secondEnd, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorIndexes, vector<int> resultIndexes, map<int, int> mapOfDifferentIndexes);
+            void recursiveProduct(vector<int> sizeTotalIndexes, vector<int> spaceTotalIndexes, size_t index, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, vector<int> spaceDifferentIndexes);
+
 
             /**
              * @brief 
@@ -34,7 +34,7 @@ namespace TensorIndexes{
         public:
 
             // Constructors
-            MultiplierTensor(TensorWithIndexes<T> fact1, TensorWithIndexes<T> fact2, map<int,int> mapOfSpacesAndDimensionsInput, map<int, int> mapOfEqualIndexesInput);
+            MultiplierTensor(TensorWithIndexes<T> fact1, TensorWithIndexes<T> fact2, map<int,int> mapOfSpacesAndDimensionsInput, map<int, int> mapOfEqualIndexesInput, vector<Index> vectorDifferentIndexesInput);
 
             MultiplierTensor(MultiplierTensor<T>& mt);
 
@@ -47,12 +47,6 @@ namespace TensorIndexes{
              */
             vector<TensorWithIndexes<T>> getFactors();
 
-            /**
-             * @brief get_N_factors method: it extract the number of factores of the product
-             * 
-             * @return int-value which correspond to the number of factors of the product
-             */
-            int get_N_factors();
 
             /**
              * @brief getMapOfDifferentIndexes method: it extracts the map of the non-common indexes
@@ -67,6 +61,14 @@ namespace TensorIndexes{
              * @return map<int, int> object which contains the spaces of the common indexes and their dimensions
              */
             map<int, int> getMapOfEqualIndexes();
+
+            
+            /**
+             * @brief getVectorDifferentIndexes method: it extracts the vector of different indexes
+             * 
+             * @return vector<Index> object which contains all the Index object used for producing the resulting tensorWithIndexes after the product
+             */
+            vector<Index> getVectorDifferentIndexes();
 
             /**
              * @brief setMapOfDifferentIndexes method: it sets the map of the different indexes with the input one
@@ -89,10 +91,16 @@ namespace TensorIndexes{
              */
             void setFactors(vector<TensorWithIndexes<T>> tensors);
 
+            /**
+             * @brief setVectorDifferentIndexes method: it sets the vector of different indexes
+             * 
+             * @param vectorDifferentIndexesInput: a vector of Index object that contains the updated indexes for the resulting tensor
+             */
+            void setVectorDifferentIndexes(vector<Index> vectorDifferentIndexesInput);
+
 
             // Methods
-            //TensorWithIndexes<T> applyProduct();
-            void applyProduct();
+            TensorWithIndexes<T> applyProduct();
     };
 
 }

@@ -164,9 +164,25 @@ namespace operators{
             mapOfEqualIndexes[equalSpaces[i]] = equalSizeDimensions[i];
         }
 
+        // Creating a vector containing the indexes of the resulting tensor
+        vector<Index> vectorDifferentIndexes = vector<Index>();
+        for(auto it = mapOfDifferentIndexes.cbegin(); it != mapOfDifferentIndexes.cend(); ++it){
+            for(Index index : spaces1){
+                if(index.getSpace() == it->first)
+                    vectorDifferentIndexes.push_back(index);
+            }
+        }
+
+        for(auto it = mapOfDifferentIndexes.cbegin(); it != mapOfDifferentIndexes.cend(); ++it){
+            for(Index index : spaces2){
+                if(index.getSpace() == it->first)
+                    vectorDifferentIndexes.push_back(index);
+            }
+        }
+
 
         // Creation of a new MultiplierTensor object
-        MultiplierTensor<T> temp = MultiplierTensor<T>(tensorWithIndexes1, tensorWithIndexes2, mapOfDifferentIndexes, mapOfEqualIndexes);
+        MultiplierTensor<T> temp = MultiplierTensor<T>(tensorWithIndexes1, tensorWithIndexes2, mapOfDifferentIndexes, mapOfEqualIndexes, vectorDifferentIndexes);
         return temp;
     }
 
@@ -221,6 +237,23 @@ namespace operators{
 
         multiplierTensor.setMapOfDifferentIndexes(mapOfDifferentIndexes);
         multiplierTensor.setMapOfEqualIndexes(mapOfEqualIndexes);
+
+
+        // Update the vector which will contain the indexes of the resulting tensor after the product
+        vector<Index> vectorDifferentIndexes = vector<Index>(multiplierTensor.getVectorDifferentIndexes());
+        vector<Index> newVectorDifferentIndexes = vector<Index>();
+        for(auto it = mapOfDifferentIndexes.cbegin(); it != mapOfDifferentIndexes.cend(); ++it){
+            for(Index index : vectorDifferentIndexes){
+                if(index.getSpace() == it->first)
+                    newVectorDifferentIndexes.push_back(index);
+            }
+            for(Index index : spaces){
+                if(index.getSpace() == it->first)
+                    newVectorDifferentIndexes.push_back(index);
+            }
+        }
+
+        multiplierTensor.setVectorDifferentIndexes(newVectorDifferentIndexes);
 
 
         // Update the factors by adding the new tensorWithIndexes

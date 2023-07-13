@@ -4,17 +4,17 @@ namespace TensorIndexes{
 
     // Constructors
     template <typename T>
-    MultiplierTensor<T>::MultiplierTensor(TensorWithIndexes<T> fact1, TensorWithIndexes<T> fact2, map<int,int> mapOfDifferentIndexesInput, map<int, int> mapOfEqualIndexesInput){
+    MultiplierTensor<T>::MultiplierTensor(TensorWithIndexes<T> fact1, TensorWithIndexes<T> fact2, map<int,int> mapOfDifferentIndexesInput, map<int, int> mapOfEqualIndexesInput, vector<Index> vectorDifferentIndexesInput){
         
         // Saving the two maps parameters
         mapOfDifferentIndexes = map<int,int> (mapOfDifferentIndexesInput);
         mapOfEqualIndexes = map<int, int> (mapOfEqualIndexesInput);
+        vectorDifferentIndexes = vector<Index>(vectorDifferentIndexesInput);
 
         // Filling the vector with the two TensorWithIndexes factors
         factors = vector<TensorWithIndexes<T>>();
         factors.push_back(fact1);
         factors.push_back(fact2);
-        n_factors = 2;
     }
 
 
@@ -24,8 +24,8 @@ namespace TensorIndexes{
         // Saving all the parameters
         mapOfDifferentIndexes = map<int,int> (mt.mapOfDifferentIndexes);
         mapOfEqualIndexes = map<int, int> (mt.mapOfEqualIndexes);
+        vectorDifferentIndexes = vector<Index> (mt.vectorDifferentIndexes);
         factors = vector<TensorWithIndexes<T>>(mt.factors);
-        n_factors = mt.n_factors + 1;
     }
 
 
@@ -38,12 +38,6 @@ namespace TensorIndexes{
 
 
     template <typename T>
-    int MultiplierTensor<T>::get_N_factors(){
-        return n_factors;
-    }
-
-
-    template <typename T>
     map<int,int> MultiplierTensor<T>::getMapOfDifferentIndexes(){
         return mapOfDifferentIndexes;
     }
@@ -52,6 +46,12 @@ namespace TensorIndexes{
     template <typename T>
     map<int, int> MultiplierTensor<T>::getMapOfEqualIndexes(){
         return mapOfEqualIndexes;
+    }
+
+
+    template <typename T>
+    vector<Index> MultiplierTensor<T>::getVectorDifferentIndexes(){
+        return vectorDifferentIndexes;
     }
 
 
@@ -73,12 +73,20 @@ namespace TensorIndexes{
     }
 
 
+    template <typename T>
+    void MultiplierTensor<T>::setVectorDifferentIndexes(vector<Index> vectorDifferentIndexesInput){
+        this->vectorDifferentIndexes = vector<Index> (vectorDifferentIndexesInput);
+    }
+
+
+
     // Methods
     template <typename T>
-    void MultiplierTensor<T>::looper(vector<int> sizeTotalIndexes, vector<int> spaceTotalIndexes, size_t index, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, vector<int> spaceDifferentIndexes){
+    void MultiplierTensor<T>::recursiveProduct(vector<int> sizeTotalIndexes, vector<int> spaceTotalIndexes, size_t index, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, vector<int> spaceDifferentIndexes){
+        // Base case
         if (index >= sizeTotalIndexes.size()) 
             return;
-
+        
         for (int i = 0; i < sizeTotalIndexes[index]; ++i) {
             
             // Insert indexes into the factors in the right position
@@ -96,75 +104,20 @@ namespace TensorIndexes{
                     resultIndexes[j] = i;              
             }
 
-            looper(sizeTotalIndexes, spaceTotalIndexes, index + 1, resultInput, vectorFactorsIndexes, resultIndexes, spaceDifferentIndexes);
+            recursiveProduct(sizeTotalIndexes, spaceTotalIndexes, index + 1, resultInput, vectorFactorsIndexes, resultIndexes, spaceDifferentIndexes);
 
+            // Innermost loop
             if (index == sizeTotalIndexes.size() - 1) {
                 // Product
                 resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
-                //cout<< "hello" << endl;
             }
         }
     }
-
-
-    /*
-    template <typename T>
-    void MultiplierTensor<T>::looper(map<int, int> totalIndexes, map<int,int>::const_iterator index,  map<int,int>::const_iterator end, map<int,int>::const_iterator secondEnd, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, map<int, int> mapOfDifferentIndexes) {
-        if (index == end){
-            // cout << i << " - " << index->second << "   " << index->first << endl;
-            // test
-            for (auto element : resultIndexes) {
-                cout << element << " ";
-            }
-            cout << endl;
-
-            for (auto element : vectorFactorsIndexes) {
-                for (auto elem : element)
-                    cout << elem << " ";
-                cout << endl;
-            }
-            cout << endl << endl;
-
-            // Product
-            resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
-        }
-        else{
-            for (int i = 0; i<index->second; ++i) {
-                
-                looper(totalIndexes, ++index, end, secondEnd, resultInput, vectorFactorsIndexes, resultIndexes, mapOfDifferentIndexes);
-
-                int space = index->first;           
-
-                // Insert indexes into the factors in the right position
-                for(int j = 0; j < (int)factors.size(); j++){
-                    vector<Index> indexes = factors[j].getSpaces();
-                    for(int z = 0; z < (int)indexes.size(); z++){
-                        if(space == indexes[z].getSpace())
-                            vectorFactorsIndexes[j][z] = i;
-                    }               
-                }
-
-                // Insert indexes into the result in the right position
-                int z = 0;
-                for(auto it = mapOfDifferentIndexes.cbegin(); it != mapOfDifferentIndexes.cend(); ++it){
-                    if(space == it->second){
-                        resultIndexes[z] = i;
-                        z++;
-                    }
-                } 
-                
-            
-                //if (index == secondEnd) {
-                    
-                //}
-            }
-        }
-    }
-    */
 
 
     template <typename T>
     T MultiplierTensor<T>::prod(vector<vector<int>> vectorFactorsIndexes) {
+        // Application of the product part of the Einstein Notation
         T elem = 1;
         for(int i = 0; i < (int) factors.size(); i++){
             elem *= factors[i].getTensor()(vectorFactorsIndexes[i]);
@@ -176,7 +129,7 @@ namespace TensorIndexes{
 
     template <typename T>
     //TensorWithIndexes<T> MultiplierTensor<T>::applyProduct(){
-    void MultiplierTensor<T>::applyProduct(){
+    TensorWithIndexes<T> MultiplierTensor<T>::applyProduct(){
 
         // Obtain all the useful attributes in order to apply the product
         vector<TensorWithIndexes<T>> factors = getFactors();
@@ -216,12 +169,14 @@ namespace TensorIndexes{
         map<int, int> totalIndexes = mapOfDifferentIndexes;
         totalIndexes.insert(mapOfEqualIndexes.begin(), mapOfEqualIndexes.end());
 
+        // Divide the map into two vectors that contain respectively the keys and the values 
         vector<int> spaceTotalIndexes, sizeTotalIndexes;
         for(map<int,int>::iterator it = totalIndexes.begin(); it != totalIndexes.end(); ++it) {
             spaceTotalIndexes.push_back(it->first);
             sizeTotalIndexes.push_back(it->second);
         }
 
+        // Save the keys of the mapOfDifferentIndexes into a vector for the function
         vector<int> spaceDifferentIndexes;
         for(map<int,int>::iterator it = mapOfDifferentIndexes.begin(); it != mapOfDifferentIndexes.end(); ++it) {
             spaceDifferentIndexes.push_back(it->first);
@@ -229,17 +184,10 @@ namespace TensorIndexes{
         
 
         // Recurive application of the product between all the factors
-        looper(sizeTotalIndexes, spaceTotalIndexes, 0, result, vectorFactorsIndexes, resultIndexes, spaceDifferentIndexes);
+        recursiveProduct(sizeTotalIndexes, spaceTotalIndexes, 0, result, vectorFactorsIndexes, resultIndexes, spaceDifferentIndexes);
         result.printTensor();
-        /*
-        // Multiplying matrix a and b and storing in array mult.
-        for(i = 0; i < r1; ++i)
-            for(j = 0; j < c2; ++j)
-                for(k = 0; k < c1; ++k)
-                    mult[i][j] += a[i][k] * b[k][j];
-        */
 
+        TensorWithIndexes<T> final_result = result(vectorDifferentIndexes);
+        return final_result;
     }
-
-
 }

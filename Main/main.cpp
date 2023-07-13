@@ -217,7 +217,13 @@ int main() {
         std::cout << it2->first << " " << it2->second << endl;
     cout << endl;
 
-    mtest.applyProduct();
+    vector<Index> vectorDifferentIndexes = mtest.getVectorDifferentIndexes();
+    for(Index index : vectorDifferentIndexes)
+        cout << index.getSpace() << " ";
+    cout << endl;
+
+    TensorWithIndexes<int> ris = mtest.applyProduct();
+    ris.getTensor().printData();
 
 
     return 0;
