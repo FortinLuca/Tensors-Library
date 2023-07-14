@@ -9,13 +9,13 @@ namespace Tensor_Library{
         this->rank = args.size();
         sizeDimensions = vector<int>(rank);
         strides = vector<int>(rank);
-        
-        // Checking that the rank is greater than zero
-        if(rank <= 0)
-            throw invalid_argument("The rank must be greater than zero");
 
         n_total_elements = 1;
         init_position = 0;
+        
+        // Checking that the rank is greater than zero
+        if(rank < 0)
+            throw invalid_argument("The rank can't be lower than zero");
 
         for(int i = rank-1; i >= 0; i--){
             // The dimensions' values of the tensor must be greater than 0
@@ -28,6 +28,12 @@ namespace Tensor_Library{
                 n_total_elements *= args[i];
                 sizeDimensions[i] = args[i];
             }
+        }
+
+        if (rank == 0) {
+            strides.push_back(n_total_elements);
+            sizeDimensions.push_back(n_total_elements);
+            rank = 1;
         }
     }
 

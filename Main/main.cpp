@@ -179,12 +179,15 @@ int main() {
 
     // Product operation
     UnknownRankedTensor<int> test1(4, 3, 4, 4);
+    // UnknownRankedTensor<int> test1(2,1);  per testare il trace
     test1.insertRandomData();
 
     UnknownRankedTensor<int> test2(4, 4, 4);
+    // UnknownRankedTensor<int> test2(2, 3, 1);
     test2.insertRandomData();
 
     UnknownRankedTensor<int> test3(3, 7);
+    // UnknownRankedTensor<int> test3(2, 3);
     test3.insertRandomData();
 
     Index i(0);
@@ -196,12 +199,15 @@ int main() {
 
 
     TensorWithIndexes<int> test1WithIndexes = test1({i, j, k, w});
+    // TensorWithIndexes<int> test1WithIndexes = test1({i, j});
     test1WithIndexes.getTensor().printData();
 
     TensorWithIndexes<int> test2WithIndexes = test2({i, z, k});
+    // TensorWithIndexes<int> test2WithIndexes = test2({i, z, j});
     test2WithIndexes.getTensor().printData();
 
     TensorWithIndexes<int> test3WithIndexes = test3({j, f});
+    // TensorWithIndexes<int> test3WithIndexes = test3({i, z});
     test3WithIndexes.getTensor().printData();
 
 
