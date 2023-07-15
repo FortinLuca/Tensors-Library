@@ -15,6 +15,9 @@ namespace TensorIndexes{
         factors = vector<TensorWithIndexes<T>>();
         factors.push_back(fact1);
         factors.push_back(fact2);
+
+        // Initializing an empty prod_result in order to use it to save the result after the method apply_product
+        prod_result = UnknownRankedTensor<T>();
     }
 
 
@@ -26,6 +29,9 @@ namespace TensorIndexes{
         mapOfEqualIndexes = map<int, int> (mt.mapOfEqualIndexes);
         vectorDifferentIndexes = vector<Index> (mt.vectorDifferentIndexes);
         factors = vector<TensorWithIndexes<T>>(mt.factors);
+
+        // copying the prod_result of the other multiplier tensor
+        prod_result = UnknownRankedTensor<T>(mt.prod_result);
     }
 
 
@@ -148,14 +154,15 @@ namespace TensorIndexes{
             sizeDimensionsCommonIndexes.push_back(it->second);
         }
 
-        // Create a new tensor in order to compute the resulting tensor
-        UnknownRankedTensor<T> result = UnknownRankedTensor<T>(sizeDimensionsDifferentIndexes);
+        // Initialize the prod_result tensor. This parameter is useful in order to not lose the UnknownRankedTensor after returning the tensorWithIndexes object because it contains a pointer to the tensor
+        // Without the prod_result attribute, the pointer after the method and returning the TensorWithIndexes object would point to a cancelled tensor because, otherwise the tensor it is locally created
+        prod_result = UnknownRankedTensor<T>(sizeDimensionsDifferentIndexes);
         
         // Insert zeros into the resulting tensor
-        shared_ptr<vector<T>> newData = make_shared<vector<T>>(result.get_n_total_elements());
-        for (int i = 0; i < result.get_n_total_elements(); i++)
+        shared_ptr<vector<T>> newData = make_shared<vector<T>>(prod_result.get_n_total_elements());
+        for (int i = 0; i < prod_result.get_n_total_elements(); i++)
             newData->at(i) = 0;
-        result.setData(newData);
+        prod_result.setData(newData);
 
 
         // Initialize the data structures which will contains the indexes for each tensor
@@ -164,7 +171,7 @@ namespace TensorIndexes{
             vectorFactorsIndexes[i] = vector<int>(factors[i].getTensor().getSizeDimensions().size());
         }
 
-        vector<int> resultIndexes = vector<int>(result.getSizeDimensions().size());
+        vector<int> resultIndexes = vector<int>(prod_result.getSizeDimensions().size());
 
         map<int, int> totalIndexes = mapOfDifferentIndexes;
         totalIndexes.insert(mapOfEqualIndexes.begin(), mapOfEqualIndexes.end());
@@ -184,9 +191,10 @@ namespace TensorIndexes{
         
 
         // Recurive application of the product between all the factors
-        recursiveProduct(sizeTotalIndexes, spaceTotalIndexes, 0, result, vectorFactorsIndexes, resultIndexes, spaceDifferentIndexes);
-        result.printTensor();
+        recursiveProduct(sizeTotalIndexes, spaceTotalIndexes, 0, prod_result, vectorFactorsIndexes, resultIndexes, spaceDifferentIndexes);
+        prod_result.printTensor();
 
-        return result(vectorDifferentIndexes);
+        // Return the tensorWithIndexes object
+        return prod_result(vectorDifferentIndexes);
     }
 }

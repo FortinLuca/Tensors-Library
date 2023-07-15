@@ -11,6 +11,7 @@ namespace TensorIndexes{
             map<int, int> mapOfEqualIndexes;         // map of the common indexes in which the keys are the spaces of the indexes and the values are the dimensions of the spaces
             vector<Index> vectorDifferentIndexes;    // vector which contains the indexes of the resulting tensor
             vector<TensorWithIndexes<T>> factors;    // vector which contains the TensorWithIndexes objects that are the factor of the product
+            UnknownRankedTensor<T> prod_result;      // UnknownRankedTensor which will save the result of the result after invoking the applyProduct method
 
             // the attributes of this class can be accessed from the classes Indexes and TensorWithIndexes
             friend class Indexes;                    
