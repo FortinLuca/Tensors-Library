@@ -17,17 +17,26 @@ namespace TensorIndexes{
             friend class Indexes;                    
             friend class TensorWithIndexes<T>;
 
+            
             /**
-             * @brief 
+             * @brief recursiveProduct method: auxiliary function of the applyProd method. It applies a recursion in order to apply the Einstein's Formalism formula without knowing at compile time how many nested loop use (equal to the number of indexes)
              * 
+             * @param sizeTotalIndexes: vector of integers that contain the sizes of the indexes in each factor of the product 
+             * @param spaceTotalIndexes: vector of integers that contain the indentifier space integgers of the indexes in each factor of the product 
+             * @param index: size_t value used for iterating the sizeTotalIndexes vector and extracting all the elements for applying a series of nested loop for each element into the vector
+             * @param resultInput: UnknownRankedTensor object initially setted to zero which eventually will contain the result of the product
+             * @param vectorFactorsIndexes: vector of vectors of integer which is initially empty but eventually it contains in the correct order all the iterated indexes for each factor in order to retrieve the correct elements
+             * @param resultIndexes: vector of integer which is initially empty but eventually it contains in the correct order all the iterated indexes for each factor in order to retrieve the correct elements
+             * @param spaceDifferentIndexes: vector of integers that contains the spaces of the resulting tensor in order to compute correctly the elements of the resultIndexes vector  
              */
             void recursiveProduct(vector<int> sizeTotalIndexes, vector<int> spaceTotalIndexes, size_t index, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, vector<int> spaceDifferentIndexes);
 
 
             /**
-             * @brief 
+             * @brief prod method: auxiliary function of the recursiveProduct method invoked in the innermost loop of that method. It applies the product part of the Einstein's Formalism between the factors
              * 
-             * @param resultInput 
+             * @param vectorFactorsIndexes: vector of vectors of integer that was correctly filled into the 
+             * @return T element obtained from the product of each element retrieved from each factor 
              */
             T prod(vector<vector<int>> vectorFactorsIndexes);
 
@@ -35,8 +44,21 @@ namespace TensorIndexes{
         public:
 
             // Constructors
+            /**
+             * @brief Construct of a MultiplierTensor object: it initializes the private attributes of the class
+             * @param fact1: first TensorWithIndexes factor
+             * @param fact2: second TensorWithIndexes factor
+             * @param mapOfSpacesAndDimensionsInput: map of integers which contains all the indexes of the resulting tensor. The key is the intentifier integer space and the value is the size dimension
+             * @param mapOfEqualIndexesInput: map of integers which contains all the common indexes from all the factors. The key is the intentifier integer space and the value is the size dimension
+             * @param vectorDifferentIndexesInput: vector of Index objects of the resulting tensor which will be used for producing a TensorWithIndexes object from an UnknownRankedTensor
+             */
             MultiplierTensor(TensorWithIndexes<T> fact1, TensorWithIndexes<T> fact2, map<int,int> mapOfSpacesAndDimensionsInput, map<int, int> mapOfEqualIndexesInput, vector<Index> vectorDifferentIndexesInput);
 
+            /**
+             * @brief Construct of a MultiplierTensor object: it copies all the attributes from another MultiplierTensor object
+             * 
+             * @param mt: MultiplierTensor object from which copy the attributes
+             */
             MultiplierTensor(MultiplierTensor<T>& mt);
 
 
@@ -101,6 +123,11 @@ namespace TensorIndexes{
 
 
             // Methods
+            /**
+             * @brief applyProduct method: it computes the real product and it uses all the attributes obtained from the operators *
+             * 
+             * @return TensorWithIndexes<T> object which contains the resulting tensor and the correct indexes after the application of the Einstein's Notation
+             */
             TensorWithIndexes<T> applyProduct();
     };
 

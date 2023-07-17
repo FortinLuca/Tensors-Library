@@ -134,7 +134,6 @@ namespace TensorIndexes{
 
 
     template <typename T>
-    //TensorWithIndexes<T> MultiplierTensor<T>::applyProduct(){
     TensorWithIndexes<T> MultiplierTensor<T>::applyProduct(){
 
         // Obtain all the useful attributes in order to apply the product
