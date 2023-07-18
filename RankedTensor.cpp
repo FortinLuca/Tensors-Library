@@ -99,8 +99,6 @@ namespace Tensor_Library {
 
     template <typename T, int n>
     RankedTensor<T, 1> RankedTensor<T, n>::flattening(){
-        printTensor();
-        cout << this->n_total_elements << endl;
         RankedTensor<T, 1> newTensor(get_n_total_elements());
         newTensor.setData(this->data);
         return newTensor;

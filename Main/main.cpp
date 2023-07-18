@@ -4,192 +4,187 @@
 
 
 int main() {
-    // Short example of four tensors with different types but the same dimensions
-    // vector<int> testvector = {2, 3, 4};
-
-    // UnknownRankedTensor<float> rt1(testvector);
-    // UnknownRankedTensor<int> rt2(testvector);
-    // UnknownRankedTensor<char> rt3(testvector);
-    // UnknownRankedTensor<double> rt4(testvector);
-
-    // /*
-    // // Printing the sizeDimensions and the strides attribute of the four tensors
-
-    // int * sizeDimensions1 = rt1.getSizeDimensions();
-    // int * sizeDimensions2 = rt2.getSizeDimensions();
-    // int * sizeDimensions3 = rt3.getSizeDimensions();
-    // int * sizeDimensions4 = rt4.getSizeDimensions();
-
-    // int * strides1 = rt1.getStrides();
-    // int * strides2 = rt2.getStrides();
-    // int * strides3 = rt3.getStrides();
-    // int * strides4 = rt4.getStrides();
-
-    // for(int i=0; i<5; i++){
-    //     cout<<to_string(sizeDimensions1[i]) + " "+ to_string(sizeDimensions2[i]) + " "+ to_string(sizeDimensions3[i]) + " "+ to_string(sizeDimensions4[i])<<endl;
-    // }
-
-    // cout<<endl;
-
-    // for(int i=0; i<5; i++){
-    //     cout<<to_string(strides1[i]) + " "+ to_string(strides2[i]) + " "+ to_string(strides2[i]) + " "+ to_string(strides2[i])<<endl;
-    // }
-    // */
-
-    // // for each tensor, it inserts pseudo-randomic elements of the correspondent type and it prints the final (filled) tensors
-    // rt1.insertRandomData();
-    // //rt1.printData();
-
-    // rt2.insertRandomData();
-    // rt2.printData();
-
-    // rt3.insertRandomData();
-    // //rt3.printData();
-
-    // rt4.insertRandomData();
-    // //rt4.printData();
-
-
-    // // Extracting a value by using the get methods from a tensor given the vector of indexes
-    // vector<int> indexesVector = {1, 2, 3};
-    // //char value = rt3(1, 2, 3);
-    // //cout<<endl<<"The element from the indexes {1, 2, 3} is ---> "<<+value<<endl<<endl;
-
-
-    // // Window method
-    // vector<int> minIndexesVector = {0, 1, 0};
-    // vector<int> maxIndexesVector = {1, 1, 2};
-
-    // UnknownRankedTensor<int> newTensor2 = rt2.window(minIndexesVector, maxIndexesVector);
-    // newTensor2.printData();
-
-    // UnknownRankedTensor<int> newTensor3 = rt2.window_copy(minIndexesVector, maxIndexesVector);
-    // newTensor3.printData();
-
-
-    // // Testing the flattening methods
-    // UnknownRankedTensor<int> newTensor4 = rt2.flattening_copy();
-    // newTensor4.printTensor();
-
-    // UnknownRankedTensor<int> newTensor5 = rt2.flattening();
-    // newTensor5.printTensor();
-
-    // // Get and set methods
-    // cout << "get(1, 1, 1) = " << rt2(1, 1, 1) << endl;
-    // rt2.set(100, 1, 1, 1);
-    // cout << "After setting 100: get(1, 1, 1) = " << rt2(1, 1, 1) << endl << endl;
-
-    
-    // UnknownRankedTensor<int> prova1(2, 3, 4);
-    // UnknownRankedTensor<int> prova2(2, 3, 4);
-    // prova1.insertRandomData();
-    // prova2.insertRandomData();
-
-    // prova1.printData();
-    // prova2.printData();
-
-    // cout << "------------------------------------------------------------------------"<< endl;
-
-    // // Iterators
-    // TensorIterator<int> it1 = prova2.getIterator();
-    // while(it1.hasNext()){
-    //    cout << it1.next() << " ";
-    // }
-    // cout << endl;
-
-    // TensorIterator<int> it2 = prova2.getIterator(1, {1, 0});
-    // while(it2.hasNext()){
-    //    cout << it2.next() << " ";
-    // }
-    // cout << endl;
-
-    // // Fix method
-    // UnknownRankedTensor<int> aa = prova2.fix(1, 2);
-    // aa.printData();
-
-
-    // cout << "------------------------------------------------------------------------"<< endl;
-
-    // // RankedTensor example with printData and printTensor
-    // RankedTensor<int, 3> nrt1(2, 3, 4);
-    // nrt1.insertRandomData();
-    // nrt1.printData();
-
-    // RankedTensor<int, 3> nrt2(2, 3, 4);
-    // nrt2.insertRandomData();
-    // nrt2.printData();
-
-    // nrt1.printTensor();
-
-
-    // // Get and Set methods
-    // cout << "get(1, 1, 1) = " << nrt1(1, 1, 1) << endl;
-    // nrt1.set(100, 1, 1, 1);
-    // cout << "After setting: get(1, 1, 1) = " << nrt1(1, 1, 1) << endl << endl;
-
-
-    // // Flattening methods
-    // RankedTensor<int, 1> nrt4 = nrt1.flattening();
-    // nrt4.printTensor();
-    // nrt4 = nrt1.flattening_copy();
-    // nrt4.printTensor();
-
-
-    // //Fix methods
-    // RankedTensor<int, 2> nrt3 = nrt1.fix(1, 1);
-    // nrt1.printData();
-    // nrt3.printData();
-    // nrt3 = nrt1.fix_copy(1, 1);
-    // nrt3.printData();
-
-
-    // // Windows methods
-    // RankedTensor<int, 3> nrt5 = nrt1.window({0, 1, 0}, {1, 1, 2});
-    // nrt1.printData();
-    // nrt5.printData();
-
-    // nrt5 = nrt1.window_copy({0, 1, 0}, {1, 1, 2});
-    // nrt1.printData();
-    // nrt5.printData();
 
     using namespace operators;
+    
+    // Short example of four tensors with different types but the same dimension
+    vector<int> dimensionsVector = {2, 3, 4};
 
-    /*
-    // Adding operation
-    UnknownRankedTensor<int> test1(4, 4, 4);
-    test1.insertRandomData();
-    test1.printData();
-
-    UnknownRankedTensor<int> test2(4, 4, 4);
-    test2.insertRandomData();
-    test2.printData();
-
-    Index i(0);
-    Index j(1);
-    Index k(2);
-
-    TensorWithIndexes<int> test1WithIndexes = test1({i, j, k});
-
-    TensorWithIndexes<int> test2WithIndexes = test2({i, j, k});
-
-    TensorWithIndexes<int> sum1 = test1WithIndexes + test2WithIndexes;
-    sum1.getTensor().printData();
-    */
+    UnknownRankedTensor<float> ut1(dimensionsVector);
+    UnknownRankedTensor<int> ut2(dimensionsVector);
+    RankedTensor<int, 3> rt1(dimensionsVector);
     
 
-    // Product operation
-    UnknownRankedTensor<int> test1(4, 3, 4, 4);
-    // UnknownRankedTensor<int> test1(2,1);  per testare il trace
-    test1.insertRandomData();
+    // Printing the sizeDimensions and the strides attribute of the four tensors
+    vector<int> sizeDimensions1 = ut1.getSizeDimensions();
+    vector<int> sizeDimensions2 = ut2.getSizeDimensions();
+    vector<int> sizeDimensions3 = rt1.getSizeDimensions();
 
-    UnknownRankedTensor<int> test2(4, 4, 4);
-    // UnknownRankedTensor<int> test2(2, 3, 1);
-    test2.insertRandomData();
+    vector<int> strides1 = ut1.getStrides();
+    vector<int> strides2 = ut2.getStrides();
+    vector<int> strides3 = rt1.getStrides();
 
-    UnknownRankedTensor<int> test3(3, 7);
-    // UnknownRankedTensor<int> test3(2, 3);
-    test3.insertRandomData();
+    vector<vector<int>> v = {sizeDimensions1, sizeDimensions2, sizeDimensions3};
+    vector<vector<int>> s = {strides1, strides2, strides3};
 
+    for (int i =0; i<3; i++) {
+        cout << "sizeDimensions" + to_string(i+1) + ":" << endl;
+        for (int j=0; j<(int)v[i].size(); j++) {
+            cout << to_string(v[i][j]) + " ";
+        }
+
+        cout << endl;
+
+        cout << "strides" + to_string(i+1) + ":" << endl;
+        for (int j=0; j<(int)s[i].size(); j++) {
+            cout<<to_string(s[i][j]) + " ";
+        }
+    
+        cout<<endl<<endl;;
+    }
+
+
+    // For each tensor, it inserts pseudo-randomic elements of the correspondent type and it prints the final (filled) tensors
+    ut1.insertRandomData();
+    ut1.printTensor();
+
+    ut2.insertRandomData();
+    ut2.printTensor();
+
+    rt1.insertRandomData();
+    rt1.printTensor();
+
+
+    // Using of GET and SET methods:
+    // extracting a value by using the GET method through OPERATOR "()" given the vector of indexes and from both a RankedTensor and UnknownRankedTensor
+    cout << "get(1, 1, 1) = " << ut2(1, 1, 1) << endl;
+    ut2.set(100, 1, 1, 1);
+    cout << "After setting 100: get(1, 1, 1) = " << ut2(1, 1, 1) << endl << endl;
+
+    cout << "get(1, 1, 1) = " << rt1(1, 1, 1) << endl;
+    rt1.set(100, 1, 1, 1);
+    cout << "After setting: get(1, 1, 1) = " << rt1(1, 1, 1) << endl << endl << endl;
+
+
+    // Testing the WINDOW methods for both tensor classes
+    vector<int> minIndexesVector = {0, 1, 0};
+    vector<int> maxIndexesVector = {1, 1, 2};
+
+    cout << "WINDOWS method:" << endl;
+    cout << "minIndexesVector: ";
+    for (int i=0; i<(int)minIndexesVector.size(); i++) {
+        cout<<minIndexesVector[i] << " "; 
+    }
+    cout << endl << "maxIndexesVector: ";
+    for (int i=0; i<(int)maxIndexesVector.size(); i++) {
+        cout<<maxIndexesVector[i] << " "; 
+    }
+    cout << endl << endl;
+
+
+    UnknownRankedTensor<int> windowTensorU = ut2.window(minIndexesVector, maxIndexesVector);
+    windowTensorU.printData();
+
+    RankedTensor<int, 3> windowTensorR = rt1.window(minIndexesVector, maxIndexesVector);
+    windowTensorR.printData();
+
+    UnknownRankedTensor<int> windowCopyTensorU = ut2.window_copy(minIndexesVector, maxIndexesVector);
+    windowCopyTensorU.printData();
+
+    RankedTensor<int, 3> windowCopyTensorR = rt1.window_copy(minIndexesVector, maxIndexesVector);
+    windowCopyTensorR.printData();
+
+
+    // Testing the FLATTENING methods for both tensor classes
+    cout << endl << "FLATTENING method:" << endl;
+    UnknownRankedTensor<int> flatteningTensorU = ut2.flattening();
+    flatteningTensorU.printTensor();
+
+    RankedTensor<int, 1> flatteningTensorR = rt1.flattening();
+    flatteningTensorR.printTensor();
+
+    UnknownRankedTensor<int> flatteningCopyTensorU = ut2.flattening_copy();
+    flatteningCopyTensorU.printTensor();
+
+    RankedTensor<int, 1> flatteningCopyTensorR = rt1.flattening_copy();
+    flatteningCopyTensorR.printTensor();
+
+
+    // Testing the FIX method for both tensor classes
+    cout << endl << "FIX method:" << endl;
+    UnknownRankedTensor<int> fixTensorU = ut2.fix(1, 2);
+    fixTensorU.printData();
+
+    RankedTensor<int, 2> fixTensorR = rt1.fix(1, 2);
+    fixTensorR.printData();
+
+    UnknownRankedTensor<int> fixCopyTensorU = ut2.fix(1, 2);
+    fixCopyTensorU.printData();
+
+    RankedTensor<int, 2> fixCopyTensorR = rt1.fix_copy(1, 2);
+    fixCopyTensorR.printData();
+
+
+    cout << "------------------------------------------------------------------------" << endl;
+
+
+    // Testing the methods for class ITERATOR for both tensor classes
+    cout << endl << "ITERATOR methods:" << endl;
+    UnknownRankedTensor<int> iteratorTensorU(2, 3, 4);
+    iteratorTensorU.insertRandomData();
+    iteratorTensorU.printData();
+
+    RankedTensor<int, 3> iteratorTensorR(2, 3, 4);
+    iteratorTensorR.insertRandomData();
+    iteratorTensorR.printData();
+
+
+    // Using of method "getIterator" to print the whole tensor data for both tensor classes
+    TensorIterator<int> it1 = iteratorTensorU.getIterator();
+    while(it1.hasNext()){
+       cout << it1.next() << " ";
+    }
+    cout << endl << endl;
+
+    TensorIterator<int> it2 = iteratorTensorR.getIterator();
+    while(it2.hasNext()){
+       cout << it2.next() << " ";
+    }
+    cout << endl << endl;
+
+    // Using of method "getIterator" to print the data along only one index by keeping fixed the others for both tensor classes
+    TensorIterator<int> it3 = iteratorTensorU.getIterator(1, {1, 0});
+    while(it3.hasNext()){
+       cout << it3.next() << " ";
+    }
+    cout << endl << endl;
+
+    TensorIterator<int> it4 = iteratorTensorR.getIterator(1, {1, 0});
+    while(it4.hasNext()){
+       cout << it4.next() << " ";
+    }
+    cout << endl << endl;
+
+
+    cout << "------------------------------------------------------------------------" << endl;
+
+    // SUM:
+    // testing the SUM operation for both tensor classes
+    cout << endl << "SUM operation:" << endl;
+    cout << "Addends:" << endl;
+    UnknownRankedTensor<int> sumTensor1(4, 4, 4);
+    sumTensor1.insertRandomData();
+    sumTensor1.printData();
+
+    UnknownRankedTensor<int> sumTensor2(4, 4, 4);
+    sumTensor2.insertRandomData();
+    sumTensor2.printData();
+
+    RankedTensor<int, 3> sumTensor3(4, 4, 4);   //in this case we use a Rankedtensor unlike the previous two
+    sumTensor3.insertRandomData();
+    sumTensor3.printData();
+
+    // Defining the Indexes
     Index i(0);
     Index j(1);
     Index k(2);
@@ -197,40 +192,59 @@ int main() {
     Index z(4);
     Index f(5);
 
+    TensorWithIndexes<int> sumTensor1WithIndexes = sumTensor1({i, j, k});
+    TensorWithIndexes<int> sumTensor2WithIndexes = sumTensor2({i, j, k});
+    TensorWithIndexes<int> sumTensor3WithIndexes = sumTensor3({i, j, k});
 
-    TensorWithIndexes<int> test1WithIndexes = test1({i, j, k, w});
-    // TensorWithIndexes<int> test1WithIndexes = test1({i, j});
-    test1WithIndexes.getTensor().printData();
-
-    TensorWithIndexes<int> test2WithIndexes = test2({i, z, k});
-    // TensorWithIndexes<int> test2WithIndexes = test2({i, z, j});
-    test2WithIndexes.getTensor().printData();
-
-    TensorWithIndexes<int> test3WithIndexes = test3({j, f});
-    // TensorWithIndexes<int> test3WithIndexes = test3({i, z});
-    test3WithIndexes.getTensor().printData();
-
-
-    MultiplierTensor<int> mtest = test1WithIndexes * test2WithIndexes * test3WithIndexes;
-
-    map<int, int> mapOfDifferentIndexes = mtest.getMapOfDifferentIndexes();
-    for(auto it = mapOfDifferentIndexes.cbegin(); it != mapOfDifferentIndexes.cend(); ++it)
-        std::cout << it->first << " " << it->second << endl;
-    cout << endl;
+    TensorWithIndexes<int> sumFinalTensor = sumTensor1WithIndexes + sumTensor2WithIndexes + sumTensor3WithIndexes;
+    cout << "Sum result:" << endl;
+    sumFinalTensor.getTensor().printData();
     
-    map<int, int> mapOfEqualIndexes = mtest.getMapOfEqualIndexes();
-    for(auto it2 = mapOfEqualIndexes.cbegin(); it2 != mapOfEqualIndexes.cend(); ++it2)
-        std::cout << it2->first << " " << it2->second << endl;
-    cout << endl;
 
-    vector<Index> vectorDifferentIndexes = mtest.getVectorDifferentIndexes();
-    for(Index index : vectorDifferentIndexes)
-        cout << index.getSpace() << " ";
-    cout << endl;
+    // PRODUCT:
+    // Testing the PRODUCT operation for both tensor classes (through the EINSTEIN FORMALISM)
+    cout << endl << "PRODUCT operation:" << endl;
+    cout << "Factors:" << endl;
+    UnknownRankedTensor<int> productTensor1(4, 3, 4, 4);
+    productTensor1.insertRandomData();
 
-    TensorWithIndexes<int> ris = mtest.applyProduct();
-    ris.getTensor().printData();
+    UnknownRankedTensor<int> productTensor2(4, 4, 4);
+    productTensor2.insertRandomData();
 
+    RankedTensor<int, 2> productTensor3(7, 3);  //in this case we use a Rankedtensor unlike the previous two
+    productTensor3.insertRandomData();
+
+    UnknownRankedTensor<int> productTensor4(3, 4, 4);
+    productTensor4.insertRandomData();
+
+    // Creation of TensorWithIndexes starting from an UnknownRankedTensor or RankedTensor
+    TensorWithIndexes<int> productTensor1WithIndexes = productTensor1({i, j, k, w});
+    productTensor1WithIndexes.getTensor().printData();
+
+    TensorWithIndexes<int> productTensor2WithIndexes = productTensor2({i, k, z});
+    productTensor2WithIndexes.getTensor().printData();
+
+    TensorWithIndexes<int> productTensor3WithIndexes = productTensor3({f, j});
+    productTensor3WithIndexes.getTensor().printData();
+
+
+    MultiplierTensor<int> multiplierTensor = productTensor1WithIndexes * productTensor2WithIndexes * productTensor3WithIndexes;
+    TensorWithIndexes<int> productFinalTensor = multiplierTensor.applyProduct();
+    cout << "Product result:" << endl;
+    productFinalTensor.getTensor().printData();
+
+
+    // testing the PRODUCT operation for the TRACE case that returns a tensor with one element
+    cout << "Factors:" << endl;
+    productTensor1WithIndexes.getTensor().printData();
+    productTensor2WithIndexes.getTensor().printData();
+    TensorWithIndexes<int> productTensor4WithIndexes = productTensor4({j, w, z});
+    productTensor4WithIndexes.getTensor().printData();
+
+    MultiplierTensor<int> multiplierTensorForTrace = productTensor1WithIndexes * productTensor2WithIndexes * productTensor4WithIndexes;
+    TensorWithIndexes<int> productFinalTensorForTrace = multiplierTensorForTrace.applyProduct();
+    cout << "Product result:" << endl;
+    productFinalTensorForTrace.getTensor().printData();
 
     return 0;
 }

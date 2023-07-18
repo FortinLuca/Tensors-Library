@@ -191,7 +191,6 @@ namespace TensorIndexes{
 
         // Recurive application of the product between all the factors
         recursiveProduct(sizeTotalIndexes, spaceTotalIndexes, 0, prod_result, vectorFactorsIndexes, resultIndexes, spaceDifferentIndexes);
-        prod_result.printTensor();
 
         // Return the tensorWithIndexes object
         return prod_result(vectorDifferentIndexes);
