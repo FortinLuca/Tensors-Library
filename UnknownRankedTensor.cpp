@@ -33,7 +33,6 @@ namespace Tensor_Library{
         if (rank == 0) {
             strides.push_back(n_total_elements);
             sizeDimensions.push_back(n_total_elements);
-            rank = 1;
         }
     }
 

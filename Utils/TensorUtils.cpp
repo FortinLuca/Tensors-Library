@@ -63,9 +63,14 @@ namespace Tensor_Library{
 
     template <typename T>
     void UnknownRankedTensor<T>::printData(){
-        TensorIterator<T> it = getIterator();
-        while(it.hasNext())
-            cout<< it.next() << " ";
+        if(rank > 0){
+            TensorIterator<T> it = getIterator();
+            while(it.hasNext())
+                cout<< it.next() << " ";
+        }
+        else{
+            cout << data->at(0) << endl;
+        }
             
         cout<<endl<<endl;
     }

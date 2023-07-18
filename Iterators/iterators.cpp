@@ -7,6 +7,9 @@ namespace Iterators{
     template <typename T>
     TensorIterator<T>::TensorIterator(UnknownRankedTensor<T> &tensorInput) : tensor(&tensorInput){
 
+        if(tensorInput.getRank() <= 0)
+            throw invalid_argument("The rank for the production of an iterator must be greater than zero");
+
         // Initialization of the rank and the flag
         n = tensor->getRank();
         indexes = vector<int>(n);
@@ -23,7 +26,12 @@ namespace Iterators{
     
     template <typename T>
     TensorIterator<T>::TensorIterator(UnknownRankedTensor<T> &tensorInput, int excludingSpace, vector<int> inputIndexes) : tensor(&tensorInput){
+
         n = tensor->getRank();
+
+        if(n <= 0)
+            throw invalid_argument("The rank for the production of an iterator must be greater than zero");
+        
         indexes = vector<int>(n);
         endIndexes = vector<int>(n);
 
