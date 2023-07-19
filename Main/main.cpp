@@ -247,30 +247,5 @@ int main() {
     productFinalTensorForTrace.getTensor().printData();
 
 
-
-    // Fix_copy and Fix
-    cout << endl << endl << "---------------------------------------------------------------------------------------" << endl;
-    cout << endl << "FIX method:" << endl;
-    UnknownRankedTensor<int> testU = UnknownRankedTensor<int>(3, 2, 3);
-    testU.insertRandomData();
-    testU.printData();
-
-    UnknownRankedTensor<int> fixTensorUTest = testU.fix(1, 1);
-    fixTensorUTest.printData();
-
-    UnknownRankedTensor<int> fixCopyTensorUTest = testU.fix_copy(1, 1);
-    fixCopyTensorUTest.printData();
-
-
-    RankedTensor<int, 3> testR = RankedTensor<int, 3>(3, 2, 3);
-    testR.insertRandomData();
-    testR.printData();
-
-    RankedTensor<int, 2> fixTensorRTest = testR.fix(1, 1);
-    fixTensorRTest.printData();
-
-    RankedTensor<int, 2> fixCopyTensorRTest = testR.fix_copy(1, 1);
-    fixCopyTensorRTest.printData();
-
     return 0;
 }
