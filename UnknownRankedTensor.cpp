@@ -201,20 +201,21 @@ namespace Tensor_Library{
 
         // Creation of a new tensor to return
         UnknownRankedTensor<T> newTensor(newSizeDimensions);
+        vector<int> newStrides = vector<int>(getRank()-1);
         
         // Computation of the new tensor's strides
         for(int i=0; i<rank; i++){
             if(i < space)
-                newTensor.getStrides()[i] = strides[i];
+                newTensor.getStrides()[i] = this->strides[i];
             else if(i > space)
-                newTensor.getStrides()[i-1] = strides[i];
+                newTensor.getStrides()[i-1] = this->strides[i];
         }
 
         // Copy of the new strides and the original data in the new tensor
         newTensor.setData(data);
 
         // Computation of the new starting position, initially setted to zero
-        newTensor.setInitPosition(newTensor.getInitPosition() + spaceIndex * strides[space]); 
+        newTensor.setInitPosition(newTensor.getInitPosition() + spaceIndex * this->strides[space]); 
 
         // It returns the new tensor
         return newTensor;
@@ -246,7 +247,7 @@ namespace Tensor_Library{
         bool checkIndex;
 
         while( it.hasNext() ) {
-            if (it.indexes[space] == spaceIndex) 
+            if (it.indexes[space] == spaceIndex)
                 checkIndex = true;
             else 
                 checkIndex = false;

@@ -84,9 +84,16 @@ namespace Tensor_Library {
         int i = 0;
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(this->n_total_elements);
         auto it = getIterator();
+        bool checkIndex;
+
         while( it.hasNext() ) {
+            if (it.getIndexes()[space] == spaceIndex)
+                checkIndex = true;
+            else 
+                checkIndex = false;
+
             T elem = it.next();
-            if(it.getIndexes()[space] == spaceIndex) {
+            if(checkIndex) {
                 newData->at(i) = elem;
                 i++;
             }

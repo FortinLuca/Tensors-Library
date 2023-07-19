@@ -118,7 +118,7 @@ int main() {
     RankedTensor<int, 2> fixTensorR = rt1.fix(1, 2);
     fixTensorR.printData();
 
-    UnknownRankedTensor<int> fixCopyTensorU = ut2.fix(1, 2);
+    UnknownRankedTensor<int> fixCopyTensorU = ut2.fix_copy(1, 2);
     fixCopyTensorU.printData();
 
     RankedTensor<int, 2> fixCopyTensorR = rt1.fix_copy(1, 2);
@@ -246,6 +246,20 @@ int main() {
     cout << "Product result:" << endl;
     productFinalTensorForTrace.getTensor().printData();
 
+
+
+    // Fix_copy and Fix
+    cout << endl << endl << "---------------------------------------------------------------------------------------" << endl;
+    cout << endl << "FIX method:" << endl;
+    UnknownRankedTensor<int> test = UnknownRankedTensor<int>(3, 2, 3);
+    test.insertRandomData();
+    test.printData();
+
+    UnknownRankedTensor<int> fixTensorUTest = test.fix(1, 1);
+    fixTensorUTest.printData();
+
+    UnknownRankedTensor<int> fixCopyTensorUTest = test.fix_copy(1, 1);
+    fixCopyTensorUTest.printData();
 
     return 0;
 }
