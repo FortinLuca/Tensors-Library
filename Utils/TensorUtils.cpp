@@ -69,7 +69,7 @@ namespace Tensor_Library{
                 cout<< it.next() << " ";
         }
         else{
-            cout << data->at(0) << endl;
+            cout << data->at(0);
         }
             
         cout<<endl<<endl;
@@ -78,10 +78,13 @@ namespace Tensor_Library{
 
     template <typename T>
     void UnknownRankedTensor<T> ::printTensor(){
+
+        // Printing the rank of the tensor
+        cout << "Tensor's rank: " << getRank() << endl;
         
         // Printing the dimensions of the tensor
         cout << "Tensor's dimensions: ";
-        for(int i = 0; i < rank; i++){
+        for(int i = 0; i < (int)sizeDimensions.size(); i++){
             cout << sizeDimensions[i];
             if(i < rank-1)
                 cout << " x ";
@@ -92,7 +95,7 @@ namespace Tensor_Library{
         
         // Printing the strides
         cout << "Tensor's strides: ";
-        for(int i = 0; i < rank; i++){
+        for(int i = 0; i < (int)strides.size(); i++){
             cout << strides[i];
             if(i < rank-1)
                 cout << " x ";

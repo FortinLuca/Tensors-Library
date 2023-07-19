@@ -246,5 +246,6 @@ int main() {
     cout << "Product result:" << endl;
     productFinalTensorForTrace.getTensor().printData();
 
+
     return 0;
 }

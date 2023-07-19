@@ -31,6 +31,7 @@ namespace Tensor_Library {
     RankedTensor<T, n-1> RankedTensor<T, n>::fix(const int space, const int spaceIndex){
 
         // Checking the exceptions
+        if(getRank() == 0) throw invalid_argument("This method cannot be applied to a trace");
         if(space < 0 || space >= n) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
         if(spaceIndex < 0) throw invalid_argument("An index cannot be less than zero");
         if(this->sizeDimensions[space] <= spaceIndex) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
@@ -66,6 +67,7 @@ namespace Tensor_Library {
     RankedTensor<T, n-1> RankedTensor<T, n>::fix_copy(const int space, const int spaceIndex){
 
         // Checking the exceptions
+        if(getRank() == 0) throw invalid_argument("This method cannot be applied to a trace");
         if(space < 0 || space >= n) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
         if(spaceIndex < 0) throw invalid_argument("An index cannot be less than zero");
         if(this->sizeDimensions[space] <= spaceIndex) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
@@ -111,12 +113,18 @@ namespace Tensor_Library {
 
         // Creating a new vector with the same elements of the original tensor
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(this->n_total_elements);
-        TensorIterator<T> it = getIterator();
 
         int index = 0;
-        while(it.hasNext()) {
-            newData->at(index) = it.next();
-            index++;
+
+        if(getRank() == 0)
+            newData->at(index) = get();
+        else{
+            TensorIterator<T> it = getIterator();
+            
+            while(it.hasNext()) {
+                newData->at(index) = it.next();
+                index++;
+            }
         }
 
         // Setting into a new tensor the new vector containing data
@@ -130,6 +138,9 @@ namespace Tensor_Library {
     RankedTensor<T, n> RankedTensor<T, n>::window(const vector<int> min, const vector<int> max) {
         int min_size = min.size();
         int max_size = max.size();
+
+        // Checking the rank
+        if(getRank() == 0) throw invalid_argument("This method cannot be applied to a trace");
 
         // Checking the input arguments of the function
         if (min_size != n) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
@@ -170,6 +181,9 @@ namespace Tensor_Library {
     RankedTensor<T, n> RankedTensor<T, n>::window_copy(const vector<int> min, const vector<int> max) {
         int min_size = min.size();
         int max_size = max.size();
+
+        // Checking the rank
+        if(getRank() == 0) throw invalid_argument("This method cannot be applied to a trace");
 
         // Checking the input arguments of the function
         if (min_size != n) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
