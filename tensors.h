@@ -146,6 +146,9 @@ namespace Tensor_Library{
         vector<int> getStrides();
 
 
+        void setStrides(vector<int> newStrides);
+
+
         /**
          * @brief getData() method: it extracts the Data object
          * 
@@ -492,6 +495,10 @@ namespace Tensor_Library{
 
         // getStrides() methods: inherited from the superclass UnknownRankedTensor
         using UnknownRankedTensor<T>::getStrides;
+
+
+        // setStrides() method: inherited from the superclass UnknownRankedTensor
+        using UnknownRankedTensor<T>::setStrides;
 
 
         // getData() methods: inherited from the superclass UnknownRankedTensor

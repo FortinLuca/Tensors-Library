@@ -56,10 +56,14 @@ namespace Tensor_Library{
         return sizeDimensions;
     }
 
-
     template <typename T>
     vector<int> UnknownRankedTensor<T>::getStrides(){
         return strides;
+    }
+
+    template <typename T>
+    void UnknownRankedTensor<T>::setStrides(vector<int> newStrides){
+        strides = newStrides;
     }
 
     template <typename T>
@@ -206,10 +210,12 @@ namespace Tensor_Library{
         // Computation of the new tensor's strides
         for(int i=0; i<rank; i++){
             if(i < space)
-                newTensor.getStrides()[i] = this->strides[i];
+                newStrides[i] = this->strides[i];
             else if(i > space)
-                newTensor.getStrides()[i-1] = this->strides[i];
+                newStrides[i-1] = this->strides[i];
         }
+
+        newTensor.setStrides(newStrides);
 
         // Copy of the new strides and the original data in the new tensor
         newTensor.setData(data);
