@@ -203,9 +203,9 @@ namespace Tensor_Library{
         newSizeDimensions.insert(newSizeDimensions.begin(), std::begin(sizeDimensions), std::end(sizeDimensions));
         newSizeDimensions.erase(newSizeDimensions.begin() + space);
 
-        // Creation of a new tensor to return
+        // Creation of a new tensor to return and a new empty vector of strides
         UnknownRankedTensor<T> newTensor(newSizeDimensions);
-        vector<int> newStrides = vector<int>(getRank()-1);
+        vector<int> newStrides = vector<int>(getStrides().size() - 1);
         
         // Computation of the new tensor's strides
         for(int i=0; i<rank; i++){
@@ -215,6 +215,7 @@ namespace Tensor_Library{
                 newStrides[i-1] = this->strides[i];
         }
 
+        // Updating the strides of the new tensor
         newTensor.setStrides(newStrides);
 
         // Copy of the new strides and the original data in the new tensor
@@ -223,7 +224,7 @@ namespace Tensor_Library{
         // Computation of the new starting position, initially setted to zero
         newTensor.setInitPosition(newTensor.getInitPosition() + spaceIndex * this->strides[space]); 
 
-        // It returns the new tensor
+        // Returning the new tensor
         return newTensor;
     }
 
@@ -252,7 +253,7 @@ namespace Tensor_Library{
         auto it = getIterator();
         bool checkIndex;
 
-        while( it.hasNext() ) {
+        while(it.hasNext()) {
             if (it.indexes[space] == spaceIndex)
                 checkIndex = true;
             else 

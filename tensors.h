@@ -131,21 +131,26 @@ namespace Tensor_Library{
 
         
         /**
-         * @brief getSizeDimensions() method: it extracts the array attribute which contains the size's dimensions
+         * @brief getSizeDimensions() method: it extracts the vector attribute which contains the size's dimensions
          * 
-         * @return int-array attribute sizeDimensions
+         * @return int-vector attribute sizeDimensions
          */
         vector<int> getSizeDimensions();
 
 
         /**
-         * @brief getStrides() method: it extracts the array attribute which contains the strides
+         * @brief getStrides() method: it extracts the vector attribute which contains the strides
          * 
-         * @return int-array attribute Strides
+         * @return int-vector attribute Strides
          */
         vector<int> getStrides();
 
 
+        /**
+         * @brief setStrides() method: it updates the vector of the tensor's strides with the input vector
+         * 
+         * @param newStrides: vector of integer containing the strides to update
+         */
         void setStrides(vector<int> newStrides);
 
 

@@ -41,16 +41,20 @@ namespace Tensor_Library {
         newSizeDimensions.insert(newSizeDimensions.begin(), std::begin(this->sizeDimensions), std::end(this->sizeDimensions));
         newSizeDimensions.erase(newSizeDimensions.begin() + space);
 
-        // Creation of a new tensor to return
+        // Creation of a new tensor to return and a new empty vector of strides
         RankedTensor<T, n-1> newTensor(newSizeDimensions);
+        vector<int> newStrides = vector<int>(getStrides().size() - 1);
         
         // Computation of the new tensor's strides
         for(int i=0; i<n; i++){
             if(i < space)
-                newTensor.getStrides()[i] = this->strides[i];
+                newStrides[i] = this->strides[i];
             else if(i > space)
-                newTensor.getStrides()[i-1] = this->strides[i];
+                newStrides[i-1] = this->strides[i];
         }
+
+        // Updating the strides of the new tensor
+        newTensor.setStrides(newStrides);
 
         // Copy of the new strides and the original data in the new tensor
         newTensor.setData(this->data);
@@ -58,7 +62,7 @@ namespace Tensor_Library {
         // Computation of the new starting position, initially setted to zero
         newTensor.setInitPosition(newTensor.getInitPosition() + spaceIndex * this->strides[space]); 
 
-        // It returns the new tensor
+        // Returning the new tensor
         return newTensor; 
     }
 
