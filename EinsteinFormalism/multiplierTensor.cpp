@@ -112,11 +112,12 @@ namespace TensorIndexes{
                     resultIndexes[j] = i;              
             }
 
+            // Recursive call of the method
             recursiveProduct(sizeTotalIndexes, spaceTotalIndexes, index + 1, resultInput, vectorFactorsIndexes, resultIndexes, spaceDifferentIndexes);
 
             // Innermost loop
             if (index == sizeTotalIndexes.size() - 1) {
-                // Product
+                // Application of the Einstein's Formalism for the product
                 resultInput.set(resultInput(resultIndexes) + prod(vectorFactorsIndexes), resultIndexes);
             }
         }
