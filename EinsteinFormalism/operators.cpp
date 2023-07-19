@@ -6,12 +6,12 @@ namespace operators{
     template <typename T>
     TensorWithIndexes<T> operator +(TensorWithIndexes<T> tensorWithIndexes1, TensorWithIndexes<T> tensorWithIndexes2) {
 
-        // We retrieve the spaces (indexes) and relative size of "this" (first tensor before the operator *) and the parameter of input "tensorWithIndexes" (second tensor after the operator *)
-        // from now on the first tensor is related to the key word "this" and the second tensor is related to the key word "input"
-        vector<Index> spaces1 = tensorWithIndexes1.getSpaces();
-        vector<Index> spaces2 = tensorWithIndexes2.getSpaces();
-        int size1 = spaces1.size();
-        int size2 = spaces2.size();
+        // We retrieve the vectorIndexObjects1 and relative size1 (first tensor before the operator *) and the parameter of input "tensorWithIndexes2" (second tensor after the operator *)
+        // from now on the first tensor is related to the number 1 and the second tensor is related to the number 2
+        vector<Index> vectorIndexObjects1 = tensorWithIndexes1.getVectorIndexObjects();
+        vector<Index> vectorIndexObjects2 = tensorWithIndexes2.getVectorIndexObjects();
+        int size1 = vectorIndexObjects1.size();
+        int size2 = vectorIndexObjects2.size();
 
         // Checking the ranks of the tensors to sum
         if(size1 != size2) throw invalid_argument("The tensors for algebraic sums must be with the same rank");
@@ -21,12 +21,11 @@ namespace operators{
 
         // Checking the order of the indexes and their dimensionality
         for(int i = 0; i < size1; i++){
-            if(spaces1[i].getSpace() != spaces2[i].getSpace()) 
-                throw invalid_argument("The tensors must have the same spaces in the same order for the application of the algebraic sum");
+            if(vectorIndexObjects1[i].getSpace() != vectorIndexObjects2[i].getSpace()) 
+                throw invalid_argument("The tensors must have the same vectorIndexObjects in the same order for the application of the algebraic sum");
             
             if(sizeDimensions1[i] != sizeDimensions2[i])
                 throw invalid_argument("The tensors must have the same sizeDimensions value in the same order fot the application of the algebraic sum");
-
         }
 
         // Creating a new data vector and a new tensor
@@ -59,12 +58,12 @@ namespace operators{
     // Product between tensors with Einstein's Formalism
     template <typename T>
     MultiplierTensor<T> operator*(TensorWithIndexes<T> tensorWithIndexes1, TensorWithIndexes<T> tensorWithIndexes2){
-        // we retrieve the spaces (indexes) and relative sizes of the 2 tensorWithIndexes parameters (first tensor before the operator *, second tensor after the operator *)
+        // we retrieve the vectorIndexObjects and relative sizes of the two tensorWithIndexes parameters (first tensor before the operator *, second tensor after the operator *)
         // from now on the first tensor is related to the number 1 and the second tensor is related to the number 2
-        vector<Index> spaces1 = tensorWithIndexes1.getSpaces();
-        vector<Index> spaces2 = tensorWithIndexes2.getSpaces();
-        int size1 = spaces1.size();
-        int size2 = spaces2.size();
+        vector<Index> vectorIndexObjects1 = tensorWithIndexes1.getVectorIndexObjects();
+        vector<Index> vectorIndexObjects2 = tensorWithIndexes2.getVectorIndexObjects();
+        int size1 = vectorIndexObjects1.size();
+        int size2 = vectorIndexObjects2.size();
 
         // we retrieve the vectors containing the sizeDimensions of the tensors and the relative sizes of the both vectors
         vector<int> tensorSizeDimensions1 = tensorWithIndexes1.getTensor().getSizeDimensions();
@@ -72,30 +71,28 @@ namespace operators{
         int sizeTensorSizeDimensions1 = tensorSizeDimensions1.size();
         int sizeTensorSizeDimensions2 = tensorSizeDimensions2.size();
 
-        // creation of support vectors of integer "spaces1_int" and "spaces2_int" where the elements are the mapped values of the respective vectors of Index "spaces1" and "spaces2"
+        // creation of support vectors of integer "spaces1" and "spaces2" where the elements are the mapped values of the respective vectors of Index "vectorIndexObjects1" and "vectorIndexObjects2"
         // in this way we exploit the vector iterator function find() to make all more readble
-        vector<int> spaces1_int = vector<int>(size1);
+        vector<int> spaces1 = vector<int>(size1);
         for(int i=0; i<size1; i++) {
-            spaces1_int[i]=spaces1[i].getSpace();
+            spaces1[i]=vectorIndexObjects1[i].getSpace();
         }
 
-        vector<int> spaces2_int = vector<int>(size2);
+        vector<int> spaces2 = vector<int>(size2);
         for(int i=0; i<size2; i++) {
-            spaces2_int[i]=spaces2[i].getSpace();
+            spaces2[i]=vectorIndexObjects2[i].getSpace();
         }
-
 
         // creation of support maps "mapTensorSizeDimensions1" and "mapTensorSizeDimensions2" with key equal to the dimensional space (index) of the relative tensorWithIndexes and value equal to its sizeDimension (corresponding to that dimensional space) 
         map<int, int> mapTensorSizeDimensions1;
         map<int, int> mapTensorSizeDimensions2;
         for (int i = 0; i<sizeTensorSizeDimensions1; i++) {
-            mapTensorSizeDimensions1[spaces1_int[i]] = tensorSizeDimensions1[i];
+            mapTensorSizeDimensions1[spaces1[i]] = tensorSizeDimensions1[i];
         }
 
         for (int i = 0; i<sizeTensorSizeDimensions2; i++) {
-            mapTensorSizeDimensions2[spaces2_int[i]] = tensorSizeDimensions2[i];
+            mapTensorSizeDimensions2[spaces2[i]] = tensorSizeDimensions2[i];
         }
-
 
         // Creation of vectors that contain the spaces of the common (equal) indexes or the non-common (different) indexes and the dimensions of the common dimensionalities
         vector<int>::iterator it;
@@ -105,9 +102,9 @@ namespace operators{
 
         // Through the two support maps, we check the two sizeDimensions's equality of the same dimensional space
         for(int i = 0; i<size2; i++) {
-            int spaceKey = spaces2_int[i];
-            it = find(spaces1_int.begin(), spaces1_int.end(), spaceKey);
-            if (it != spaces1_int.end()) {
+            int spaceKey = spaces2[i];
+            it = find(spaces1.begin(), spaces1.end(), spaceKey);
+            if (it != spaces1.end()) {
                 int dimensionSize1 = mapTensorSizeDimensions1.at(spaceKey);
                 int dimensionSize2 = mapTensorSizeDimensions2.at(spaceKey);
                 if (dimensionSize2 != dimensionSize1) throw invalid_argument("The dimensional space's size of the first tensor must be equal to that of the same dimensional space of the second tensor");
@@ -116,10 +113,9 @@ namespace operators{
             }
         }
 
-
         // Creation of the vector of the spaces of the non-common indexes
-        differentSpaces.assign(spaces1_int.begin(), spaces1_int.end());
-        differentSpaces.insert(differentSpaces.end(), spaces2_int.begin(), spaces2_int.end());
+        differentSpaces.assign(spaces1.begin(), spaces1.end());
+        differentSpaces.insert(differentSpaces.end(), spaces2.begin(), spaces2.end());
 
         bool isPresentEqualSpace = true;
         vector<int>::iterator it_positionToErase;
@@ -137,7 +133,6 @@ namespace operators{
             }   
         }
         
-
         // Compute the number of elements of the resulting tensor and the size dimensions of the non-common indexes
         int dimensionMultiplierTrace = 1;
         vector<int> differentSizeDimensions((int)differentSpaces.size());
@@ -150,7 +145,6 @@ namespace operators{
                 differentSizeDimensions[i] = mapTensorSizeDimensions2.at(differentSpaces[i]);
             }
         }
-
 
         // Map that contains indexes of the potential new tensor after the product
         map<int,int> mapOfDifferentIndexes;
@@ -167,19 +161,18 @@ namespace operators{
         // Creating a vector containing the indexes of the resulting tensor
         vector<Index> vectorDifferentIndexes = vector<Index>();
         for(auto it = mapOfDifferentIndexes.cbegin(); it != mapOfDifferentIndexes.cend(); ++it){
-            for(Index index : spaces1){
+            for(Index index : vectorIndexObjects1){
                 if(index.getSpace() == it->first)
                     vectorDifferentIndexes.push_back(index);
             }
         }
 
         for(auto it = mapOfDifferentIndexes.cbegin(); it != mapOfDifferentIndexes.cend(); ++it){
-            for(Index index : spaces2){
+            for(Index index : vectorIndexObjects2){
                 if(index.getSpace() == it->first)
                     vectorDifferentIndexes.push_back(index);
             }
         }
-
 
         // Creation of a new MultiplierTensor object
         MultiplierTensor<T> temp = MultiplierTensor<T>(tensorWithIndexes1, tensorWithIndexes2, mapOfDifferentIndexes, mapOfEqualIndexes, vectorDifferentIndexes);
@@ -191,25 +184,25 @@ namespace operators{
     template <typename T>
     MultiplierTensor<T> operator*(MultiplierTensor<T> multiplierTensor, TensorWithIndexes<T> tensorWithIndexes){
 
-        // Retrieve the spaces (indexes) and relative size (tensor after the operator *)
-        vector<Index> spaces = tensorWithIndexes.getSpaces();
-        int size = spaces.size();
+        // Retrieve the vectorIndexObjects and relative size (tensor after the operator *)
+        vector<Index> vectorIndexObjects = tensorWithIndexes.getVectorIndexObjects();
+        int size = vectorIndexObjects.size();
 
         // Retrieve the vectors containing the sizeDimensions of this tensor and input tensor and the relative sizes of the both vectors
         vector<int> tensorSizeDimensions = tensorWithIndexes.getTensor().getSizeDimensions();
         int sizeTensorSizeDimensions = tensorSizeDimensions.size();
 
-        // Creation of support vector of integer "spaces_int" a where the elements are the mapped values of the vector of Index "spaces"
+        // Creation of support vector of integer "spaces" a where the elements are the mapped values of the vector of Index "vectorIndexObjects"
         // in this way we exploit the vector iterator function find() to make all more readble
-        vector<int> spaces_int = vector<int>(size);
+        vector<int> spaces = vector<int>(size);
         for(int i=0; i<size; i++) {
-            spaces_int[i]=spaces[i].getSpace();
+            spaces[i]=vectorIndexObjects[i].getSpace();
         }
 
-        // Creation of support map "mapTensorSizeDimensions" with key equal to the dimensional space (index) of the relative tensorWithIndexes and value equal to its sizeDimension (corresponding to that dimensional space) 
+        // Creation of support map "mapTensorSizeDimensions" with key equal to the dimensional space of the relative tensorWithIndexes and value equal to its sizeDimension (corresponding to that dimensional space) 
         map<int, int> mapTensorSizeDimensions;
         for (int i = 0; i<sizeTensorSizeDimensions; i++) {
-            mapTensorSizeDimensions[spaces_int[i]] = tensorSizeDimensions[i];
+            mapTensorSizeDimensions[spaces[i]] = tensorSizeDimensions[i];
         }
 
         // Update the common and the non-common indexes from the maps mapOfDifferentIndexes and mapOfEqualIndexes in the MultiplierTensor
@@ -248,7 +241,7 @@ namespace operators{
                 if(index.getSpace() == it->first)
                     newVectorDifferentIndexes.push_back(index);
             }
-            for(Index index : spaces){
+            for(Index index : vectorIndexObjects){
                 if(index.getSpace() == it->first)
                     newVectorDifferentIndexes.push_back(index);
             }

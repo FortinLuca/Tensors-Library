@@ -99,7 +99,7 @@ namespace TensorIndexes{
             
             // Insert indexes into the factors in the right position
             for(int j = 0; j < (int)factors.size(); j++){
-                vector<Index> indexes = factors[j].getSpaces();
+                vector<Index> indexes = factors[j].getVectorIndexObjects();
                 for(int z = 0; z < (int)indexes.size(); z++){
                     if(spaceTotalIndexes[index] == indexes[z].getSpace())
                         vectorFactorsIndexes[j][z] = i;
@@ -188,8 +188,7 @@ namespace TensorIndexes{
         vector<int> spaceDifferentIndexes;
         for(map<int,int>::iterator it = mapOfDifferentIndexes.begin(); it != mapOfDifferentIndexes.end(); ++it) {
             spaceDifferentIndexes.push_back(it->first);
-        }
-        
+        }        
 
         // Recurive application of the product between all the factors
         recursiveProduct(sizeTotalIndexes, spaceTotalIndexes, 0, prod_result, vectorFactorsIndexes, resultIndexes, spaceDifferentIndexes);

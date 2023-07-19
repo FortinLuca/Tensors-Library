@@ -11,7 +11,7 @@ namespace TensorIndexes{
     class TensorWithIndexes{
 
         private:
-            vector<Index> spaces;                   // vector which contains the Index objects which will be used for the product operation
+            vector<Index> vectorIndexObjects;       // vector which contains the Index objects which will be used for the product operation
             UnknownRankedTensor<T> *tensor;         // pointer to a UnknownRankedTensor object which compose the TensorWithIndexes object (subsumption in case of RankedTensor object)          
             
             friend class Indexes;                   // it can access the private or protected fields of the Index objects
@@ -23,20 +23,20 @@ namespace TensorIndexes{
             /**
              * @brief Constructor of TensorWithIndexes: it initializes all the fields of the class
              * 
-             * @param inputSpaces: input Index-vector that contains the Index objects which will be used for the product operation
+             * @param inputVectorIndexObjects: input Index-vector that contains the Index objects which will be used for the product operation
              * @param inputTensor: input pointer to a tensor which will compose the object of this class
              */
-            TensorWithIndexes(vector<Index> inputSpaces, UnknownRankedTensor<T> &inputTensor);
+            TensorWithIndexes(vector<Index> inputVectorIndexObjects, UnknownRankedTensor<T> &inputTensor);
             
 
             /**
              * @brief Overloading constructor of TensorWithIndexes: it initializes all the fields of the class
              * 
-             * @param inputSpaces: input series of Index objects which will be used for the product operation
+             * @param inputVectorIndexObjects: input series of Index objects which will be used for the product operation
              * @param inputTensor: input pointer to a tensor which will compose the object of this class
              */
             template <typename... indexes>
-            TensorWithIndexes(indexes... inputSpaces, UnknownRankedTensor<T> &inputTensor);
+            TensorWithIndexes(indexes... inputVectorIndexObjects, UnknownRankedTensor<T> &inputTensor);
 
 
             // ---------------------------------------------------------------------------------------------------------
@@ -50,11 +50,11 @@ namespace TensorIndexes{
 
 
             /**
-             * @brief getSpaces() method: it returns the Index-vector parameter
+             * @brief getVectorIndexObjects() method: it returns the Index-vector parameter
              * 
              * @return vector<Index> field contained in this class
              */
-            vector<Index> getSpaces();
+            vector<Index> getVectorIndexObjects();
 
     };
 
