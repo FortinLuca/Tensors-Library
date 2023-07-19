@@ -95,22 +95,26 @@ namespace Tensor_Library{
     T UnknownRankedTensor<T>::get(vector<int> tensorIndexes){
         int index = init_position;
         int i = 0;
-        int size_index = tensorIndexes.size();
+        int size_indexes = tensorIndexes.size();
 
-        if(size_index != rank) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
+        if (rank == 0)
+            return data->at(index);
+        else {
+            if(size_indexes != rank) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
 
-        //check of the association of tensor index provided and corrispective dimension vector
-        for (int tensorIndex : tensorIndexes) {
-            if (sizeDimensions[i] <= tensorIndex ) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
-            if (tensorIndex < 0) throw invalid_argument("An index cannot be less than zero");
-            i++;
+            //check of the association of tensor index provided and corrispective dimension vector
+            for (int tensorIndex : tensorIndexes) {
+                if (sizeDimensions[i] <= tensorIndex ) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
+                if (tensorIndex < 0) throw invalid_argument("An index cannot be less than zero");
+                i++;
+            }
+
+            // Computation of the index of the vector from which we take the value provided
+            for(int i=0; i<rank; i++)
+                index += strides[i] * tensorIndexes[i];  // Expolitation of the input tensor indexes and the strides concept
+
+            return data->at(index);
         }
-
-        // Computation of the index of the vector from which we take the value provided
-        for(int i=0; i<rank; i++)
-            index += strides[i] * tensorIndexes[i];  // Expolitation of the input tensor indexes and the strides concept
-
-        return data->at(index);
     }
 
 
@@ -141,21 +145,25 @@ namespace Tensor_Library{
         int i = 0;
         int size_indexes = tensorIndexes.size();
 
-        if(size_indexes != rank) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
+        if (rank == 0)
+            data->at(index) = elem;
+        else{
+            if(size_indexes != rank) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
 
-        // Check of the association of tensor index provided and corrispective dimension vector
-        for (int tensorIndex : tensorIndexes) {
-            if (sizeDimensions[i] <= tensorIndex ) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
-            if (tensorIndex < 0) throw invalid_argument("An index cannot be less than zero");
-            i++;
+            // Check of the association of tensor index provided and corrispective dimension vector
+            for (int tensorIndex : tensorIndexes) {
+                if (sizeDimensions[i] <= tensorIndex ) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
+                if (tensorIndex < 0) throw invalid_argument("An index cannot be less than zero");
+                i++;
+            }
+
+            // Computation of the index of the vector from which we take the value provided
+            for(int i=0; i<rank; i++)
+                index += strides[i] * tensorIndexes[i];  // Expolitation of the input tensor indexes and the strides concept
+
+            // Setting the element into the correct position
+            data->at(index) = elem;
         }
-
-        // Computation of the index of the vector from which we take the value provided
-        for(int i=0; i<rank; i++)
-            index += strides[i] * tensorIndexes[i];  // Expolitation of the input tensor indexes and the strides concept
-
-        // Setting the element into the correct position
-        data->at(index) = elem;
     }
 
 
