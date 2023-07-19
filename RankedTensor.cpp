@@ -116,6 +116,7 @@ namespace Tensor_Library {
 
         int index = 0;
 
+        // Inserting the elements of the new tensors and managing the case if the tensor is a trace
         if(getRank() == 0)
             newData->at(index) = get();
         else{

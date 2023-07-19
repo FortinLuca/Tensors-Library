@@ -13,7 +13,7 @@ namespace TensorIndexes{
             vector<TensorWithIndexes<T>> factors;    // vector which contains the TensorWithIndexes objects that are the factor of the product
             UnknownRankedTensor<T> prod_result;      // UnknownRankedTensor which will save the result of the result after invoking the applyProduct method
 
-            // the attributes of this class can be accessed from the classes Indexes and TensorWithIndexes
+            // it can access the private or protected fields of the classes Indexes and TensorWithIndexes
             friend class Indexes;                    
             friend class TensorWithIndexes<T>;
 
@@ -54,6 +54,7 @@ namespace TensorIndexes{
              */
             MultiplierTensor(TensorWithIndexes<T> fact1, TensorWithIndexes<T> fact2, map<int,int> mapOfSpacesAndDimensionsInput, map<int, int> mapOfEqualIndexesInput, vector<Index> vectorDifferentIndexesInput);
 
+
             /**
              * @brief Construct of a MultiplierTensor object: it copies all the attributes from another MultiplierTensor object
              * 
@@ -62,6 +63,7 @@ namespace TensorIndexes{
             MultiplierTensor(MultiplierTensor<T>& mt);
 
 
+            // -------------------------------------------------------------------------------------
             // getters and setters
             /**
              * @brief GetFactors method: it extract the factors of the product 
@@ -78,6 +80,7 @@ namespace TensorIndexes{
              */
             map<int,int> getMapOfDifferentIndexes();
 
+
             /**
              * @brief getMapOfEqualIndexes method: it extracts the map of the common indexes
              * 
@@ -93,12 +96,14 @@ namespace TensorIndexes{
              */
             vector<Index> getVectorDifferentIndexes();
 
+
             /**
              * @brief setMapOfDifferentIndexes method: it sets the map of the different indexes with the input one
              * 
              * @param mapOfDifferentIndexesInput: input map to be set as mapOfDifferentIndexes attribute
              */
             void setMapOfDifferentIndexes(map<int, int> mapOfDifferentIndexesInput);
+
 
             /**
              * @brief setMapOfEqualIndexes method: it sets the map of the different indexes with the input one
@@ -107,12 +112,14 @@ namespace TensorIndexes{
              */
             void setMapOfEqualIndexes(map<int, int> mapOfEqualIndexesInput);
 
+
             /**
              * @brief setFactors method: it sets the vector containing the factors of the products
              * 
              * @param tensors: a vector of tensorWithIndexes objects that contains the updated factors
              */
             void setFactors(vector<TensorWithIndexes<T>> tensors);
+
 
             /**
              * @brief setVectorDifferentIndexes method: it sets the vector of different indexes
@@ -122,6 +129,7 @@ namespace TensorIndexes{
             void setVectorDifferentIndexes(vector<Index> vectorDifferentIndexesInput);
 
 
+            // --------------------------------------------------------------------------------------------------------------
             // Methods
             /**
              * @brief applyProduct method: it computes the real product and it uses all the attributes obtained from the operators *

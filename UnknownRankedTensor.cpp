@@ -97,6 +97,7 @@ namespace Tensor_Library{
         int i = 0;
         int size_indexes = tensorIndexes.size();
 
+        // Checking if the tensor is a trace or not
         if (rank == 0){
             if((int)tensorIndexes.size() == 0 || ((int) tensorIndexes.size() == 1 && tensorIndexes[0] == 0))
                 return data->at(index);
@@ -149,6 +150,7 @@ namespace Tensor_Library{
         int i = 0;
         int size_indexes = tensorIndexes.size();
 
+        // Checking if the tensor is a trace or not
         if (rank == 0){
             if((int)tensorIndexes.size() == 0 || ((int) tensorIndexes.size() == 1 && tensorIndexes[0] == 0))
                 data->at(index) = elem;
@@ -185,7 +187,6 @@ namespace Tensor_Library{
 
     template <typename T>
     UnknownRankedTensor<T> UnknownRankedTensor<T>::fix(const int space, const int spaceIndex){
-
         
         // Checking the exceptions
         if(getRank() == 0) throw invalid_argument("This method cannot be applied to a trace");
@@ -243,6 +244,7 @@ namespace Tensor_Library{
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
         auto it = getIterator();
         bool checkIndex;
+
         while( it.hasNext() ) {
             if (it.indexes[space] == spaceIndex) 
                 checkIndex = true;
@@ -281,6 +283,7 @@ namespace Tensor_Library{
 
         int index = 0;
 
+        // Inserting the elements of the new tensors and managing the case if the tensor is a trace
         if(getRank() == 0)
             newData->at(index) = get();
         else{

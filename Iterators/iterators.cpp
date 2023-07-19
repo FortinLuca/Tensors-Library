@@ -7,6 +7,7 @@ namespace Iterators{
     template <typename T>
     TensorIterator<T>::TensorIterator(UnknownRankedTensor<T> &tensorInput) : tensor(&tensorInput){
 
+        // A trace cannot have an iterator
         if(tensorInput.getRank() <= 0)
             throw invalid_argument("The rank for the production of an iterator must be greater than zero");
 
@@ -27,8 +28,8 @@ namespace Iterators{
     template <typename T>
     TensorIterator<T>::TensorIterator(UnknownRankedTensor<T> &tensorInput, int excludingSpace, vector<int> inputIndexes) : tensor(&tensorInput){
 
+        // A trace cannot have an iterator
         n = tensor->getRank();
-
         if(n <= 0)
             throw invalid_argument("The rank for the production of an iterator must be greater than zero");
         

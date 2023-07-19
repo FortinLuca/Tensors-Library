@@ -36,6 +36,7 @@ namespace TensorIndexes{
 
 
 
+    // --------------------------------------------------------------------------------------------
     // Getters and Setters
     template <typename T>
     vector<TensorWithIndexes<T>> MultiplierTensor<T>::getFactors(){
@@ -86,6 +87,7 @@ namespace TensorIndexes{
 
 
 
+    // -------------------------------------------------------------------------------------------------------------------
     // Methods
     template <typename T>
     void MultiplierTensor<T>::recursiveProduct(vector<int> sizeTotalIndexes, vector<int> spaceTotalIndexes, size_t index, UnknownRankedTensor<T> resultInput, vector<vector<int>> vectorFactorsIndexes, vector<int> resultIndexes, vector<int> spaceDifferentIndexes){

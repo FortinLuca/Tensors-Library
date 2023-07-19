@@ -55,7 +55,7 @@ namespace operators{
 
 
 
-
+    // ----------------------------------------------------------------------------------------------------------
     // Product between tensors with Einstein's Formalism
     template <typename T>
     MultiplierTensor<T> operator*(TensorWithIndexes<T> tensorWithIndexes1, TensorWithIndexes<T> tensorWithIndexes2){
@@ -190,6 +190,7 @@ namespace operators{
 
     template <typename T>
     MultiplierTensor<T> operator*(MultiplierTensor<T> multiplierTensor, TensorWithIndexes<T> tensorWithIndexes){
+
         // Retrieve the spaces (indexes) and relative size (tensor after the operator *)
         vector<Index> spaces = tensorWithIndexes.getSpaces();
         int size = spaces.size();

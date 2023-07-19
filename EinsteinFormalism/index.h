@@ -11,7 +11,9 @@ namespace TensorIndexes{
         private:
             int space;  // int-value which specifies the dimensional-space that the index represent
 
+
         public:
+            // Constructor
             /**
              * @brief Constructor of the class Index: it initializes the only field of the class Index
              * 
@@ -19,6 +21,8 @@ namespace TensorIndexes{
              */
             Index(int space);
 
+            
+            // Getter
             /**
              * @brief getSpace() method: it extracts the dimensional space represented by to the Index object
              * 

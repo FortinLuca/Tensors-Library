@@ -254,7 +254,7 @@ namespace Tensor_Library{
          * @brief fix() method: it slices the tensor by fixing a specifing space
          *  
          * @param space: integer that goes from 0 to n-1. It specifies the space which will be fixed
-         * @param tensorIndexes: integer that specify the index of the space which will be fices 
+         * @param tensorIndexes: integer that specify the index of the space which will be fixed
          * @return new tensor of type UnknownRankedTensor<T> with that rank will be reduced by one and the data points to the original tensor
          */
         UnknownRankedTensor<T> fix(const int space, const int tensorIndex);
