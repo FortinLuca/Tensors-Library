@@ -217,6 +217,7 @@ int main() {
     UnknownRankedTensor<int> productTensor4(3, 4, 4);
     productTensor4.insertRandomData();
 
+
     // Creation of TensorWithIndexes starting from an UnknownRankedTensor or RankedTensor
     TensorWithIndexes<int> productTensor1WithIndexes = productTensor1({i, j, k, w});
     productTensor1WithIndexes.getTensor().printData();
@@ -234,7 +235,7 @@ int main() {
     productFinalTensor.getTensor().printData();
 
 
-    // testing the PRODUCT operation for the TRACE case that returns a tensor with one element
+    // Testing the PRODUCT operation for the TRACE case that returns a tensor with one element
     cout << "Factors:" << endl;
     productTensor1WithIndexes.getTensor().printData();
     productTensor2WithIndexes.getTensor().printData();
@@ -246,6 +247,22 @@ int main() {
     cout << "Product result:" << endl;
     productFinalTensorForTrace.getTensor().printData();
 
+
+    // Testing a trace
+    cout << endl << "--------------------------------------------------------------------------------------" << endl;
+    cout << "Trace: " << endl;
+    vector<int> emptyVector = {};
+    UnknownRankedTensor<int> traceU1 = UnknownRankedTensor<int>(emptyVector);
+    RankedTensor<int, 0> traceR1 = RankedTensor<int, 0>(emptyVector);
+
+    UnknownRankedTensor<int> traceU2 = UnknownRankedTensor<int>();
+    RankedTensor<int, 0> traceR2 = RankedTensor<int, 0>();
+    
+    traceU1.insertRandomData();
+    traceU1.printTensor();
+
+    traceR1.insertRandomData();
+    traceR1.printTensor();
 
     return 0;
 }
