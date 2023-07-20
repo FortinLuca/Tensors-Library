@@ -7,6 +7,10 @@ Two tensor classes:
 * UnknownRankedTensor: there is no compile time information about rank or dimensions of the tensor, only type
 * RankedTensor: the tensor has rank information in its type, but no dimensional information
 
+The data is maintained in a consecutive area. The template specification must maintain an array of the strides and width of each dimension. In the classes there are as attributes also:
+* stride: distance in the next element of this index
+* width: number of entries for this index
+
 Tensor methods:
 * getters and setter
 * get
@@ -19,6 +23,8 @@ Tensor methods:
 The last three methods have two versions:
 * the normal version in which the result will point to the data of the original tensor in which the method is applied
 * the copy version in which the result copies the elements from the original tensors
+
+The RankedTensor class is a subclass of UnknownRankedTensor class, so it inherites parameters and attributes from its superclass. Only in some cases we had to override the method with a similar implementation.
 
 
 ## Iterator class
