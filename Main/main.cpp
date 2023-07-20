@@ -264,5 +264,7 @@ int main() {
     traceR1.insertRandomData();
     traceR1.printTensor();
 
+    //TODO: applying sums and product with traces respectively as addends and sums
+
     return 0;
 }
