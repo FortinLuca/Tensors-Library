@@ -6,6 +6,11 @@ namespace operators{
     template <typename T>
     TensorWithIndexes<T> operator +(TensorWithIndexes<T> tensorWithIndexes1, TensorWithIndexes<T> tensorWithIndexes2) {
 
+        // Managing type exceptions
+        if constexpr(!is_arithmetic_v<T>) throw invalid_argument("The type must be arithmetic!");
+        if constexpr(is_same_v<char, T> || is_same_v<signed char, T> || is_same_v<unsigned char, T>) throw invalid_argument("Thr type shouldn't be char because there is an high overflow risk");
+        if constexpr(is_same_v<bool, T>) throw invalid_argument("Thr type shouldn't be bool because there is an high overflow risk");
+
         // We retrieve the vectorIndexObjects1 and relative size1 (first tensor before the operator *) and the parameter of input "tensorWithIndexes2" (second tensor after the operator *)
         // from now on the first tensor is related to the number 1 and the second tensor is related to the number 2
         vector<Index> vectorIndexObjects1 = tensorWithIndexes1.getVectorIndexObjects();
@@ -58,6 +63,12 @@ namespace operators{
     // Product between tensors with Einstein's Formalism
     template <typename T>
     MultiplierTensor<T> operator*(TensorWithIndexes<T> tensorWithIndexes1, TensorWithIndexes<T> tensorWithIndexes2){
+
+        // Managing type exceptions
+        if constexpr(!is_arithmetic_v<T>) throw invalid_argument("The type must be arithmetic!");
+        if constexpr(is_same_v<char, T> || is_same_v<signed char, T> || is_same_v<unsigned char, T>) throw invalid_argument("Thr type shouldn't be char because there is an high overflow risk");
+        if constexpr(is_same_v<bool, T>) throw invalid_argument("Thr type shouldn't be bool because there is an high overflow risk");
+
         // we retrieve the vectorIndexObjects and relative sizes of the two tensorWithIndexes parameters (first tensor before the operator *, second tensor after the operator *)
         // from now on the first tensor is related to the number 1 and the second tensor is related to the number 2
         vector<Index> vectorIndexObjects1 = tensorWithIndexes1.getVectorIndexObjects();
@@ -183,6 +194,11 @@ namespace operators{
 
     template <typename T>
     MultiplierTensor<T> operator*(MultiplierTensor<T> multiplierTensor, TensorWithIndexes<T> tensorWithIndexes){
+
+        // Managing type exceptions
+        if constexpr(!is_arithmetic_v<T>) throw invalid_argument("The type must be arithmetic!");
+        if constexpr(is_same_v<char, T> || is_same_v<signed char, T> || is_same_v<unsigned char, T>) throw invalid_argument("Thr type shouldn't be char because there is an high overflow risk");
+        if constexpr(is_same_v<bool, T>) throw invalid_argument("Thr type shouldn't be bool because there is an high overflow risk");
 
         // Retrieve the vectorIndexObjects and relative size (tensor after the operator *)
         vector<Index> vectorIndexObjects = tensorWithIndexes.getVectorIndexObjects();

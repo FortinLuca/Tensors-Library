@@ -6,6 +6,11 @@ namespace TensorIndexes{
     template <typename T>
     MultiplierTensor<T>::MultiplierTensor(TensorWithIndexes<T> fact1, TensorWithIndexes<T> fact2, map<int,int> mapOfDifferentIndexesInput, map<int, int> mapOfEqualIndexesInput, vector<Index> vectorDifferentIndexesInput){
         
+        // Managing type exceptions
+        if constexpr(!is_arithmetic_v<T>) throw invalid_argument("The type must be arithmetic!");
+        if constexpr(is_same_v<char, T> || is_same_v<signed char, T> || is_same_v<unsigned char, T>) throw invalid_argument("Thr type shouldn't be char because there is an high overflow risk");
+        if constexpr(is_same_v<bool, T>) throw invalid_argument("Thr type shouldn't be bool because there is an high overflow risk");
+        
         // Saving the two maps parameters
         mapOfDifferentIndexes = map<int,int> (mapOfDifferentIndexesInput);
         mapOfEqualIndexes = map<int, int> (mapOfEqualIndexesInput);
