@@ -76,12 +76,17 @@ namespace operators{
         if constexpr(is_same_v<char, T> || is_same_v<signed char, T> || is_same_v<unsigned char, T>) throw invalid_argument("The type shouldn't be char because there is an high overflow risk");
         if constexpr(is_same_v<bool, T>) throw invalid_argument("The type shouldn't be bool because there is an high overflow risk");
 
+
         // we retrieve the vectorIndexObjects and relative sizes of the two tensorWithIndexes parameters (first tensor before the operator *, second tensor after the operator *)
         // from now on the first tensor is related to the number 1 and the second tensor is related to the number 2
         vector<Index> vectorIndexObjects1 = tensorWithIndexes1.getVectorIndexObjects();
         vector<Index> vectorIndexObjects2 = tensorWithIndexes2.getVectorIndexObjects();
         int size1 = vectorIndexObjects1.size();
         int size2 = vectorIndexObjects2.size();
+
+        // Checking if one factor is a trace
+        if(size1 == 0 || size2 == 0)
+            throw invalid_argument("A trace can't be a factor of the product");
 
         // we retrieve the vectors containing the sizeDimensions of the tensors and the relative sizes of the both vectors
         vector<int> tensorSizeDimensions1 = tensorWithIndexes1.getTensor().getSizeDimensions();
@@ -211,6 +216,10 @@ namespace operators{
         // Retrieve the vectorIndexObjects and relative size (tensor after the operator *)
         vector<Index> vectorIndexObjects = tensorWithIndexes.getVectorIndexObjects();
         int size = vectorIndexObjects.size();
+
+        // Checking whether one factor is a trace
+        if(size == 0)
+            throw invalid_argument("A trace can't be a factor of the product");
 
         // Retrieve the vectors containing the sizeDimensions of this tensor and input tensor and the relative sizes of the both vectors
         vector<int> tensorSizeDimensions = tensorWithIndexes.getTensor().getSizeDimensions();

@@ -287,21 +287,7 @@ int main() {
     
     TensorWithIndexes<int> traceRes1 = traceWithIndexes1 + traceWithIndexes2;
     traceRes1.getTensor().printData();
-
-
-    //TODO: applying product with traces respectively as factors (maybe?)
-    // Product between traces
-    cout << endl << "Product between traces: " << endl;
-    traceU1.printData();
-    traceR1.printData();
-    MultiplierTensor<int> traceMult1 = traceWithIndexes1 * traceWithIndexes2;
-
-
-    // Product between a tensor and a trace
-
-
-    // Product between a MultiplierTensor object and a trace
-
+    
 
     return 0;
 }
