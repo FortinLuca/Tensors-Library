@@ -39,9 +39,9 @@ For this purpose we have introducted the ***Index*** class which contains an ide
 Then from a tensor we can create a ***tensorWithIndexes*** objects which contains the pointer to the original tensor and the indexes.
 
 ### Operators
-We have introducted the ***operator +*** in order to apply the sum between two TensorWithIndexes objects and two ***operators \* *** in order to prepare the product between two TensorWithIndexes objects or one MultiplierTensor object and one TensorWithIndexes object.
+We have introducted the ***operator +*** in order to apply the sum between two TensorWithIndexes objects and two ***operators \**** in order to prepare the product between two TensorWithIndexes objects or one MultiplierTensor object and one TensorWithIndexes object.
 
 ### Multiplier class
-In this class, after the ***operator \* *** are saved all the informations in order to apply the product without losing informations.
+In this class, after the ***operator \**** are saved all the informations in order to apply the product without losing informations.
 The method ***applyProduct*** uses all the attributes saved from the operators * and it applies the product between the factors by following the Einstein's Formalism.
 
