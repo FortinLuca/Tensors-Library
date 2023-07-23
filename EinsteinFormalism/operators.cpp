@@ -37,17 +37,24 @@ namespace operators{
         int n_total_elements = tensorWithIndexes1.getTensor().get_n_total_elements();
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
 
-        // Creating the two iterators
-        TensorIterator<T> it1 = tensorWithIndexes1.getTensor().getIterator();
-        TensorIterator<T> it2 = tensorWithIndexes2.getTensor().getIterator();
-        int index = 0;
+        // Since there are the same dimensions, the iterators iterates in the same number of steps (when they are not trace)
+        if(vectorIndexObjects1.size() > 0 && vectorIndexObjects2.size() > 0){
+            TensorIterator<T> it1 = tensorWithIndexes1.getTensor().getIterator();
+            TensorIterator<T> it2 = tensorWithIndexes2.getTensor().getIterator();
+            int index = 0;
 
-        // Since there are the same dimensions, the iterators iterates in the same number of steps
-        while(it1.hasNext() && it2.hasNext()){         
-            T elem1 = it1.next();
-            T elem2 = it2.next();
-            newData->at(index) = elem1 + elem2;
-            index++;
+            while(it1.hasNext() && it2.hasNext()){         
+                T elem1 = it1.next();
+                T elem2 = it2.next();
+                newData->at(index) = elem1 + elem2;
+                index++;
+            }
+        }
+        // When the two addends are trace we have to change our way to apply the sum because we can't create iterators
+        else if(vectorIndexObjects1.size() == 0 && vectorIndexObjects2.size() == 0){
+            T elem1 = tensorWithIndexes1.getTensor().get();
+            T elem2 = tensorWithIndexes2.getTensor().get();
+            newData->at(0) = elem1 + elem2;
         }
 
         // Inserting the new pointer of data and returning the current tensor
@@ -88,7 +95,7 @@ namespace operators{
         for(int i=0; i<size1; i++) {
             spaces1[i]=vectorIndexObjects1[i].getSpace();
         }
-
+        
         vector<int> spaces2 = vector<int>(size2);
         for(int i=0; i<size2; i++) {
             spaces2[i]=vectorIndexObjects2[i].getSpace();
@@ -97,6 +104,7 @@ namespace operators{
         // creation of support maps "mapTensorSizeDimensions1" and "mapTensorSizeDimensions2" with key equal to the dimensional space (index) of the relative tensorWithIndexes and value equal to its sizeDimension (corresponding to that dimensional space) 
         map<int, int> mapTensorSizeDimensions1;
         map<int, int> mapTensorSizeDimensions2;
+        
         for (int i = 0; i<sizeTensorSizeDimensions1; i++) {
             mapTensorSizeDimensions1[spaces1[i]] = tensorSizeDimensions1[i];
         }
@@ -236,7 +244,8 @@ namespace operators{
                          throw invalid_argument("The dimensional space's size of the tensor must be equal to that of the same dimensional space of the multiplier tensor");
                     }
                 }
-            } else {
+            } 
+            else {
                 if (mapOfDifferentIndexes.at(it->first) != it->second) {
                     throw invalid_argument("The dimensional space's size of the tensor must be equal to that of the same dimensional space of the multiplier tensor");
                 }

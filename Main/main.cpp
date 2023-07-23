@@ -264,7 +264,35 @@ int main() {
     traceR1.insertRandomData();
     traceR1.printTensor();
 
-    //TODO: applying sums and product with traces respectively as addends and sums
+    traceU2.insertRandomData();
+    traceR2.insertRandomData();
+
+    
+    // Sum between two traces
+    cout << endl << "Sum between traces: " << endl;
+    vector<Index> emptyvectorTrace = {};
+    TensorWithIndexes<int> traceWithIndexes1 = traceU1(emptyvectorTrace);
+    TensorWithIndexes<int> traceWithIndexes2 = traceR1(emptyvectorTrace);
+    traceU1.printData();
+    traceR1.printData();
+    
+    TensorWithIndexes<int> traceRes1 = traceWithIndexes1 + traceWithIndexes2;
+    traceRes1.getTensor().printData();
+
+
+    //TODO: applying product with traces respectively as factors
+    // Product between traces
+    cout << endl << "Product between traces: " << endl;
+    traceU1.printData();
+    traceR1.printData();
+    MultiplierTensor<int> traceMult1 = traceWithIndexes1 * traceWithIndexes2;
+
+
+    // Product between a tensor and a trace
+
+
+    // Product between a MultiplierTensor object and a trace
+
 
     return 0;
 }
