@@ -267,6 +267,15 @@ int main() {
     traceU2.insertRandomData();
     traceR2.insertRandomData();
 
+
+    // Flattening and flattening_copy (the only requested methods that a trace can apply)
+    cout << endl << "Flattening for traces: " << endl;
+    UnknownRankedTensor<int> flattenTrace1 = traceU2.flattening();
+    flattenTrace1.printTensor();
+
+    UnknownRankedTensor<int> flattenTrace2 = traceU2.flattening_copy();
+    flattenTrace2.printTensor();
+
     
     // Sum between two traces
     cout << endl << "Sum between traces: " << endl;
@@ -280,7 +289,7 @@ int main() {
     traceRes1.getTensor().printData();
 
 
-    //TODO: applying product with traces respectively as factors
+    //TODO: applying product with traces respectively as factors (maybe?)
     // Product between traces
     cout << endl << "Product between traces: " << endl;
     traceU1.printData();
