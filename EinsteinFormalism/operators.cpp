@@ -37,7 +37,7 @@ namespace operators{
         int n_total_elements = tensorWithIndexes1.getTensor().get_n_total_elements();
         shared_ptr<vector<T>> newData = make_shared<vector<T>>(n_total_elements);
 
-        // Since there are the same dimensions, the iterators iterates in the same number of steps (when they are not trace)
+        // Since there are the same dimensions, the iterators iterate in the same number of steps (when they aren't zero-rank tensors)
         if(vectorIndexObjects1.size() > 0 && vectorIndexObjects2.size() > 0){
             TensorIterator<T> it1 = tensorWithIndexes1.getTensor().getIterator();
             TensorIterator<T> it2 = tensorWithIndexes2.getTensor().getIterator();
@@ -50,7 +50,7 @@ namespace operators{
                 index++;
             }
         }
-        // When the two addends are trace we have to change our way to apply the sum because we can't create iterators
+        // When the two addends are zero-rank tensors we have to change our way to apply the sum because we can't create iterators
         else if(vectorIndexObjects1.size() == 0 && vectorIndexObjects2.size() == 0){
             T elem1 = tensorWithIndexes1.getTensor().get();
             T elem2 = tensorWithIndexes2.getTensor().get();
@@ -84,9 +84,9 @@ namespace operators{
         int size1 = vectorIndexObjects1.size();
         int size2 = vectorIndexObjects2.size();
 
-        // Checking if one factor is a trace
+        // Checking if one factor is a zero-rank tensor
         if(size1 == 0 || size2 == 0)
-            throw invalid_argument("A trace can't be a factor of the product");
+            throw invalid_argument("A zero-rank tensor can't be a factor of the product");
 
         // we retrieve the vectors containing the sizeDimensions of the tensors and the relative sizes of the both vectors
         vector<int> tensorSizeDimensions1 = tensorWithIndexes1.getTensor().getSizeDimensions();
@@ -217,9 +217,9 @@ namespace operators{
         vector<Index> vectorIndexObjects = tensorWithIndexes.getVectorIndexObjects();
         int size = vectorIndexObjects.size();
 
-        // Checking whether one factor is a trace
+        // Checking whether one factor is a zero-rank tensor
         if(size == 0)
-            throw invalid_argument("A trace can't be a factor of the product");
+            throw invalid_argument("A zero-rank tensor can't be a factor of the product");
 
         // Retrieve the vectors containing the sizeDimensions of this tensor and input tensor and the relative sizes of the both vectors
         vector<int> tensorSizeDimensions = tensorWithIndexes.getTensor().getSizeDimensions();

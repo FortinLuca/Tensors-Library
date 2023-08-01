@@ -101,12 +101,12 @@ namespace Tensor_Library{
         int i = 0;
         int size_indexes = tensorIndexes.size();
 
-        // Checking if the tensor is a trace or not
+        // Checking if the tensor is a zero-rank tensor or not
         if (rank == 0){
             if((int)tensorIndexes.size() == 0 || ((int) tensorIndexes.size() == 1 && tensorIndexes[0] == 0))
                 return data->at(index);
             else
-                throw invalid_argument("You can retrive the element of the trace with an empty index list or with a list of one element corresponding to zero");
+                throw invalid_argument("You can retrive the element of the zero-rank tensor with an empty index list or with a list of one element corresponding to zero");
         }
         else {
             if(size_indexes != rank) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
@@ -154,12 +154,12 @@ namespace Tensor_Library{
         int i = 0;
         int size_indexes = tensorIndexes.size();
 
-        // Checking if the tensor is a trace or not
+        // Checking if the tensor is a zero-rank tensor or not
         if (rank == 0){
             if((int)tensorIndexes.size() == 0 || ((int) tensorIndexes.size() == 1 && tensorIndexes[0] == 0))
                 data->at(index) = elem;
             else
-                throw invalid_argument("You can set the element of the trace with an empty index list or with a list of one element corresponding to zero");
+                throw invalid_argument("You can set the element of the zero-rank tensor with an empty index list or with a list of one element corresponding to zero");
         }
         else{
             if(size_indexes != rank) throw invalid_argument("The number of indexes' dimensions inserted are not equal to the number of rank");
@@ -193,7 +193,7 @@ namespace Tensor_Library{
     UnknownRankedTensor<T> UnknownRankedTensor<T>::fix(const int space, const int spaceIndex){
         
         // Checking the exceptions
-        if(getRank() == 0) throw invalid_argument("This method cannot be applied to a trace");
+        if(getRank() == 0) throw invalid_argument("This method cannot be applied to a zero-rank tensor");
         if(space < 0 || space >= rank) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
         if(spaceIndex < 0) throw invalid_argument("An index cannot be less than zero");
         if(sizeDimensions[space] <= spaceIndex) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
@@ -234,7 +234,7 @@ namespace Tensor_Library{
     UnknownRankedTensor<T> UnknownRankedTensor<T>::fix_copy(const int space, const int spaceIndex){
 
         // Checking the exceptions
-        if(getRank() == 0) throw invalid_argument("This method cannot be applied to a trace");
+        if(getRank() == 0) throw invalid_argument("This method cannot be applied to a zero-rank tensor");
         if(space < 0 || space >= rank) throw invalid_argument("The dimensional space must exists and it must be lower than total rank");
         if(spaceIndex < 0) throw invalid_argument("An index cannot be less than zero");
         if(sizeDimensions[space] <= spaceIndex) throw runtime_error("Error in association of tensor index provided to get function and the real dimension of the corrispective vector");
@@ -291,7 +291,7 @@ namespace Tensor_Library{
 
         int index = 0;
 
-        // Inserting the elements of the new tensors and managing the case if the tensor is a trace
+        // Inserting the elements of the new tensors and managing the case if the tensor is a zero-rank tensor
         if(getRank() == 0)
             newData->at(index) = get();
         else{
@@ -316,7 +316,7 @@ namespace Tensor_Library{
         int max_size = max.size();
 
         // Checking the exceptions
-        if (getRank() == 0) throw invalid_argument("This method cannot be applied to a trace");
+        if (getRank() == 0) throw invalid_argument("This method cannot be applied to a zero-rank tensor");
         if (min_size != rank) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
         if (max_size != rank) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
         
@@ -357,7 +357,7 @@ namespace Tensor_Library{
         int max_size = max.size();
 
         // Checking exceptions
-        if (getRank() == 0) throw invalid_argument("This method cannot be applied to a trace");
+        if (getRank() == 0) throw invalid_argument("This method cannot be applied to a zero-rank tensor");
         if (min_size != rank) throw invalid_argument("The number of min indexes inserted are not equal to the number of rank");
         if (max_size != rank) throw invalid_argument("The number of max indexes inserted are not equal to the number of rank");
         

@@ -235,7 +235,7 @@ int main() {
     productFinalTensor.getTensor().printData();
 
 
-    // Testing the PRODUCT operation for the TRACE case that returns a tensor with one element
+    // Testing the PRODUCT operation for the TRACE case that returns a rank-zero tensor with one element
     cout << "Factors:" << endl;
     productTensor1WithIndexes.getTensor().printData();
     productTensor2WithIndexes.getTensor().printData();
@@ -248,45 +248,45 @@ int main() {
     productFinalTensorForTrace.getTensor().printData();
 
 
-    // Testing a trace
+    // Testing a zero-rank tensor
     cout << endl << "--------------------------------------------------------------------------------------" << endl;
-    cout << "Trace: " << endl;
+    cout << "Zero-rank tensor: " << endl;
     vector<int> emptyVector = {};
-    UnknownRankedTensor<int> traceU1 = UnknownRankedTensor<int>(emptyVector);
-    RankedTensor<int, 0> traceR1 = RankedTensor<int, 0>(emptyVector);
+    UnknownRankedTensor<int> zeroRankTensorU1 = UnknownRankedTensor<int>(emptyVector);
+    RankedTensor<int, 0> zeroRankTensorR1 = RankedTensor<int, 0>(emptyVector);
 
-    UnknownRankedTensor<int> traceU2 = UnknownRankedTensor<int>();
-    RankedTensor<int, 0> traceR2 = RankedTensor<int, 0>();
+    UnknownRankedTensor<int> zeroRankTensorU2 = UnknownRankedTensor<int>();
+    RankedTensor<int, 0> zeroRankTensorR2 = RankedTensor<int, 0>();
     
-    traceU1.insertRandomData();
-    traceU1.printTensor();
+    zeroRankTensorU1.insertRandomData();
+    zeroRankTensorU1.printTensor();
 
-    traceR1.insertRandomData();
-    traceR1.printTensor();
+    zeroRankTensorR1.insertRandomData();
+    zeroRankTensorR1.printTensor();
 
-    traceU2.insertRandomData();
-    traceR2.insertRandomData();
+    zeroRankTensorU2.insertRandomData();
+    zeroRankTensorR2.insertRandomData();
 
 
-    // Flattening and flattening_copy (the only requested methods that a trace can apply)
-    cout << endl << "Flattening for traces: " << endl;
-    UnknownRankedTensor<int> flattenTrace1 = traceU2.flattening();
-    flattenTrace1.printTensor();
+    // Flattening and flattening_copy (the only requested methods that a zero-rank tensor can apply)
+    cout << endl << "Flattening for zero-rank tensors: " << endl;
+    UnknownRankedTensor<int> flattenZeroRankTensor1 = zeroRankTensorU2.flattening();
+    flattenZeroRankTensor1.printTensor();
 
-    UnknownRankedTensor<int> flattenTrace2 = traceU2.flattening_copy();
-    flattenTrace2.printTensor();
+    UnknownRankedTensor<int> flattenZeroRankTensor2 = zeroRankTensorU2.flattening_copy();
+    flattenZeroRankTensor2.printTensor();
 
     
-    // Sum between two traces
-    cout << endl << "Sum between traces: " << endl;
-    vector<Index> emptyvectorTrace = {};
-    TensorWithIndexes<int> traceWithIndexes1 = traceU1(emptyvectorTrace);
-    TensorWithIndexes<int> traceWithIndexes2 = traceR1(emptyvectorTrace);
-    traceU1.printData();
-    traceR1.printData();
+    // Sum between two zero-rank tensors
+    cout << endl << "Sum between zero-rank tensors: " << endl;
+    vector<Index> emptyVectorZeroRankTensor = {};
+    TensorWithIndexes<int> zeroRankTensorWithIndexes1 = zeroRankTensorU1(emptyVectorZeroRankTensor);
+    TensorWithIndexes<int> zeroRankTensorWithIndexes2 = zeroRankTensorR1(emptyVectorZeroRankTensor);
+    zeroRankTensorU1.printData();
+    zeroRankTensorR1.printData();
     
-    TensorWithIndexes<int> traceRes1 = traceWithIndexes1 + traceWithIndexes2;
-    traceRes1.getTensor().printData();
+    TensorWithIndexes<int> zeroRankTensorRes1 = zeroRankTensorWithIndexes1 + zeroRankTensorWithIndexes2;
+    zeroRankTensorRes1.getTensor().printData();
     
 
     return 0;
